@@ -1,0 +1,94 @@
+import { Injectable } from '@angular/core';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  User,
+  onAuthStateChanged,
+  AuthError
+} from 'firebase/auth';
+import { FirebaseService } from './firebase.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { UserAccount } from '../models/user.model';
+import { doc, setDoc, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
+
+  constructor(private firebaseService: FirebaseService) {
+    onAuthStateChanged(this.firebaseService.auth, (user: User | null) => {
+      this.currentUserSubject.next(user);
+    });
+  }
+
+  async register(email: string, password: string): Promise<User> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        this.firebaseService.auth,
+        email,
+        password
+      );
+      return userCredential.user;
+    } catch (error) {
+      throw this.getFriendlyErrorMessage(error as AuthError);
+    }
+  }
+
+  async login(email: string, password: string): Promise<User> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        this.firebaseService.auth,
+        email,
+        password
+      );
+      return userCredential.user;
+    } catch (error) {
+      throw this.getFriendlyErrorMessage(error as AuthError);
+    }
+  }
+
+  async logout(): Promise<void> {
+    await signOut(this.firebaseService.auth);
+  }
+
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  private getFriendlyErrorMessage(error: AuthError): Error {
+    const errorMessages: Record<string, string> = {
+      'auth/user-not-found': 'Este usuario no está registrado. Por favor, crea una cuenta nueva para ingresar.',
+      'auth/wrong-password': 'La contraseña es incorrecta. Por favor, inténtalo de nuevo.',
+      'auth/email-already-in-use': 'Este correo electrónico ya está registrado. Intenta iniciar sesión.',
+      'auth/weak-password': 'La contraseña es demasiado débil. Debe tener al menos 6 caracteres.',
+    };
+    
+    const message = errorMessages[error.code] || 'Este usuario no se halla en los registros. ¿Deseas registrarte?.';
+    return new Error(message);
+  }
+
+  subscribeToUserData(uid: string, callback: (data: UserAccount | null) => void): Unsubscribe {
+    const userRef = doc(this.firebaseService.firestore, 'users', uid);
+    return onSnapshot(userRef, (docSnapshot: any) => {
+      if (docSnapshot.exists()) {
+        callback({ uid, ...docSnapshot.data() } as UserAccount);
+      } else {
+        callback(null);
+      }
+    }, (error: any) => {
+      console.error('Error fetching user data:', error);
+      callback(null);
+    });
+  }
+
+  async saveUserData(uid: string, userData: Omit<UserAccount, 'uid'>): Promise<void> {
+    const userRef = doc(this.firebaseService.firestore, 'users', uid);
+    await setDoc(userRef, userData);
+  }
+}
+
+

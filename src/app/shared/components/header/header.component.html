@@ -1,0 +1,71 @@
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md p-2">
+  <div class="container mx-auto flex justify-between items-center">
+    <!-- Sección Izquierda: Avatar y Stats -->
+    <button (click)="navigateToHome()" class="flex items-center gap-3 group">
+      <div class="relative">
+        <div class="text-4xl bg-slate-100 rounded-full p-1">{{ activeChild?.avatar }}</div>
+        @if (equippedAccessory) {
+          <div class="absolute -top-2 -right-2 text-2xl transform rotate-12">
+            {{ equippedAccessory.icon }}
+          </div>
+        }
+      </div>
+      <div class="text-left">
+        <span class="font-bold text-slate-700 text-base block group-hover:text-blue-600 transition-colors leading-none mb-1">
+          {{ activeChild?.name }}
+        </span>
+        <div class="flex items-center gap-2 md:gap-3">
+          <!-- RUEDAS -->
+          <div class="flex items-center gap-1" title="Ruedas">
+            <span class="font-display text-lg text-amber-600">{{ activeChild?.progress?.ruedas }}</span>
+            <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 text-amber-600" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <!-- VOLANTES -->
+          <div class="flex items-center gap-1" title="Volantes">
+            <span class="font-display text-lg text-blue-600">{{ activeChild?.progress?.volantes }}</span>
+            <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" class="w-5 h-5"/>
+          </div>
+          <!-- GASOLINA -->
+          <div class="flex items-center gap-1" title="Combustible">
+            <span class="font-display text-lg text-yellow-600">{{ activeChild?.progress?.fuelLiters }}</span>
+            <span class="text-xl">⛽</span>
+          </div>
+          <!-- DOCUMENTOS -->
+          <div class="flex items-center gap-1 border-l-2 border-slate-300 pl-2 ml-1" title="Mis Documentos">
+            @for (milestone of milestones; track milestone) {
+              <span
+                [class.opacity-100]="milestone.isUnlocked"
+                [class.opacity-20]="!milestone.isUnlocked"
+                [class.grayscale-0]="milestone.isUnlocked"
+                [class.grayscale]="!milestone.isUnlocked"
+                [class.scale-110]="milestone.isUnlocked"
+                [class.scale-90]="!milestone.isUnlocked"
+                class="text-xl transition-all duration-300"
+                [title]="milestone.isUnlocked ? milestone.name : 'Bloqueado'">
+                {{ milestone.icon }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <!-- Botones de Acción -->
+    <div class="flex items-center gap-2">
+      <button (click)="switchProfile()" class="bg-blue-100 text-blue-700 px-3 py-2 rounded-xl font-bold hover:bg-blue-200 transition-all text-xs sm:text-sm">
+        Cambiar Conductor
+      </button>
+      <button (click)="logout()" class="bg-red-100 text-red-600 p-2 rounded-xl hover:bg-red-200 transition-all" title="Salir">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+

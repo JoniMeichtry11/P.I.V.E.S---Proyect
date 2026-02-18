@@ -1,0 +1,302 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
+import { UserAccount, Child, Progress, Booking } from '../models/user.model';
+import { AuthService } from './auth.service';
+import { MILESTONES_ORDER } from '../constants/app.constants';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private currentUserAccountSubject = new BehaviorSubject<UserAccount | null>(null);
+  public currentUserAccount$ = this.currentUserAccountSubject.asObservable();
+
+  private activeChildIndexSubject = new BehaviorSubject<number | null>(null);
+  public activeChildIndex$ = this.activeChildIndexSubject.asObservable();
+
+  public activeChild$: Observable<Child | null> = combineLatest([
+    this.currentUserAccount$,
+    this.activeChildIndex$
+  ]).pipe(
+    map(([account, index]: [UserAccount | null, number | null]) => {
+      if (account && index !== null && account.children[index]) {
+        return account.children[index];
+      }
+      return null;
+    })
+  );
+
+  constructor(private authService: AuthService) {
+    this.authService.currentUser$.subscribe((user: any) => {
+      if (user) {
+        this.authService.subscribeToUserData(user.uid, (data: UserAccount | null) => {
+          if (data) {
+            this.currentUserAccountSubject.next(this.migrateUserData(data));
+          } else {
+            this.currentUserAccountSubject.next(null);
+          }
+        });
+      } else {
+        this.currentUserAccountSubject.next(null);
+        this.activeChildIndexSubject.next(null);
+      }
+    });
+  }
+
+  getCurrentUserAccount(): UserAccount | null {
+    return this.currentUserAccountSubject.value;
+  }
+
+  getActiveChild(): Child | null {
+    const account = this.getCurrentUserAccount();
+    const index = this.activeChildIndexSubject.value;
+    if (account && index !== null && account.children[index]) {
+      return account.children[index];
+    }
+    return null;
+  }
+
+  setActiveChildIndex(index: number | null): void {
+    this.activeChildIndexSubject.next(index);
+  }
+
+  getActiveChildIndex(): number | null {
+    return this.activeChildIndexSubject.value;
+  }
+
+  async updateUserAccount(account: UserAccount): Promise<void> {
+    const user = this.authService.getCurrentUser();
+    if (!user) return;
+
+    const { uid, ...dataToSave } = account;
+    await this.authService.saveUserData(user.uid, dataToSave);
+  }
+
+  async updateActiveChild(childData: Partial<Child>): Promise<void> {
+    const account = this.getCurrentUserAccount();
+    const index = this.activeChildIndexSubject.value;
+    
+    if (!account || index === null) return;
+
+    const updatedChildren = [...account.children];
+    updatedChildren[index] = { ...updatedChildren[index], ...childData };
+    
+    await this.updateUserAccount({ ...account, children: updatedChildren });
+  }
+
+  async addChild(childData: Omit<Child, 'id' | 'progress' | 'bookings' | 'hasCompletedOnboarding' | 'accessories' | 'usedRedeemCodes'>): Promise<void> {
+    const account = this.getCurrentUserAccount();
+    if (!account) return;
+
+    const newChild: Child = {
+      ...childData,
+      id: `${Date.now()}-${Math.random()}`,
+      progress: {
+        ruedas: 0,
+        volantes: 0,
+        milestones: [],
+        currentCardIndex: 0,
+        fuelLiters: 0,
+        familyActionsProgress: 0
+      },
+      bookings: [],
+      hasCompletedOnboarding: false,
+      accessories: { unlocked: [], equipped: null },
+      usedRedeemCodes: []
+    };
+
+    const updatedAccount = {
+      ...account,
+      children: [...account.children, newChild]
+    };
+
+    await this.updateUserAccount(updatedAccount);
+  }
+
+  async completeCard(wasSuccessful: boolean): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    let { ruedas, volantes, milestones, ...restProgress } = child.progress;
+    
+    if (wasSuccessful) {
+      ruedas += 1;
+      if (ruedas >= 4) {
+        ruedas = 0;
+        volantes += 1;
+      }
+      if (volantes >= 4) {
+        volantes = 0;
+        const nextMilestone = MILESTONES_ORDER[milestones.length];
+        if (nextMilestone) {
+          milestones = [...milestones, nextMilestone];
+        }
+      }
+    }
+
+    await this.updateActiveChild({
+      progress: { ...restProgress, ruedas, volantes, milestones }
+    });
+  }
+
+  async advanceCardIndex(): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    await this.updateActiveChild({
+      progress: {
+        ...child.progress,
+        currentCardIndex: child.progress.currentCardIndex + 1
+      }
+    });
+  }
+
+  async addBooking(bookingDetails: Omit<Booking, 'id' | 'status' | 'remindersSent'>): Promise<boolean> {
+    const child = this.getActiveChild();
+    if (!child) return false;
+
+    if (child.progress.fuelLiters < bookingDetails.car.pricePerSlot) {
+      return false;
+    }
+
+    const newBooking: Booking = {
+      ...bookingDetails,
+      id: Date.now().toString(),
+      status: 'active',
+      remindersSent: { dayBefore: false, sameDay: false }
+    };
+
+    await this.updateActiveChild({
+      bookings: [...child.bookings, newBooking],
+      progress: {
+        ...child.progress,
+        fuelLiters: child.progress.fuelLiters - bookingDetails.car.pricePerSlot
+      }
+    });
+
+    return true;
+  }
+
+  /**
+   * Crea una reserva para un hijo específico (usado cuando el hijo activo tiene conflicto de horario
+   * y el adulto decide reservar para un hermano/a).
+   */
+  async addBookingForChild(childId: string, bookingDetails: Omit<Booking, 'id' | 'status' | 'remindersSent'>): Promise<boolean> {
+    const account = this.getCurrentUserAccount();
+    if (!account) return false;
+
+    const targetIndex = account.children.findIndex(c => c.id === childId);
+    if (targetIndex === -1) return false;
+
+    const targetChild = account.children[targetIndex];
+    if (targetChild.progress.fuelLiters < bookingDetails.car.pricePerSlot) {
+      return false;
+    }
+
+    const newBooking: Booking = {
+      ...bookingDetails,
+      id: Date.now().toString(),
+      status: 'active',
+      remindersSent: { dayBefore: false, sameDay: false }
+    };
+
+    const updatedChildren = [...account.children];
+    updatedChildren[targetIndex] = {
+      ...targetChild,
+      bookings: [...(targetChild.bookings || []), newBooking],
+      progress: {
+        ...targetChild.progress,
+        fuelLiters: targetChild.progress.fuelLiters - bookingDetails.car.pricePerSlot
+      }
+    };
+
+    await this.updateUserAccount({ ...account, children: updatedChildren });
+    return true;
+  }
+
+  async cancelBooking(bookingId: string): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    const booking = child.bookings.find(b => b.id === bookingId);
+    if (!booking) return;
+
+    const updatedBookings = child.bookings.map(b =>
+      b.id === bookingId ? { ...b, status: 'cancelled' as const } : b
+    );
+
+    await this.updateActiveChild({
+      bookings: updatedBookings,
+      progress: {
+        ...child.progress,
+        fuelLiters: child.progress.fuelLiters + booking.car.pricePerSlot
+      }
+    });
+  }
+
+  async addFuel(amount: number): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    await this.updateActiveChild({
+      progress: {
+        ...child.progress,
+        fuelLiters: child.progress.fuelLiters + amount
+      }
+    });
+  }
+
+  async redeemCode(code: string, amount: number): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    const usedCodes = child.usedRedeemCodes || [];
+    if (usedCodes.includes(code)) {
+      throw new Error('Este código ya ha sido canjeado.');
+    }
+
+    await this.updateActiveChild({
+      usedRedeemCodes: [...usedCodes, code],
+      progress: {
+        ...child.progress,
+        fuelLiters: child.progress.fuelLiters + amount
+      }
+    });
+  }
+
+  async updateActiveChildData(partialData: Partial<Child>): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    await this.updateActiveChild(partialData);
+  }
+
+  private migrateUserData(data: UserAccount): UserAccount {
+    return {
+      ...data,
+      children: (data.children || []).map(child => {
+        const { progress, accessories, ...rest } = child;
+        return {
+          ...rest,
+          id: child.id || `${Date.now()}-${Math.random()}`,
+          progress: {
+            ruedas: progress?.ruedas ?? 0,
+            volantes: progress?.volantes ?? 0,
+            milestones: progress?.milestones ?? [],
+            currentCardIndex: progress?.currentCardIndex ?? 0,
+            fuelLiters: progress?.fuelLiters ?? 0,
+            familyActionsProgress: progress?.familyActionsProgress ?? 0
+          },
+          bookings: child.bookings || [],
+          hasCompletedOnboarding: child.hasCompletedOnboarding || false,
+          accessories: {
+            unlocked: accessories?.unlocked ?? [],
+            equipped: accessories?.equipped ?? null
+          },
+          usedRedeemCodes: child.usedRedeemCodes || []
+        };
+      })
+    };
+  }
+}
+

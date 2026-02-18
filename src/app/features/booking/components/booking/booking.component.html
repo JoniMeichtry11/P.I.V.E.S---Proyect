@@ -1,0 +1,234 @@
+<div class="max-w-4xl mx-auto p-2 sm:p-4 md:p-8">
+  <!-- Modal -->
+  @if (modal.isOpen) {
+    <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center animate-bounce-in">
+        <h2 class="text-2xl font-display text-slate-800 mb-2">{{ modal.title }}</h2>
+        <div class="my-4 text-slate-600">
+          {{ modal.content }}
+        </div>
+        <!-- Reasignar reserva a otro hijo -->
+        @if (modalType === 'reassign') {
+          <div class="my-4 text-left">
+            <label class="block text-sm font-bold text-slate-600 mb-2">Elegí a quién reservarle:</label>
+            <select [(ngModel)]="reassignTargetId" class="w-full p-2 border border-slate-300 rounded-lg">
+              @for (child of reassignCandidates; track child) {
+                <option [value]="child.id">
+                  {{ child.name }} (⛽ {{ child.progress.fuelLiters }})
+                </option>
+              }
+            </select>
+            <p class="text-xs text-slate-400 mt-2">Se descontará el combustible del perfil seleccionado.</p>
+          </div>
+        }
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          @for (action of modal.actions; track action) {
+            <button
+              (click)="action.onClick()"
+              [class]="action.className + ' py-2 px-4 text-white font-bold rounded-lg transition-transform active:scale-95'"
+              >
+              {{ action.text }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Cabecera con Saldo Actual -->
+  <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+    <button (click)="router.navigate(['/home'])" class="text-sm text-blue-600 hover:underline font-bold">
+      &larr; Volver al Inicio
+    </button>
+    <div class="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full border border-yellow-200">
+      <span class="text-slate-600 font-bold text-sm">Tu Tanque:</span>
+      <span class="font-display text-xl text-amber-600">{{ userFuel }}</span>
+      <span class="text-xl">⛽</span>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 min-h-[60vh] relative overflow-hidden">
+    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-green-50 rounded-full opacity-50 pointer-events-none"></div>
+
+    @if (step < 4) {
+      <h1 class="text-3xl md:text-4xl font-display text-center text-slate-700 mb-2">Reserva tu Coche</h1>
+    }
+
+    <!-- PASO 1: SELECCIÓN DE COCHE -->
+    @if (step === 1) {
+      <div>
+        <h2 class="text-xl md:text-2xl font-bold text-center text-slate-600 mb-6">1. Elige tu modelo favorito</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          @for (car of carModels; track car) {
+            <button
+              (click)="handleSelectCar(car)"
+              [class.border-transparent]="userFuel >= car.pricePerSlot"
+              [class.hover:border-green-500]="userFuel >= car.pricePerSlot"
+              [class.bg-slate-50]="userFuel >= car.pricePerSlot"
+              [class.hover:shadow-lg]="userFuel >= car.pricePerSlot"
+              [class.hover:-translate-y-1]="userFuel >= car.pricePerSlot"
+              [class.border-slate-200]="userFuel < car.pricePerSlot"
+              [class.bg-slate-100]="userFuel < car.pricePerSlot"
+              [class.opacity-70]="userFuel < car.pricePerSlot"
+              [class.cursor-not-allowed]="userFuel < car.pricePerSlot"
+              class="relative border-2 p-2 sm:p-4 rounded-xl transition-all duration-300 group"
+              >
+              @if (userFuel < car.pricePerSlot) {
+                <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10 shadow-sm">
+                  Falta Combustible
+                </div>
+              }
+              <img
+                [src]="car.image"
+                [alt]="car.name"
+                [class.grayscale]="userFuel < car.pricePerSlot"
+                [class.group-hover:scale-105]="userFuel >= car.pricePerSlot"
+                [class.group-hover:-rotate-2]="userFuel >= car.pricePerSlot"
+                class="w-full h-auto object-cover rounded-lg mb-2 transition-transform duration-300"
+                />
+              <h3 class="font-bold text-sm sm:text-base text-slate-800">{{ car.name }}</h3>
+              <div class="flex items-center justify-center gap-1 mt-1">
+                <span [class.text-amber-600]="userFuel >= car.pricePerSlot" [class.text-slate-400]="userFuel < car.pricePerSlot" class="font-display text-lg">{{ car.pricePerSlot }}</span>
+                <span class="text-lg">⛽</span>
+              </div>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- PASO 2: FECHA Y HORA -->
+    @if (step === 2 && selectedCar) {
+      <div>
+        <button (click)="step = 1" class="text-sm text-slate-500 hover:text-blue-600 hover:underline mb-4 flex items-center gap-1">
+          <span>🔄</span> Cambiar coche
+        </button>
+        <h2 class="text-2xl font-bold text-center text-slate-600 mb-2">2. Elige fecha y hora</h2>
+        <div class="flex justify-center items-center gap-4 mb-6 bg-green-50 p-4 rounded-xl border border-green-100 max-w-md mx-auto">
+          <img [src]="selectedCar.image" [alt]="selectedCar.name" class="w-20 h-auto"/>
+          <div>
+            <p class="font-bold text-slate-700">{{ selectedCar.name }}</p>
+            <p class="text-sm text-slate-500">Costo: {{ selectedCar.pricePerSlot }} ⛽</p>
+          </div>
+        </div>
+        <form (ngSubmit)="handleDateTimeSubmit()" class="max-w-md mx-auto space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-600">Fecha de Práctica</label>
+            <input
+              type="date"
+              [(ngModel)]="selectedDate"
+              name="date"
+              [min]="minDate"
+              (change)="loadBookedSlots()"
+              class="w-full mt-1 p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              required
+              />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600">Horario Disponible</label>
+            <select
+              [(ngModel)]="selectedTime"
+              name="time"
+              class="w-full mt-1 p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              required
+              >
+              <option value="">-- Selecciona una hora --</option>
+              @for (group of timeSlots | keyvalue; track group) {
+                <optgroup [label]="group.key">
+                  @for (time of group.value; track time) {
+                    <option
+                      [value]="time.value"
+                      [disabled]="globallyBookedSlots.includes(time.value)"
+                      [class.text-red-300]="globallyBookedSlots.includes(time.value)"
+                      >
+                      {{ time.label }} {{ globallyBookedSlots.includes(time.value) ? '(Ocupado)' : '' }}
+                    </option>
+                  }
+                </optgroup>
+              }
+            </select>
+          </div>
+          <button type="submit" class="w-full py-4 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1">
+            Continuar
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- PASO 3: CONFIRMACIÓN Y PAGO -->
+    @if (step === 3 && selectedCar) {
+      <div class="text-center max-w-md mx-auto">
+        <button (click)="step = 2" class="text-sm text-slate-500 hover:text-blue-600 hover:underline mb-4 flex items-center justify-center gap-1">
+          <span>✏️</span> Editar fecha/hora
+        </button>
+        <h2 class="text-2xl font-bold text-slate-600 mb-6">3. Confirma tu reserva</h2>
+        <div class="bg-gradient-to-br from-sky-50 to-white p-6 rounded-2xl border-2 border-sky-100 shadow-lg mb-6 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-2 bg-sky-400"></div>
+          <img [src]="selectedCar.image" [alt]="selectedCar.name" class="w-48 h-auto mx-auto mb-4 drop-shadow-md"/>
+          <h3 class="text-2xl font-display text-slate-800">{{ selectedCar.name }}</h3>
+          <div class="my-4 space-y-2 text-slate-600">
+            <div class="flex justify-between border-b border-slate-200 pb-1">
+              <span>Fecha:</span>
+              <span class="font-bold">{{ dateFormatted }}</span>
+            </div>
+            <div class="flex justify-between border-b border-slate-200 pb-1">
+              <span>Hora:</span>
+              <span class="font-bold">{{ selectedTime }}</span>
+            </div>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-xl border border-amber-100 mt-4">
+            <div class="flex justify-between items-center text-sm text-slate-500 mb-1">
+              <span>Tu tanque actual:</span>
+              <span>{{ userFuel }} ⛽</span>
+            </div>
+            <div class="flex justify-between items-center text-lg font-bold text-slate-800">
+              <span>Costo del turno:</span>
+              <span class="text-red-500">- {{ selectedCar.pricePerSlot }} ⛽</span>
+            </div>
+            <div class="border-t border-amber-200 mt-2 pt-2 flex justify-between items-center font-display text-xl text-green-600">
+              <span>Te quedarán:</span>
+              <span>{{ remainingFuel }} ⛽</span>
+            </div>
+          </div>
+        </div>
+        <button (click)="handleConfirmAndPay()" class="w-full py-4 bg-blue-600 text-white font-bold text-lg rounded-xl hover:bg-blue-700 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 active:scale-95">
+          ✅ ¡Confirmar y Pagar!
+        </button>
+      </div>
+    }
+
+    <!-- PASO 4: ÉXITO -->
+    @if (step === 4 && selectedCar) {
+      <div class="text-center flex flex-col items-center justify-center h-full animate-fade-in-up">
+        <div class="text-7xl mb-4 animate-bounce">🎉</div>
+        <h2 class="text-4xl font-display text-green-600 mb-2">¡Listo, Piloto!</h2>
+        <p class="text-xl text-slate-700 font-bold mb-2">Reserva Confirmada</p>
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 max-w-md mb-8">
+          <p class="text-slate-600 mb-1">
+            El <span class="font-bold text-blue-600">{{ selectedCar.name }}</span> estará esperando a <span class="font-bold">{{ confirmedForChildName }}</span>.
+          </p>
+          <p class="text-slate-800 font-bold text-lg">
+            {{ fullDateFormatted }}
+            <br/>
+            a las {{ selectedTime }}
+          </p>
+        </div>
+        <div class="w-full max-w-md space-y-3">
+          <button (click)="handleWhatsAppNotification()" class="w-full py-4 bg-[#25D366] text-white font-bold rounded-xl hover:bg-[#20bd5a] flex items-center justify-center gap-3 shadow-lg transition-transform hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.536 1.907 6.344l-1.495 5.454 5.53-1.453z"/>
+            </svg>
+            Enviar Comprobante por WhatsApp
+          </button>
+          <button (click)="resetBooking()" class="w-full py-3 bg-white text-blue-600 border-2 border-blue-100 font-bold rounded-xl hover:bg-blue-50">
+            Hacer otra reserva
+          </button>
+          <button (click)="router.navigate(['/home'])" class="text-slate-400 font-semibold text-sm hover:text-slate-600 mt-2">
+            Volver al Inicio
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

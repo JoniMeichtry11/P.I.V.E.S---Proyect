@@ -1,0 +1,163 @@
+<div class="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-sky-200 to-blue-300">
+  <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-3xl shadow-2xl">
+    <div class="text-center">
+      <img src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg" alt="Logo de Proyecto P.I.V.E.S." class="w-40 h-40 mx-auto mb-2 object-contain" />
+      <h1 class="text-4xl font-display text-blue-600">
+        {{ mode === 'login' ? '¡Bienvenido de Nuevo!' : 'Crea tu Cuenta' }}
+      </h1>
+      <p class="mt-2 text-slate-500">{{ mode === 'login' ? 'Ingresa para continuar la aventura.' : 'Educación que salva vidas' }}</p>
+    </div>
+
+    @if (error) {
+      <div class="text-red-500 text-sm text-center font-bold bg-red-100 p-2 rounded-lg">{{ error }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4 text-left">
+      <!-- Campos de registro -->
+      @if (mode === 'register') {
+        <div class="border-t border-slate-200 pt-4">
+          <h2 class="text-xl font-bold text-slate-700 text-center mb-4">Datos del Adulto</h2>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1">Nombre del Adulto</label>
+              <input formControlName="parentName" type="text" placeholder="Ej: Ana Pérez"
+                class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 placeholder:text-slate-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Número de Celular</label>
+                <input formControlName="phone" type="tel" placeholder="Ej: +54 9 11 12345678"
+                  class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 placeholder:text-slate-400" />
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Email y Password -->
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Correo Electrónico</label>
+            <input formControlName="email" type="email" placeholder="tu@email.com"
+              class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 placeholder:text-slate-400" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1">Contraseña</label>
+              <input formControlName="password" type="password" placeholder="••••••••"
+                class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 placeholder:text-slate-400" />
+              </div>
+
+              <!-- Campos de niños (solo registro) -->
+              @if (mode === 'register') {
+                <div>
+                  @for (child of children; track child; let i = $index) {
+                    <div class="border-t border-slate-200 pt-4 space-y-3 mt-4">
+                      <h2 class="text-xl font-bold text-slate-700 text-center mb-2">
+                        {{ child.gender === 'female' ? 'Perfil de la Pequeña Conductora' : 'Perfil del Pequeño Conductor' }}
+                        {{ children.length > 1 ? ' #' + (i + 1) : '' }}
+                      </h2>
+                      <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Sexo</label>
+                        <div class="grid grid-cols-2 gap-2">
+                          <button type="button" (click)="handleChildDataChange(i, 'gender', 'male')"
+                            [class.bg-blue-500]="child.gender === 'male'"
+                            [class.text-white]="child.gender === 'male'"
+                            [class.shadow]="child.gender === 'male'"
+                            [class.bg-slate-200]="child.gender !== 'male'"
+                            class="py-2 rounded-lg font-semibold transition-colors hover:bg-slate-300">
+                            Masculino
+                          </button>
+                          <button type="button" (click)="handleChildDataChange(i, 'gender', 'female')"
+                            [class.bg-pink-500]="child.gender === 'female'"
+                            [class.text-white]="child.gender === 'female'"
+                            [class.shadow]="child.gender === 'female'"
+                            [class.bg-slate-200]="child.gender !== 'female'"
+                            class="py-2 rounded-lg font-semibold transition-colors hover:bg-slate-300">
+                            Femenino
+                          </button>
+                        </div>
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                          Nombre {{ child.gender === 'female' ? 'de la Niña' : 'del Niño' }}
+                        </label>
+                        <input type="text" [value]="child.name"
+                          (input)="handleChildDataChange(i, 'name', $any($event.target).value)"
+                          placeholder="Ej: Leo"
+                          class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-slate-900 placeholder:text-slate-400" />
+                        </div>
+                        <div class="mt-4">
+                          <label class="block text-sm font-medium text-slate-600 mb-2">Elige un Avatar</label>
+                          <div class="grid grid-cols-6 gap-2">
+                            @for (avatar of avatars; track avatar; let avatarIndex = $index) {
+                              <button
+                                type="button"
+                                (click)="handleChildDataChange(i, 'avatar', avatar)"
+                                [class.bg-amber-300]="child.avatar === avatar"
+                                [class.scale-110]="child.avatar === avatar"
+                                [class.ring-2]="child.avatar === avatar"
+                                [class.ring-amber-500]="child.avatar === avatar"
+                                [class.bg-slate-100]="child.avatar !== avatar"
+                                class="text-3xl p-2 rounded-full transition-transform duration-200 hover:bg-amber-100">
+                                {{ avatar }}
+                              </button>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <button type="button" (click)="addChild()"
+                      class="w-full mt-4 py-2 text-blue-600 font-bold border-2 border-blue-500 rounded-lg hover:bg-blue-50 transition-colors">
+                      + Añadir otro niño/a
+                    </button>
+                  </div>
+                }
+
+                <button type="submit" [disabled]="loading || form.invalid"
+                  [class.bg-blue-500]="mode === 'login'"
+                  [class.hover:bg-blue-600]="mode === 'login'"
+                  [class.bg-green-500]="mode === 'register'"
+                  [class.hover:bg-green-600]="mode === 'register'"
+                  [class.disabled:bg-slate-400]="loading || form.invalid"
+                  class="w-full py-3 px-4 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transform transition-transform hover:scale-105 disabled:bg-slate-400">
+                  {{ loading ? 'Cargando...' : (mode === 'login' ? 'Ingresar' : 'Crear Cuenta') }}
+                </button>
+              </form>
+
+              <div class="text-center mt-4">
+                <button (click)="mode = mode === 'login' ? 'register' : 'login'; error = ''"
+                  class="text-sm text-blue-600 hover:underline">
+                  {{ mode === 'login' ? '¿No tienes una cuenta? Regístrate' : '¿Ya tienes una cuenta? Ingresa' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal de verificación -->
+          @if (showVerification) {
+            <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+              <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-3xl shadow-2xl text-center">
+                <h1 class="text-3xl font-display text-blue-600">Verifica tu Cuenta</h1>
+                <p class="text-slate-500">
+                  Hemos enviado un código de 6 dígitos a tu celular (vía SMS o WhatsApp). Ingrésalo para continuar.
+                  <br/>
+                  <span class="font-bold text-sm">(Psst... para esta demo, el código es <strong class="text-amber-500">123456</strong>)</span>
+                </p>
+                <form (ngSubmit)="handleVerificationSubmit()" class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Código de Verificación</label>
+                    <input [(ngModel)]="verificationCode" name="code" type="text" maxlength="6" placeholder="••••••"
+                      class="w-full text-center text-2xl tracking-[.5em] px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-slate-900 placeholder:text-slate-400"
+                      required />
+                    </div>
+                    <button type="submit" [disabled]="loading"
+                      class="w-full py-3 px-4 text-white font-bold rounded-lg bg-green-500 hover:bg-green-600 disabled:bg-slate-400">
+                      {{ loading ? 'Verificando...' : 'Verificar y Completar Registro' }}
+                    </button>
+                  </form>
+                  <button (click)="showVerification = false" class="text-sm text-blue-600 hover:underline mt-2">
+                    &larr; Volver a editar mis datos
+                  </button>
+                </div>
+              </div>
+            }
+
+

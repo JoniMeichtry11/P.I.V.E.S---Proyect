@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Proyecto P.I.V.E.S.</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3b82f6"/>
+  <meta name="description" content="Proyecto P.I.V.E.S. (Programa Integral de Educación Vial y Seguridad) es una aplicación web divertida y educativa para que los niños aprendan sobre seguridad vial. Educación que salva vidas." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  
+  <!-- Google Fonts -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap');
+    body {
+      font-family: 'Nunito', sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6, .font-display {
+      font-family: 'Fredoka One', cursive;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .printable-area, .printable-area * {
+        visibility: visible;
+      }
+      .printable-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+      }
+      .no-print {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+
+

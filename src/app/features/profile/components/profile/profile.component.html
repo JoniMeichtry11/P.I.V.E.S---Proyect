@@ -1,0 +1,117 @@
+<div class="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+  <h1 class="text-4xl md:text-5xl font-display text-center text-slate-700">Mi Perfil</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Panel del Personaje -->
+    <div class="lg:col-span-1 bg-white p-8 rounded-3xl shadow-xl flex flex-col items-center">
+      <div class="relative text-9xl mb-6 bg-sky-50 rounded-full p-8 ring-4 ring-sky-200">
+        <span>{{ activeChild?.avatar }}</span>
+        @if (equippedAccessory) {
+          <span class="absolute -top-4 -right-4 text-7xl transform rotate-12 drop-shadow-md">{{ equippedAccessory.icon }}</span>
+        }
+      </div>
+      <h3 class="text-3xl font-display text-blue-600 mb-6">{{ activeChild?.name }}</h3>
+
+      <div class="grid grid-cols-3 gap-3 w-full">
+        <div class="bg-amber-100 p-3 rounded-2xl text-center flex flex-col items-center">
+          <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-amber-600 mb-1" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+            <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="font-display text-xl">{{ ruedas }}</span>
+        </div>
+        <div class="bg-blue-100 p-3 rounded-2xl text-center flex flex-col items-center">
+          <img src="https://i.ibb.co/TxxrB3Ln/rueda.jpg" alt="Volante" class="w-8 h-8 mb-1"/>
+          <span class="font-display text-xl">{{ volantes }}</span>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-2xl text-center flex flex-col items-center">
+          <span class="text-3xl mb-1">⛽</span>
+          <span class="font-display text-xl">{{ fuelLiters }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de Progreso -->
+    <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-xl flex flex-col justify-center">
+      <h2 class="text-2xl font-display text-slate-700 mb-6 text-center">¡Mi Progreso!</h2>
+
+      <div class="space-y-8">
+        <div>
+          <h4 class="font-bold text-amber-700 text-center text-lg">Ruedas para el próximo Volante</h4>
+          <div class="flex gap-3 justify-center my-4">
+            @for (i of [1,2,3,4]; track i) {
+              <div [class.bg-amber-100]="i <= ruedas" [class.scale-110]="i <= ruedas" [class.bg-slate-100]="i > ruedas" [class.opacity-30]="i > ruedas" class="p-2 rounded-full transition-all duration-300">
+                <svg viewBox="0 0 24 24" fill="none" [class.text-amber-600]="i <= ruedas" [class.text-slate-400]="i > ruedas" class="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                  <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-8">
+          <h4 class="font-bold text-blue-700 text-center text-lg">Volantes para tu Licencia</h4>
+          <div class="flex gap-3 justify-center my-4">
+            @for (i of [1,2,3,4]; track i) {
+              <div [class.bg-amber-100]="i <= volantes" [class.scale-110]="i <= volantes" [class.bg-slate-100]="i > volantes" [class.opacity-30]="i > volantes" class="p-2 rounded-full transition-all duration-300">
+                <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" [class.opacity-100]="i <= volantes" [class.opacity-40]="i > volantes" class="w-10 h-10"/>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tienda de Accesorios -->
+  <div class="bg-white p-8 rounded-3xl shadow-xl">
+    <h2 class="text-3xl font-display text-slate-800 mb-8 text-center">Tienda de Accesorios</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      @for (acc of accessories; track acc) {
+        <div class="p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 flex flex-col items-center shadow-sm">
+          <div class="text-5xl mb-4 transform group-hover:scale-110 transition-transform">{{ acc.icon }}</div>
+          <p class="font-bold text-sm text-slate-700 text-center mb-4 min-h-[40px] flex items-center">{{ acc.name }}</p>
+          @if (!isUnlocked(acc.id)) {
+            <button
+              (click)="handlePurchase(acc)"
+              [disabled]="!canAfford(acc.price)"
+              [class.bg-green-500]="canAfford(acc.price)"
+              [class.text-white]="canAfford(acc.price)"
+              [class.hover:bg-green-600]="canAfford(acc.price)"
+              [class.active:scale-95]="canAfford(acc.price)"
+              [class.bg-slate-300]="!canAfford(acc.price)"
+              [class.text-slate-500]="!canAfford(acc.price)"
+              [class.cursor-not-allowed]="!canAfford(acc.price)"
+              class="w-full py-3 px-2 rounded-xl text-sm font-bold shadow-md flex items-center justify-center gap-1 transition-all"
+              >
+              {{ acc.price }}
+              <svg viewBox="0 0 24 24" fill="none" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          }
+          @if (isUnlocked(acc.id)) {
+            <button
+              (click)="handleEquip(acc)"
+              [class.bg-red-500]="isEquipped(acc.id)"
+              [class.text-white]="true"
+              [class.hover:bg-red-600]="isEquipped(acc.id)"
+              [class.bg-blue-500]="!isEquipped(acc.id)"
+              [class.hover:bg-blue-600]="!isEquipped(acc.id)"
+              class="w-full py-3 px-2 rounded-xl text-sm font-bold shadow-md transition-all active:scale-95"
+              >
+              {{ isEquipped(acc.id) ? 'Quitar' : 'Poner' }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+
