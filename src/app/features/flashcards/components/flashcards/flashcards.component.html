@@ -5,7 +5,7 @@
       <button (click)="handleBackToMenu(); router.navigate(['/home'])" class="text-blue-600 font-bold hover:underline flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
         &larr; Volver al Inicio
       </button>
-      <h1 class="text-3xl md:text-4xl font-display text-slate-700 text-center flex-grow">
+      <h1 class="text-3xl md:text-4xl font-display text-slate-700 text-center grow">
         Álbum de Desafíos
       </h1>
       <div class="w-24"></div>
@@ -58,6 +58,14 @@
     <h1 [class.text-green-600]="wasCardSuccessful" [class.text-orange-600]="!wasCardSuccessful" class="text-3xl font-display mb-2">
       {{ wasCardSuccessful ? '¡Nivel Completado!' : '¡Inténtalo de nuevo!' }}
     </h1>
+    
+    @if (isSavingProgress) {
+      <div class="flex items-center gap-2 text-blue-500 text-sm font-bold mb-4 animate-pulse">
+        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+        Sincronizando progreso...
+      </div>
+    }
+
     <!-- RESUMEN DE RESPUESTAS -->
     <div class="w-full bg-slate-50 rounded-xl p-4 mb-6 shadow-inner text-left max-h-60 overflow-y-auto border border-slate-200">
       <h3 class="text-sm font-bold text-slate-500 uppercase mb-3 text-center">Resumen de Respuestas</h3>
@@ -84,12 +92,12 @@
     </div>
     <div class="flex flex-col gap-3 w-full max-w-sm">
       @if (wasCardSuccessful && isLastLevelOfGame) {
-        <button (click)="handleGoToBooking()" type="button" class="w-full py-4 px-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-display text-xl rounded-2xl hover:scale-105 shadow-lg transition-transform">
+        <button (click)="handleGoToBooking()" type="button" class="w-full py-4 px-6 bg-linear-to-r from-green-500 to-emerald-600 text-white font-display text-xl rounded-2xl hover:scale-105 shadow-lg transition-transform">
           🚗 Ir a Reservar Coche
         </button>
       }
       @if (wasCardSuccessful && !isLastLevelOfGame) {
-        <button (click)="handleDirectNextLevel()" type="button" class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-display text-xl rounded-2xl hover:scale-105 shadow-lg transition-transform flex items-center justify-center gap-2">
+        <button (click)="handleDirectNextLevel()" type="button" class="w-full py-4 px-6 bg-linear-to-r from-blue-500 to-indigo-600 text-white font-display text-xl rounded-2xl hover:scale-105 shadow-lg transition-transform flex items-center justify-center gap-2">
           Siguiente Nivel ➡️
         </button>
       }
@@ -142,7 +150,7 @@
           [class.border-2]="!isSpeaking"
           [class.border-blue-100]="!isSpeaking"
           [class.hover:scale-110]="!isSpeaking"
-          class="flex-shrink-0 p-3 rounded-full transition-all duration-300 shadow-md"
+          class="shrink-0 p-3 rounded-full transition-all duration-300 shadow-md"
           >
           🔊
         </button>

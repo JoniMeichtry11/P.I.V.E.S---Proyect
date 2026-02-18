@@ -30,6 +30,7 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
   correctShuffledIndex: number | null = null;
   isSpeaking = false;
   currentlySpeakingIndex: number | null = null;
+  isSavingProgress = false;
   
   readonly MARA_HAPPY_URL = MARA_HAPPY_URL;
   readonly MARA_THINKING_URL = MARA_THINKING_URL;
@@ -53,7 +54,7 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.userService.activeChild$.subscribe((child: any) => {
         this.activeChild = child;
-        if (child) {
+        if (child && this.viewMode === 'menu') {
           this.playingCardIndex = child.progress.currentCardIndex;
           this.questionIndex = child.progress.currentCardIndex * QUESTIONS_PER_CARD;
         }
@@ -154,9 +155,14 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
       const successful = this.correctAnswersInCard === QUESTIONS_PER_CARD;
       this.wasCardSuccessful = successful;
       
-      if (successful && this.playingCardIndex === this.activeChild?.progress.currentCardIndex) {
-        this.userService.completeCard(true);
-        this.userService.advanceCardIndex();
+      if (successful) {
+        this.isSavingProgress = true;
+        this.userService.completeLevel(this.playingCardIndex).then(() => {
+          this.isSavingProgress = false;
+        }).catch(err => {
+          console.error("Error saving progress:", err);
+          this.isSavingProgress = false;
+        });
       }
       
       this.showCardResult = true;
@@ -173,10 +179,7 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
   }
 
   handleBackToMenu(): void {
-    if (this.showCardResult && this.wasCardSuccessful && this.playingCardIndex === this.activeChild?.progress.currentCardIndex) {
-      this.userService.completeCard(true);
-      this.userService.advanceCardIndex();
-    }
+    // Ya no es necesario llamar a userService aquí porque ya se guardó en handleNext
     this.textToSpeech.cancel();
     this.viewMode = 'menu';
   }

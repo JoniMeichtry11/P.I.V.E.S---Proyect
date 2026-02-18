@@ -120,30 +120,46 @@ export class UserService {
     await this.updateUserAccount(updatedAccount);
   }
 
-  async completeCard(wasSuccessful: boolean): Promise<void> {
+  async completeLevel(levelIndex: number): Promise<void> {
     const child = this.getActiveChild();
     if (!child) return;
 
-    let { ruedas, volantes, milestones, ...restProgress } = child.progress;
+    // Solo avanzamos el progreso real si el niño está completando su nivel actual más alto
+    const isAdvancingGlobalProgress = levelIndex === child.progress.currentCardIndex;
     
-    if (wasSuccessful) {
-      ruedas += 1;
-      if (ruedas >= 4) {
-        ruedas = 0;
-        volantes += 1;
-      }
-      if (volantes >= 4) {
-        volantes = 0;
-        const nextMilestone = MILESTONES_ORDER[milestones.length];
-        if (nextMilestone) {
-          milestones = [...milestones, nextMilestone];
-        }
+    let { ruedas, volantes, milestones, currentCardIndex, ...restProgress } = child.progress;
+    
+    // 1. Lógica de Recompensas (Ruedas/Volantes)
+    ruedas += 1;
+    if (ruedas >= 4) {
+      ruedas = 0;
+      volantes += 1;
+    }
+    if (volantes >= 4) {
+      volantes = 0;
+      const nextMilestone = MILESTONES_ORDER[milestones.length];
+      if (nextMilestone) {
+        milestones = [...milestones, nextMilestone];
       }
     }
 
+    // 2. Lógica de Avance de Nivel
+    if (isAdvancingGlobalProgress) {
+      currentCardIndex += 1;
+    }
+
+    // 3. Persistencia única
     await this.updateActiveChild({
-      progress: { ...restProgress, ruedas, volantes, milestones }
+      progress: { 
+        ...restProgress, 
+        ruedas, 
+        volantes, 
+        milestones, 
+        currentCardIndex 
+      }
     });
+
+    console.log(`Progreso sincronizado en Firestore: Nivel ${currentCardIndex}, Ruedas ${ruedas}`);
   }
 
   async advanceCardIndex(): Promise<void> {
