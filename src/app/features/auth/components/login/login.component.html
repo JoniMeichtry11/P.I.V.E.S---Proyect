@@ -48,7 +48,7 @@
               <!-- Campos de niños (solo registro) -->
               @if (mode === 'register') {
                 <div>
-                  @for (child of children; track child; let i = $index) {
+                  @for (child of children; track $index; let i = $index) {
                     <div class="border-t border-slate-200 pt-4 space-y-3 mt-4">
                       <h2 class="text-xl font-bold text-slate-700 text-center mb-2">
                         {{ child.gender === 'female' ? 'Perfil de la Pequeña Conductora' : 'Perfil del Pequeño Conductor' }}

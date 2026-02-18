@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, ReplaySubject } from 'rxjs';
 import { UserAccount, Child, Progress, Booking } from '../models/user.model';
 import { AuthService } from './auth.service';
 import { MILESTONES_ORDER } from '../constants/app.constants';
@@ -8,8 +8,9 @@ import { MILESTONES_ORDER } from '../constants/app.constants';
   providedIn: 'root'
 })
 export class UserService {
-  private currentUserAccountSubject = new BehaviorSubject<UserAccount | null>(null);
+  private currentUserAccountSubject = new ReplaySubject<UserAccount | null>(1);
   public currentUserAccount$ = this.currentUserAccountSubject.asObservable();
+  private _currentAccount: UserAccount | null = null;
 
   private activeChildIndexSubject = new BehaviorSubject<number | null>(null);
   public activeChildIndex$ = this.activeChildIndexSubject.asObservable();
@@ -30,13 +31,19 @@ export class UserService {
     this.authService.currentUser$.subscribe((user: any) => {
       if (user) {
         this.authService.subscribeToUserData(user.uid, (data: UserAccount | null) => {
-          if (data) {
-            this.currentUserAccountSubject.next(this.migrateUserData(data));
-          } else {
-            this.currentUserAccountSubject.next(null);
+          const migratedData = data ? this.migrateUserData(data) : null;
+          this._currentAccount = migratedData;
+          this.currentUserAccountSubject.next(migratedData);
+          
+          if (migratedData) {
+            // Auto-select if only one child and none selected
+            if (this.activeChildIndexSubject.value === null && migratedData.children.length === 1) {
+              this.activeChildIndexSubject.next(0);
+            }
           }
         });
       } else {
+        this._currentAccount = null;
         this.currentUserAccountSubject.next(null);
         this.activeChildIndexSubject.next(null);
       }
@@ -44,7 +51,7 @@ export class UserService {
   }
 
   getCurrentUserAccount(): UserAccount | null {
-    return this.currentUserAccountSubject.value;
+    return this._currentAccount;
   }
 
   getActiveChild(): Child | null {

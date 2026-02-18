@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from './core/services/user.service';
 import { AuthService } from './core/services/auth.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { filter, map, switchMap, tap, takeUntil } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -26,9 +27,10 @@ import { filter, map } from 'rxjs/operators';
   styles: [],
   standalone: false
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   showHeader$;
   activeChild$;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userService: UserService,
@@ -43,33 +45,37 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Manejar redirecciones basadas en el estado del usuario
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        this.userService.currentUserAccount$.subscribe(account => {
-          if (account) {
-            const activeIndex = this.userService.getActiveChildIndex();
-            const activeChild = this.userService.getActiveChild();
-            
-            if (activeIndex === null) {
-              if (account.children.length > 1) {
-                this.router.navigate(['/child-selection']);
-              } else if (account.children.length === 1) {
-                this.userService.setActiveChildIndex(0);
-                const currentUrl = this.router.url;
-                if (currentUrl === '/' || currentUrl === '/welcome') {
-                  this.router.navigate(['/home']);
-                }
-              } else {
-                this.router.navigate(['/child-selection']);
-              }
-            } else if (activeChild && !activeChild.hasCompletedOnboarding && this.router.url !== '/onboarding') {
-              this.router.navigate(['/onboarding']);
-            }
+    this.authService.currentUser$.pipe(
+      switchMap(user => {
+        if (user) {
+          return this.userService.currentUserAccount$;
+        } else {
+          return of(null);
+        }
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(account => {
+      if (account) {
+        const activeIndex = this.userService.getActiveChildIndex();
+        
+        if (activeIndex === null && account.children.length === 1) {
+          this.userService.setActiveChildIndex(0);
+        }
+        
+        const currentUrl = this.router.url;
+        if (currentUrl === '/' || currentUrl === '/welcome' || currentUrl === '/login' || currentUrl === '/register') {
+          if (this.userService.getActiveChildIndex() !== null) {
+            this.router.navigate(['/home']);
           }
-        });
+        }
       }
     });
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
+
 

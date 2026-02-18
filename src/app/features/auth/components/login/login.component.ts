@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
     if (this.mode === 'login') {
       try {
         await this.authService.login(this.form.value.email, this.form.value.password);
-        // El guard manejará la redirección
+        this.router.navigate(['/home']);
       } catch (err: any) {
         this.error = err.message || 'Error al iniciar sesión';
       } finally {
@@ -127,6 +127,7 @@ export class LoginComponent implements OnInit {
           };
 
           await this.authService.saveUserData(user.uid, finalAccount);
+          this.router.navigate(['/home']);
         } catch (err: any) {
           this.error = err.message || 'Error al registrar';
           this.showVerification = false;

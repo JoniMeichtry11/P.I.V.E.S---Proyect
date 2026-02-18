@@ -8,7 +8,7 @@ import {
   AuthError
 } from 'firebase/auth';
 import { FirebaseService } from './firebase.service';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { UserAccount } from '../models/user.model';
 import { doc, setDoc, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
 
@@ -16,11 +16,13 @@ import { doc, setDoc, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private currentUserSubject = new ReplaySubject<User | null>(1);
   public currentUser$ = this.currentUserSubject.asObservable();
+  private _currentUser: User | null = null;
 
   constructor(private firebaseService: FirebaseService) {
     onAuthStateChanged(this.firebaseService.auth, (user: User | null) => {
+      this._currentUser = user;
       this.currentUserSubject.next(user);
     });
   }
@@ -32,7 +34,10 @@ export class AuthService {
         email,
         password
       );
-      return userCredential.user;
+      const user = userCredential.user;
+      this._currentUser = user;
+      this.currentUserSubject.next(user);
+      return user;
     } catch (error) {
       throw this.getFriendlyErrorMessage(error as AuthError);
     }
@@ -45,7 +50,11 @@ export class AuthService {
         email,
         password
       );
-      return userCredential.user;
+      const user = userCredential.user;
+      console.log(user);
+      this._currentUser = user;
+      this.currentUserSubject.next(user);
+      return user;
     } catch (error) {
       throw this.getFriendlyErrorMessage(error as AuthError);
     }
@@ -53,10 +62,12 @@ export class AuthService {
 
   async logout(): Promise<void> {
     await signOut(this.firebaseService.auth);
+    this._currentUser = null;
+    this.currentUserSubject.next(null);
   }
 
   getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+    return this._currentUser;
   }
 
   private getFriendlyErrorMessage(error: AuthError): Error {
