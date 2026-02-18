@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authService.currentUser$.pipe(
       switchMap(user => {
-        if (user) {
+        if (user && user.emailVerified) {
           return this.userService.currentUserAccount$;
         } else {
           return of(null);

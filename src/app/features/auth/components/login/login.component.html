@@ -135,27 +135,16 @@
           @if (showVerification) {
             <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
               <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-3xl shadow-2xl text-center">
-                <h1 class="text-3xl font-display text-blue-600">Verifica tu Cuenta</h1>
+                <img src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg" alt="Logo" class="w-24 h-24 mx-auto mb-2 object-contain" />
+                <h1 class="text-3xl font-display text-blue-600">Revisa tu Correo</h1>
                 <p class="text-slate-500">
-                  Hemos enviado un código de 6 dígitos a tu celular (vía SMS o WhatsApp). Ingrésalo para continuar.
-                  <br/>
-                  <span class="font-bold text-sm">(Psst... para esta demo, el código es <strong class="text-amber-500">123456</strong>)</span>
+                  Hemos enviado un enlace de verificación a tu correo electrónico. 
+                  Por favor, haz clic en el enlace para activar tu cuenta.
                 </p>
-                <form (ngSubmit)="handleVerificationSubmit()" class="space-y-4">
-                  <div>
-                    <label class="block text-sm font-medium text-slate-600 mb-1">Código de Verificación</label>
-                    <input [(ngModel)]="verificationCode" name="code" type="text" maxlength="6" placeholder="••••••"
-                      class="w-full text-center text-2xl tracking-[.5em] px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-slate-900 placeholder:text-slate-400"
-                      required />
-                    </div>
-                    <button type="submit" [disabled]="loading"
-                      class="w-full py-3 px-4 text-white font-bold rounded-lg bg-green-500 hover:bg-green-600 disabled:bg-slate-400">
-                      {{ loading ? 'Verificando...' : 'Verificar y Completar Registro' }}
-                    </button>
-                  </form>
-                  <button (click)="showVerification = false" class="text-sm text-blue-600 hover:underline mt-2">
-                    &larr; Volver a editar mis datos
-                  </button>
+                <button (click)="handleVerificationSubmit()" 
+                  class="w-full py-3 px-4 text-white font-bold rounded-lg bg-green-500 hover:bg-green-600">
+                  Volver al Login
+                </button>
                 </div>
               </div>
             }

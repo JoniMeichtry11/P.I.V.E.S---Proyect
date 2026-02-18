@@ -87,57 +87,55 @@ export class LoginComponent implements OnInit {
         },
         children: this.children
       };
-      this.showVerification = true;
-      this.loading = false;
+      
+      this.loading = true;
+      try {
+        const user = await this.authService.register(
+          this.pendingAccount.parent.email,
+          this.pendingAccount.parent.password
+        );
+
+        await this.authService.sendEmailVerification(user);
+
+        const finalAccount = {
+          parent: {
+            name: this.pendingAccount.parent.name,
+            email: this.pendingAccount.parent.email,
+            phone: this.pendingAccount.parent.phone
+          },
+          children: this.pendingAccount.children.map((child: any) => ({
+            ...child,
+            id: `${Date.now()}-${Math.random()}`,
+            progress: {
+              ruedas: 0,
+              volantes: 0,
+              milestones: [],
+              currentCardIndex: 0,
+              fuelLiters: 10,
+              familyActionsProgress: 0
+            },
+            bookings: [],
+            hasCompletedOnboarding: false,
+            accessories: { unlocked: [], equipped: null },
+            usedRedeemCodes: []
+          }))
+        };
+
+        await this.authService.saveUserData(user.uid, finalAccount);
+        await this.authService.logout();
+        this.showVerification = true;
+      } catch (err: any) {
+        this.error = err.message || 'Error al registrar';
+      } finally {
+        this.loading = false;
+      }
     }
   }
 
   async handleVerificationSubmit(): Promise<void> {
-    if (this.verificationCode === '123456') {
-      if (this.pendingAccount) {
-        this.loading = true;
-        try {
-          const user = await this.authService.register(
-            this.pendingAccount.parent.email,
-            this.pendingAccount.parent.password
-          );
-
-          const finalAccount = {
-            parent: {
-              name: this.pendingAccount.parent.name,
-              email: this.pendingAccount.parent.email,
-              phone: this.pendingAccount.parent.phone
-            },
-            children: this.pendingAccount.children.map((child: any) => ({
-              ...child,
-              id: `${Date.now()}-${Math.random()}`,
-              progress: {
-                ruedas: 0,
-                volantes: 0,
-                milestones: [],
-                currentCardIndex: 0,
-                fuelLiters: 10,
-                familyActionsProgress: 0
-              },
-              bookings: [],
-              hasCompletedOnboarding: false,
-              accessories: { unlocked: [], equipped: null },
-              usedRedeemCodes: []
-            }))
-          };
-
-          await this.authService.saveUserData(user.uid, finalAccount);
-          this.router.navigate(['/home']);
-        } catch (err: any) {
-          this.error = err.message || 'Error al registrar';
-          this.showVerification = false;
-        } finally {
-          this.loading = false;
-        }
-      }
-    } else {
-      this.error = 'El código de verificación no es correcto. Por favor, inténtalo de nuevo.';
-    }
+    this.showVerification = false;
+    this.mode = 'login';
+    this.error = '';
   }
 }
 

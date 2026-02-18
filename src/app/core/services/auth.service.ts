@@ -5,6 +5,7 @@ import {
   signOut, 
   User,
   onAuthStateChanged,
+  sendEmailVerification,
   AuthError
 } from 'firebase/auth';
 import { FirebaseService } from './firebase.service';
@@ -21,6 +22,7 @@ export class AuthService {
   private _currentUser: User | null = null;
 
   constructor(private firebaseService: FirebaseService) {
+    this.firebaseService.auth.languageCode = 'es';
     onAuthStateChanged(this.firebaseService.auth, (user: User | null) => {
       this._currentUser = user;
       this.currentUserSubject.next(user);
@@ -51,11 +53,20 @@ export class AuthService {
         password
       );
       const user = userCredential.user;
+      
+      if (!user.emailVerified) {
+        await this.logout();
+        throw new Error('Tu cuenta aún no ha sido verificada. Por favor, revisa tu correo electrónico y haz clic en el enlace de confirmación.');
+      }
+
       console.log(user);
       this._currentUser = user;
       this.currentUserSubject.next(user);
       return user;
     } catch (error) {
+      if (error instanceof Error && error.message.includes('verificada')) {
+        throw error;
+      }
       throw this.getFriendlyErrorMessage(error as AuthError);
     }
   }
@@ -99,6 +110,10 @@ export class AuthService {
   async saveUserData(uid: string, userData: Omit<UserAccount, 'uid'>): Promise<void> {
     const userRef = doc(this.firebaseService.firestore, 'users', uid);
     await setDoc(userRef, userData);
+  }
+
+  async sendEmailVerification(user: User): Promise<void> {
+    await sendEmailVerification(user);
   }
 }
 
