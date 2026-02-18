@@ -5,13 +5,14 @@ import {
   signOut, 
   User,
   onAuthStateChanged,
+  deleteUser,
   sendEmailVerification,
   AuthError
 } from 'firebase/auth';
 import { FirebaseService } from './firebase.service';
 import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { UserAccount } from '../models/user.model';
-import { doc, setDoc, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
+import { doc, setDoc, getDoc, onSnapshot, Unsubscribe, deleteDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -114,6 +115,25 @@ export class AuthService {
 
   async sendEmailVerification(user: User): Promise<void> {
     await sendEmailVerification(user);
+  }
+  
+  async deleteAccount(): Promise<void> {
+    const user = this.firebaseService.auth.currentUser;
+    if (!user) throw new Error('No hay usuario autenticado');
+
+    try {
+      // 1. Delete from Firestore
+      const userRef = doc(this.firebaseService.firestore, 'users', user.uid);
+      await deleteDoc(userRef);
+
+      // 2. Delete from Auth
+      await deleteUser(user);
+    } catch (error: any) {
+      if (error.code === 'auth/requires-recent-login') {
+        throw new Error('Por seguridad, debes haber iniciado sesión recientemente para realizar esta acción. Por favor, cierra sesión e ingresa de nuevo antes de intentar eliminar tu cuenta.');
+      }
+      throw error;
+    }
   }
 }
 

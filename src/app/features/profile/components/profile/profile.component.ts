@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   activeChild: Child | null = null;
+  isDeleteModalOpen = false;
   private subscriptions = new Subscription();
 
   constructor(
@@ -99,6 +100,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   canAfford(price: number): boolean {
     return this.ruedas >= price;
+  }
+
+  confirmDeleteAccount(): void {
+    this.isDeleteModalOpen = true;
+  }
+
+  cancelDelete(): void {
+    this.isDeleteModalOpen = false;
+  }
+
+  async executeDeleteAccount(): Promise<void> {
+    try {
+      await this.userService.deleteAccount();
+      // El guard de auth se encargará de redirigir si el usuario ya no existe
+      this.router.navigate(['/welcome']);
+    } catch (error: any) {
+      alert(error.message || 'Error al eliminar la cuenta');
+      this.isDeleteModalOpen = false;
+    }
   }
 }
 

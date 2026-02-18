@@ -294,6 +294,10 @@ export class UserService {
     await this.updateActiveChild(partialData);
   }
 
+  async deleteAccount(): Promise<void> {
+    await this.authService.deleteAccount();
+  }
+
   private migrateUserData(data: UserAccount): UserAccount {
     return {
       ...data,
