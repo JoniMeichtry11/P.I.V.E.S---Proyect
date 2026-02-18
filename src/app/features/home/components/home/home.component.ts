@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { Child } from '../../../../core/models/user.model';
 
 @Component({
@@ -14,13 +15,19 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.userService.activeChild$.subscribe(child => {
       this.activeChild = child;
     });
+  }
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    this.router.navigate(['/welcome']);
   }
 
   get hasCompletedBookings(): boolean {

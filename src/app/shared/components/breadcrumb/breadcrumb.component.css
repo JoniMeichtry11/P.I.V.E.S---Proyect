@@ -1,0 +1,7 @@
+.breadcrumb-container {
+  font-family: 'Inter', sans-serif;
+}
+
+.breadcrumb-container ol li:last-child {
+  pointer-events: none;
+}

@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+/* Global cursor styles */
+button, 
+[role="button"],
+a {
+  cursor: pointer;
+}
+
+button:disabled,
+[disabled] {
+  cursor: not-allowed !important;
+}
+
+/* Specific interactive cursors */
+.interactive-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.help-cursor {
+  cursor: help;
+}
+
+.zoom-cursor {
+  cursor: zoom-in;
+}
+
+.copy-cursor {
+  cursor: copy;
+}

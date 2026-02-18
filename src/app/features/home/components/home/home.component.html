@@ -4,7 +4,7 @@
     <div class="lg:col-span-2">
       <button
         (click)="navigateTo('flashcards')"
-        class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-gradient-to-br from-blue-500 to-indigo-600"
+        class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-blue-500 to-indigo-600"
         >
         <div class="text-5xl mb-4">📖</div>
         <div>
@@ -16,7 +16,7 @@
 
     <button
       (click)="navigateTo('profile')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-gradient-to-br from-slate-500 to-slate-700"
+      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-slate-500 to-slate-700"
       >
       <div class="text-5xl mb-4">👤</div>
       <div>
@@ -27,7 +27,7 @@
 
     <button
       (click)="navigateTo('booking')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-gradient-to-br from-green-500 to-emerald-600"
+      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-green-500 to-emerald-600"
       >
       <div class="text-5xl mb-4">🚗</div>
       <div>
@@ -38,7 +38,7 @@
 
     <button
       (click)="navigateTo('map')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-gradient-to-br from-amber-500 to-orange-600"
+      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-amber-500 to-orange-600"
       >
       <div class="text-5xl mb-4">🗺️</div>
       <div>
@@ -49,7 +49,7 @@
 
     <button
       (click)="navigateTo('buy-fuel')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-gradient-to-br from-purple-500 to-pink-600"
+      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-purple-500 to-pink-600"
       >
       <div class="text-5xl mb-4">⛽</div>
       <div>
@@ -58,13 +58,13 @@
       </div>
     </button>
 
-    <div class="lg:col-span-3">
+    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
       <button
         (click)="navigateTo('family-actions')"
         [disabled]="!hasCompletedBookings"
         [class.opacity-50]="!hasCompletedBookings"
         [class.cursor-not-allowed]="!hasCompletedBookings"
-        class="relative w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-gradient-to-br from-teal-500 to-cyan-600"
+        class="relative w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-teal-500 to-cyan-600"
         >
         <div class="text-5xl mb-4">{{ hasCompletedBookings ? '👍' : '🔒' }}</div>
         <div>
@@ -76,6 +76,17 @@
             <p class="text-center font-bold px-4">Completa una práctica de manejo para desbloquear</p>
           </div>
         }
+      </button>
+
+      <button
+        (click)="logout()"
+        class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-rose-500 to-red-600"
+        >
+        <div class="text-5xl mb-4">🚪</div>
+        <div>
+          <h2 class="text-2xl font-display">Cerrar Sesión</h2>
+          <p class="mt-1 font-light">¿Ya terminaste por hoy? ¡Nos vemos pronto!</p>
+        </div>
       </button>
     </div>
   </div>

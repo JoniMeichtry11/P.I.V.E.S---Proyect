@@ -19,6 +19,9 @@ import { Subject, of } from 'rxjs';
           [activeChild]="activeChild$ | async"
         ></app-notification-manager>
       }
+      @if (showHeader$ | async) {
+        <app-breadcrumb></app-breadcrumb>
+      }
       <main [class.pt-24]="showHeader$ | async" class="transition-opacity duration-500 ease-in-out">
         <router-outlet></router-outlet>
       </main>

@@ -4,11 +4,13 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { NotificationManagerComponent } from './components/notification-manager/notification-manager.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    NotificationManagerComponent
+    NotificationManagerComponent,
+    BreadcrumbComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { NotificationManagerComponent } from './components/notification-manager/
     FormsModule,
     ReactiveFormsModule,
     HeaderComponent,
-    NotificationManagerComponent
+    NotificationManagerComponent,
+    BreadcrumbComponent
   ]
 })
 export class SharedModule { }
