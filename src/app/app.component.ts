@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from './core/services/user.service';
 import { AuthService } from './core/services/auth.service';
-import { Router } from '@angular/router';
-import { filter, map, switchMap, tap, takeUntil } from 'rxjs/operators';
-import { Subject, of } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter, map, switchMap, takeUntil, combineLatestWith, startWith } from 'rxjs/operators';
+import { Subject, of, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -34,15 +34,31 @@ export class AppComponent implements OnInit, OnDestroy {
   showHeader$;
   activeChild$;
   private destroy$ = new Subject<void>();
+  private currentUrl$ = new BehaviorSubject<string>('/');
+
+  private readonly ROUTES_WITHOUT_HEADER = [
+    '/welcome', '/login', '/register', '/onboarding', '/child-selection'
+  ];
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private router: Router
   ) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    ).subscribe((event: any) => {
+      this.currentUrl$.next(event.urlAfterRedirects || event.url);
+    });
+
     this.showHeader$ = this.userService.activeChild$.pipe(
-      filter(child => child !== null),
-      map(child => child?.hasCompletedOnboarding ?? false)
+      combineLatestWith(this.currentUrl$),
+      map(([child, url]) => {
+        if (!child) return false;
+        if (this.ROUTES_WITHOUT_HEADER.some(r => url.startsWith(r))) return false;
+        return child.hasCompletedOnboarding;
+      })
     );
     this.activeChild$ = this.userService.activeChild$;
   }
@@ -67,8 +83,16 @@ export class AppComponent implements OnInit, OnDestroy {
         
         const currentUrl = this.router.url;
         if (currentUrl === '/' || currentUrl === '/welcome' || currentUrl === '/login' || currentUrl === '/register') {
-          if (this.userService.getActiveChildIndex() !== null) {
-            this.router.navigate(['/home']);
+          const idx = this.userService.getActiveChildIndex();
+          if (idx !== null) {
+            const child = account.children[idx];
+            if (child && !child.hasCompletedOnboarding) {
+              this.router.navigate(['/onboarding']);
+            } else {
+              this.router.navigate(['/home']);
+            }
+          } else if (account.children.length > 1) {
+            this.router.navigate(['/child-selection']);
           }
         }
       }

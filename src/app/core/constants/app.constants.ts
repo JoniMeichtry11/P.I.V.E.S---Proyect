@@ -52,9 +52,9 @@ export const FAMILY_ACTION_CARDS: FamilyActionCard[] = [
 
 export const CAR_MODELS: CarModel[] = [
   { id: 'car1', name: 'Buggito', image: 'https://i.ibb.co/8DPJkNFJ/buggy-rojo.jpg', pricePerSlot: 2 },
-  { id: 'car2', name: 'Aventurero Azul', image: 'https://raw.githubusercontent.com/pives-project/assets/main/images/car-azul.png', pricePerSlot: 2 },
-  { id: 'car3', name: 'Princesa Rosa', image: 'https://raw.githubusercontent.com/pives-project/assets/main/images/car-rosa.png', pricePerSlot: 2 },
-  { id: 'car4', name: 'Excavadora Poderosa', image: 'https://raw.githubusercontent.com/pives-project/assets/main/images/car-excavadora.png', pricePerSlot: 2 },
+  { id: 'car2', name: 'Aventurero Azul', image: 'https://i.ibb.co/Ld81vLT5/hilux-azul.jpg', pricePerSlot: 2 },
+  { id: 'car3', name: 'Princesa Rosa', image: 'https://i.ibb.co/hx8tmcK4/rosado.jpg', pricePerSlot: 2 },
+  { id: 'car4', name: 'Rayo Blanco', image: 'https://i.ibb.co/ZRK9Ny1X/mercedes-blanco.jpg', pricePerSlot: 2 },
 ];
 
 export const EVENTS: Event[] = [
