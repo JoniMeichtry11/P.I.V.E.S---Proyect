@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { OnboardingGuard } from './core/guards/onboarding.guard';
+import { AdminGuard } from './core/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -54,6 +55,11 @@ const routes: Routes = [
     loadChildren: () => import('./features/map/map.module').then(m => m.MapModule),
     canActivate: [AuthGuard, OnboardingGuard],
     data: { breadcrumb: 'Mapa de Eventos' }
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard, AdminGuard]
   },
   /*
   {

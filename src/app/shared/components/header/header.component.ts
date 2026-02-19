@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Child, Accessory } from '../../../core/models/user.model';
+import { Child, Accessory, UserAccount } from '../../../core/models/user.model';
 import { ACCESSORIES, MILESTONES_ORDER, MILESTONE_DATA } from '../../../core/constants/app.constants';
 
 @Component({
@@ -12,7 +12,15 @@ import { ACCESSORIES, MILESTONES_ORDER, MILESTONE_DATA } from '../../../core/con
   standalone: false
 })
 export class HeaderComponent {
-  @Input() activeChild: Child | null = null;
+  @Input() set activeChild(value: Child | null) {
+    this._activeChild = value;
+    this._updateMilestones();
+  }
+  get activeChild(): Child | null { return this._activeChild; }
+  @Input() isAdmin = false;
+
+  private _activeChild: Child | null = null;
+  cachedMilestones: Array<{name: string; icon: string; isUnlocked: boolean}> = [];
 
   constructor(
     private router: Router,
@@ -25,10 +33,10 @@ export class HeaderComponent {
     return ACCESSORIES.find(acc => acc.id === this.activeChild!.accessories.equipped);
   }
 
-  get milestones() {
-    return MILESTONES_ORDER.map(key => ({
+  private _updateMilestones(): void {
+    this.cachedMilestones = MILESTONES_ORDER.map(key => ({
       ...MILESTONE_DATA[key],
-      isUnlocked: (this.activeChild?.progress.milestones || []).includes(key)
+      isUnlocked: (this._activeChild?.progress?.milestones || []).includes(key)
     }));
   }
 
@@ -44,6 +52,10 @@ export class HeaderComponent {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/welcome']);
+  }
+
+  navigateToAdmin(): void {
+    this.router.navigate(['/admin']);
   }
 }
 

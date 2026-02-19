@@ -1,4 +1,4 @@
-import { Accessory, CarModel, Question, FamilyActionCard, Event, FuelPackage, Milestone } from '../models/user.model';
+import { Accessory, CarModel, Question, FamilyActionCard, FuelPackage, Milestone } from '../models/user.model';
 
 export const AVATARS: string[] = [
   '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮'
@@ -57,11 +57,7 @@ export const CAR_MODELS: CarModel[] = [
   { id: 'car4', name: 'Rayo Blanco', image: 'https://i.ibb.co/ZRK9Ny1X/mercedes-blanco.jpg', pricePerSlot: 2 },
 ];
 
-export const EVENTS: Event[] = [
-  { title: 'Gran PRESENTACION', date: 'Sábado, 10 de enero de 2026', location: 'Plaza General San Martín', description: '¡Te esperamos! Habrá mucha diversión.' },
-  { title: 'Practicas', date: 'Domingo, 11 de enero de 2026', location: 'Plaza Soldado Aguila', description: 'Un taller interactivo para aprender y practicar.' },
-  { title: 'Día de Práctica en el Circuito', date: 'Sábado, 17 de enero de 2026', location: 'Circuito de Educación Vial "El Volante"', description: 'Ven a practicar con nuestros coches a batería en un circuito seguro y supervisado.' }
-];
+
 
 export const FUEL_PACKAGES: FuelPackage[] = [
   { liters: 2, price: 10000, bgColor: 'from-sky-400 to-blue-500' },

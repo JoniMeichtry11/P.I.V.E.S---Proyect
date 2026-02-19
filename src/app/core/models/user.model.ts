@@ -46,6 +46,7 @@ export interface UserAccount {
   uid: string;
   parent: Parent;
   children: Child[];
+  isAdmin?: boolean;
 }
 
 export interface CarModel {
@@ -83,10 +84,16 @@ export interface FamilyActionCard {
 }
 
 export interface Event {
+  id?: string;
   title: string;
   date: string;
   location: string;
   description: string;
+  lat: number;
+  lng: number;
+  route?: { lat: number, lng: number }[];
+  time?: string;
+  category?: 'practica' | 'presentacion' | 'taller' | 'competencia';
 }
 
 export interface FuelPackage {

@@ -36,7 +36,7 @@
           </div>
           <!-- DOCUMENTOS -->
           <div class="flex items-center gap-1 border-l-2 border-slate-300 pl-2 ml-1" title="Mis Documentos">
-            @for (milestone of milestones; track milestone) {
+            @for (milestone of cachedMilestones; track milestone.name) {
               <span
                 [class.opacity-100]="milestone.isUnlocked"
                 [class.opacity-20]="!milestone.isUnlocked"
@@ -56,6 +56,11 @@
 
     <!-- Botones de Acción -->
     <div class="flex items-center gap-2">
+      @if (isAdmin) {
+        <button (click)="navigateToAdmin()" class="bg-amber-100 text-amber-700 px-3 py-2 rounded-xl font-bold hover:bg-amber-200 transition-all text-xs sm:text-sm" title="Panel de Administración">
+          ⚙️ Admin
+        </button>
+      }
       <button (click)="switchProfile()" class="bg-blue-100 text-blue-700 px-3 py-2 rounded-xl font-bold hover:bg-blue-200 transition-all text-xs sm:text-sm">
         Cambiar Conductor
       </button>

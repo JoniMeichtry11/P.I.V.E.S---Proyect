@@ -4,6 +4,7 @@ import { AuthService } from './core/services/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, map, switchMap, takeUntil, combineLatestWith, startWith } from 'rxjs/operators';
 import { Subject, of, BehaviorSubject } from 'rxjs';
+import { SUPER_ADMIN_EMAIL } from './core/services/admin.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { Subject, of, BehaviorSubject } from 'rxjs';
       @if (showHeader$ | async) {
         <app-header
           [activeChild]="activeChild$ | async"
+          [isAdmin]="isAdmin$ | async"
         ></app-header>
       }
       @if (showHeader$ | async) {
@@ -33,12 +35,10 @@ import { Subject, of, BehaviorSubject } from 'rxjs';
 export class AppComponent implements OnInit, OnDestroy {
   showHeader$;
   activeChild$;
+  isAdmin$;
   private destroy$ = new Subject<void>();
   private currentUrl$ = new BehaviorSubject<string>('/');
-
-  private readonly ROUTES_WITHOUT_HEADER = [
-    '/welcome', '/login', '/register', '/onboarding', '/child-selection'
-  ];
+  private readonly ROUTES_WITHOUT_HEADER = ['/welcome', '/auth/login', '/auth/register', '/onboarding', '/child-selection', '/admin'];
 
   constructor(
     private userService: UserService,
@@ -61,6 +61,10 @@ export class AppComponent implements OnInit, OnDestroy {
       })
     );
     this.activeChild$ = this.userService.activeChild$;
+    this.isAdmin$ = this.userService.currentUserAccount$.pipe(
+      map(account => account?.isAdmin === true || account?.parent?.email === SUPER_ADMIN_EMAIL),
+      startWith(false)
+    );
   }
 
   ngOnInit(): void {

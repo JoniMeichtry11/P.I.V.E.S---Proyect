@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OnboardingRoutingModule } from './onboarding-routing.module';
-import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { SharedModule } from '../../shared/shared.module';
+import { OnboardingComponent } from './components/onboarding/onboarding.component';
+import { OnboardingRoutingModule } from './onboarding-routing.module';
 
 @NgModule({
   declarations: [
