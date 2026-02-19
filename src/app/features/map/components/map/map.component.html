@@ -1,31 +1,129 @@
-<div class="max-w-6xl mx-auto p-4 md:p-8">
-  <h1 class="text-4xl font-display text-center text-slate-700 mb-8">Mapa y Calendario de Eventos</h1>
-  <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+<div class="events-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>🗺️ Mapa de Eventos</h1>
+      <p class="header-subtitle">Explorá los próximos eventos y sus ubicaciones</p>
+    </div>
+    @if (isAdmin) {
+      <button class="btn-create" (click)="openCreateForm()">
+        <span class="plus-icon">+</span> Nuevo Evento
+      </button>
+    }
+  </div>
 
-    <div class="lg:col-span-3 bg-white p-6 rounded-2xl shadow-xl">
-      <h2 class="text-2xl font-bold text-slate-800 mb-4">Puntos de Encuentro</h2>
-      <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border-2 border-slate-200">
-        <img src="https://i.ibb.co/1GHRyCQp/mapa.png" alt="Mapa de puntos de encuentro" class="w-full h-full object-cover"/>
-      </div>
-      <p class="mt-4 text-slate-500">
-        Aquí puedes ver nuestros circuitos de práctica y los puntos de encuentro para los eventos. ¡Te esperamos!
-      </p>
+  <div class="main-layout">
+    <!-- Mapa Interactivo (Google Maps) -->
+    <div class="map-panel">
+      <google-map
+        width="100%"
+        height="100%"
+        [center]="center"
+        [zoom]="zoom"
+        [options]="options"
+      >
+        <!-- Marcadores -->
+        @for (event of events; track event.id) {
+          <map-marker
+            #marker="mapMarker"
+            [position]="{ lat: event.lat, lng: event.lng }"
+            [options]="getMarkerOptions(event)"
+            (mapClick)="openInfoWindow(marker, event)"
+          ></map-marker>
+
+          <!-- Recorrido -->
+          @if (event.route && event.route.length >= 2) {
+            <map-polyline [options]="getPolylineOptions(event)"></map-polyline>
+          }
+        }
+
+        <!-- Info Window -->
+        <map-info-window>
+          @if (selectedEvent) {
+            <div class="info-window-content">
+              <h3>{{ selectedEvent.title }}</h3>
+              <p>📅 {{ formatDisplayDate(selectedEvent.date) }} {{ selectedEvent.time }}</p>
+              <p>📍 {{ selectedEvent.location }}</p>
+            </div>
+          }
+        </map-info-window>
+      </google-map>
     </div>
 
-    <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-xl">
-      <h2 class="text-2xl font-bold text-slate-800 mb-4">Próximos Eventos</h2>
-      <div class="space-y-4">
-        @for (event of events; track event) {
-          <div class="bg-sky-50 p-4 rounded-lg border border-sky-200">
-            <p class="font-bold text-blue-700">{{ event.title }}</p>
-            <p class="text-sm text-slate-600 font-semibold">{{ event.date }}</p>
-            <p class="text-sm text-slate-500">📍 {{ event.location }}</p>
-            <p class="text-sm mt-1 text-slate-700">{{ event.description }}</p>
-          </div>
-        }
-      </div>
+    <!-- Lista de Eventos -->
+    <div class="events-panel">
+      <h2 class="events-title">📅 Próximos Eventos</h2>
+
+      @if (isLoading) {
+        <div class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Cargando eventos...</p>
+        </div>
+      } @else if (events.length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon">🎈</span>
+          <p>No hay eventos programados todavía.</p>
+          @if (isAdmin) {
+            <button class="btn-create-sm" (click)="openCreateForm()">Crear el primero</button>
+          }
+        </div>
+      } @else {
+        <div class="events-list">
+          @for (event of events; track event.id) {
+            <div
+              class="event-card"
+              [class.selected]="selectedEvent?.id === event.id"
+              (click)="focusOnEvent(event)"
+            >
+              <div class="event-card-header">
+                <span class="category-badge" [ngClass]="getCategoryColorClass(event.category)">
+                  {{ getCategoryEmoji(event.category) }} {{ getCategoryLabel(event.category) }}
+                </span>
+                @if (isAdmin) {
+                  <div class="event-actions">
+                    <button class="action-btn edit-btn" title="Editar" (click)="openEditForm(event); $event.stopPropagation()">✏️</button>
+                    <button class="action-btn delete-btn" title="Eliminar" (click)="confirmDeleteEvent(event); $event.stopPropagation()">🗑️</button>
+                  </div>
+                }
+              </div>
+
+              <h3 class="event-title">{{ event.title }}</h3>
+              <div class="event-meta">
+                <span>📅 {{ formatDisplayDate(event.date) }}</span>
+                @if (event.time) {
+                  <span>🕐 {{ event.time }}</span>
+                }
+              </div>
+              <p class="event-location">📍 {{ event.location }}</p>
+              <p class="event-description">{{ event.description }}</p>
+
+              @if (event.route && event.route.length > 0) {
+                <span class="route-badge">🛤️ Recorrido trazado</span>
+              }
+
+              <!-- Confirmación de eliminación -->
+              @if (deletingEventId === event.id) {
+                <div class="delete-confirm" (click)="$event.stopPropagation()">
+                  <p>¿Eliminar este evento?</p>
+                  <div class="delete-confirm-actions">
+                    <button class="btn-confirm-delete" (click)="deleteEvent(event)">Sí, eliminar</button>
+                    <button class="btn-cancel-delete" (click)="cancelDelete()">Cancelar</button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
+
+  <!-- Modal de Formulario -->
+  @if (showEventForm) {
+    <app-event-form
+      [event]="editingEvent"
+      (save)="onSaveEvent($event)"
+      (cancel)="closeForm()"
+    ></app-event-form>
+  }
 </div>
-
-

@@ -1,0 +1,110 @@
+<div class="event-form-overlay" (click)="onOverlayClick($event)">
+  <div class="event-form-modal">
+    <div class="modal-header">
+      <h2>{{ isEditing ? 'Editar Evento' : 'Nuevo Evento' }}</h2>
+      <button class="close-btn" (click)="onCancel()">✕</button>
+    </div>
+
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+      <div class="form-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="title">Título *</label>
+            <input id="title" type="text" formControlName="title" placeholder="Ej: Gran Práctica en el Parque">
+          </div>
+          <div class="form-group">
+            <label for="category">Categoría</label>
+            <select id="category" formControlName="category">
+              <option value="">Sin categoría</option>
+              <option value="practica">🏎️ Práctica</option>
+              <option value="presentacion">🎉 Presentación</option>
+              <option value="taller">📚 Taller</option>
+              <option value="competencia">🏆 Competencia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="date">Fecha *</label>
+            <input id="date" type="date" formControlName="date">
+          </div>
+          <div class="form-group flex-1">
+            <label for="time">Hora</label>
+            <input id="time" type="time" formControlName="time">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Ubicación (texto) *</label>
+          <input id="location" type="text" formControlName="location" placeholder="Ej: Plaza General San Martín">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción *</label>
+          <textarea id="description" formControlName="description" rows="3" placeholder="Describe el evento..."></textarea>
+        </div>
+
+        <!-- Mini mapa Google Maps para seleccionar ubicación y trazar recorrido -->
+        <div class="map-section">
+          <div class="map-section-header">
+            <label>📍 Ubicación y Recorrido</label>
+            <div class="map-mode-toggle">
+              <button type="button" class="mode-btn" [class.active]="mapMode === 'location'" (click)="setMapMode('location')">
+                📍 Ubicación
+              </button>
+              <button type="button" class="mode-btn" [class.active]="mapMode === 'route'" (click)="setMapMode('route')">
+                🛤️ Recorrido
+              </button>
+            </div>
+          </div>
+          <p class="map-hint">
+            @if (mapMode === 'location') {
+              Hacé clic en el mapa para seleccionar la ubicación del evento.
+            } @else {
+              Hacé clic en el mapa para agregar puntos al recorrido.
+            }
+          </p>
+          <div class="form-map-container">
+            <google-map
+              width="100%"
+              height="100%"
+              [center]="center"
+              [zoom]="zoom"
+              [options]="options"
+              (mapClick)="onMapClick($event)"
+            >
+              @if (markerPosition) {
+                <map-marker [position]="markerPosition" [options]="markerOptions"></map-marker>
+              }
+
+              @if (routePoints.length > 0) {
+                <map-polyline [path]="routePoints" [options]="polylineOptions"></map-polyline>
+                
+                @for (pt of routePoints; track pt) {
+                  <map-circle [center]="pt" [options]="{radius: 5, fillColor: '#f59e0b', fillOpacity: 1, strokeColor: '#d97706', strokeWeight: 1}"></map-circle>
+                }
+              }
+            </google-map>
+          </div>
+          @if (routePoints.length > 0) {
+            <button type="button" class="clear-route-btn" (click)="clearRoute()">
+              🗑️ Limpiar recorrido ({{ routePoints.length }} puntos)
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="eventForm.invalid || isSaving">
+          @if (isSaving) {
+            <span class="spinner"></span> Guardando...
+          } @else {
+            {{ isEditing ? 'Guardar Cambios' : 'Crear Evento' }}
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

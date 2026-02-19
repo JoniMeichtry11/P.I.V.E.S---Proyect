@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
-import { FirebaseService } from '../../../../core/services/firebase.service';
+import { AdminService } from '../../../../core/services/admin.service';
 import { Child, CarModel, UserAccount } from '../../../../core/models/user.model';
 import { CAR_MODELS, TIME_SLOTS } from '../../../../core/constants/app.constants';
-import { collectionGroup, query, where, getDocs } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 
 interface ModalAction {
@@ -53,7 +52,7 @@ export class BookingComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private userService: UserService,
-    private firebaseService: FirebaseService
+    private adminService: AdminService
   ) {
     this.router = this._router;
   }
@@ -100,16 +99,10 @@ export class BookingComponent implements OnInit, OnDestroy {
   async loadBookedSlots(): Promise<void> {
     if (this.step === 2 && this.selectedCar && this.selectedDate) {
       try {
-        const bookingsRef = collectionGroup(this.firebaseService.firestore, 'bookings');
-        const q = query(
-          bookingsRef,
-          where('date', '==', this.selectedDate),
-          where('car.id', '==', this.selectedCar.id),
-          where('status', '==', 'active')
+        this.globallyBookedSlots = await this.adminService.getGloballyBookedSlots(
+          this.selectedDate,
+          this.selectedCar.id
         );
-        
-        const snapshot = await getDocs(q);
-        this.globallyBookedSlots = snapshot.docs.map(doc => doc.data()['time']);
       } catch (error) {
         console.error('Error loading booked slots:', error);
         this.globallyBookedSlots = [];
