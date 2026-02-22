@@ -1,0 +1,66 @@
+<div class="help-page max-w-4xl mx-auto p-6 md:p-12">
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-display text-slate-800 mb-4">Centro de Ayuda 💡</h1>
+    <p class="text-lg text-slate-600">¿Tenés alguna duda o sugerencia? Estamos aquí para ayudarte.</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Contact Info -->
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 transition-transform hover:-translate-y-1">
+      <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+        📞
+      </div>
+      <h2 class="text-2xl font-bold text-slate-800 mb-4">Llamanos o escribinos</h2>
+      <p class="text-slate-600 mb-6">Podés contactarnos vía WhatsApp o llamada telefónica para una atención más rápida.</p>
+      
+      <div class="space-y-4">
+        <a [href]="whatsappUrl" target="_blank" class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-green-50 text-slate-700 hover:text-green-700 transition-colors group">
+          <span class="text-2xl group-hover:scale-110 transition-transform">📱</span>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-60">WhatsApp / Tel</p>
+            <p class="text-lg font-bold">{{ phone }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Email Card -->
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 transition-transform hover:-translate-y-1">
+      <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+        ✉️
+      </div>
+      <h2 class="text-2xl font-bold text-slate-800 mb-4">Envianos un correo</h2>
+      <p class="text-slate-600 mb-6">Para consultas administrativas o soporte técnico, escribinos a nuestras casillas oficiales.</p>
+      
+      <div class="space-y-4">
+        <a [href]="'mailto:' + emailPrimary" class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 transition-colors group">
+          <span class="text-2xl group-hover:scale-110 transition-transform">📩</span>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-60">Contacto General</p>
+            <p class="text-lg font-bold">{{ emailPrimary }}</p>
+          </div>
+        </a>
+        
+        <a [href]="'mailto:' + emailSupport" class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 transition-colors group">
+          <span class="text-2xl group-hover:scale-110 transition-transform">🤖</span>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-60">Sistema / No-Reply</p>
+            <p class="text-lg font-bold">{{ emailSupport }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Preview o Pie -->
+  <div class="mt-16 bg-linear-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl relative overflow-hidden">
+    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+    <div class="relative z-10">
+      <h3 class="text-2xl font-bold mb-4">¿Ya revisaste el mapa de eventos?</h3>
+      <p class="text-blue-100 mb-8 max-w-xl mx-auto">Allí encontrarás todas las fechas y ubicaciones de nuestras próximas prácticas y competencias.</p>
+      <button routerLink="/map" class="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:shadow-lg transition-all active:scale-95">
+        Ir al Mapa de Eventos
+      </button>
+    </div>
+  </div>
+</div>

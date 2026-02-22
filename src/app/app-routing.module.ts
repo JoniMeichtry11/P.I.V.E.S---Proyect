@@ -57,6 +57,12 @@ const routes: Routes = [
     data: { breadcrumb: 'Mapa de Eventos' }
   },
   {
+    path: 'help',
+    loadChildren: () => import('./features/help/help.module').then(m => m.HelpModule),
+    canActivate: [AuthGuard, OnboardingGuard],
+    data: { breadcrumb: 'Ayuda y Contacto' }
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
     canActivate: [AuthGuard, AdminGuard]
