@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { AdminService } from '../../../../core/services/admin.service';
-import { Child, CarModel, UserAccount } from '../../../../core/models/user.model';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { Child, CarModel, UserAccount, Booking } from '../../../../core/models/user.model';
 import { CAR_MODELS, TIME_SLOTS } from '../../../../core/constants/app.constants';
 import { Subscription } from 'rxjs';
 
@@ -52,7 +53,8 @@ export class BookingComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private userService: UserService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private notificationService: NotificationService
   ) {
     this.router = this._router;
   }
@@ -231,18 +233,37 @@ export class BookingComponent implements OnInit, OnDestroy {
   }
 
   handleWhatsAppNotification(): void {
+    if (!this.selectedCar || !this.selectedDate || !this.selectedTime || !this.currentUserAccount) return;
+
+    const booking: Booking = {
+      id: '',
+      status: 'active',
+      date: this.selectedDate,
+      time: this.selectedTime,
+      car: this.selectedCar,
+      remindersSent: { dayBefore: false, sameDay: false }
+    };
+
+    this.notificationService.sendWhatsAppNotification(
+      this.currentUserAccount,
+      this.confirmedForChildName,
+      booking
+    );
+  }
+
+  handleAddToCalendar(): void {
     if (!this.selectedCar || !this.selectedDate || !this.selectedTime) return;
 
-    const dateFormatted = new Date(this.selectedDate + 'T00:00:00').toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    const message = `¡Hola! 👋 Confirmamos tu reserva en el Programa P.I.V.E.S. para ${this.confirmedForChildName}:\n\n🚗 Coche: ${this.selectedCar.name}\n🗓️ Fecha: ${dateFormatted}\n⏰ Hora: ${this.selectedTime}\n⛽ Combustible usado: ${this.selectedCar.pricePerSlot} Lts\n\n¡Te esperamos para una gran aventura de aprendizaje! 🚦`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const booking: Booking = {
+      id: '',
+      status: 'active',
+      date: this.selectedDate,
+      time: this.selectedTime,
+      car: this.selectedCar,
+      remindersSent: { dayBefore: false, sameDay: false }
+    };
+
+    this.notificationService.addToGoogleCalendar(this.confirmedForChildName, booking);
   }
 
   resetBooking(): void {
