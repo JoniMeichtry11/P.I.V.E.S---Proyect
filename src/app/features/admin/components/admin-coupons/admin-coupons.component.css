@@ -1,0 +1,9 @@
+/* Estilos específicos si son necesarios, pero estamos usando Tailwind */
+:host {
+  display: block;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

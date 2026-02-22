@@ -106,7 +106,25 @@
             <span class="group-hover:translate-x-1 transition-transform">→</span>
           </div>
         </button>
+
+        <button (click)="navigateTo('/admin/coupons')"
+          class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-amber-500/50 hover:bg-slate-800/80 transition-all duration-300">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-amber-600/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+              🎟️
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-white group-hover:text-amber-400 transition-colors">Cupones</h3>
+              <p class="text-sm text-slate-400">Crear y gestionar cupones de combustible</p>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 group-hover:text-amber-400 transition-colors">
+            <span>Gestionar beneficios</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </button>
       </div>
+
 
       <!-- Botón refrescar -->
       <div class="mt-8 text-center">

@@ -6,6 +6,7 @@ import { Child, FuelPackage } from '../../../../core/models/user.model';
 import { PREPAID_CODES, FUEL_PACKAGES } from '../../../../core/constants/app.constants';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
+import { CouponService } from '../../../../core/services/coupon.service';
 
 interface FeedbackMessage {
   type: 'success' | 'error' | 'pending';
@@ -29,6 +30,8 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
   isCreatingPreference = false;
   /** Cuando es true se está verificando el pago que regresó de MP */
   isVerifyingPayment = false;
+  /** Cuando es true se está validando un cupón */
+  isValidatingCoupon = false;
   paymentMethod: 'card' | 'wallet' = 'card';
 
   private subscriptions = new Subscription();
@@ -42,7 +45,8 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private paymentService: PaymentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private couponService: CouponService
   ) {
     this.router = this._router;
   }
@@ -103,6 +107,11 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
             createdAt: new Date().toISOString()
           });
         }
+        
+        // Limpiar descuento si el pago fue aprobado
+        if (this.activeChild?.progress?.activeDiscount) {
+          await this.userService.clearDiscount();
+        }
 
         this.purchasedAmount = liters;
         this.showSuccessModal = true;
@@ -119,19 +128,53 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleRedeemCodeSubmit(): void {
+  async handleRedeemCodeSubmit(): Promise<void> {
+    if (!this.redeemCode.trim()) return;
+    
     const code = this.redeemCode.toUpperCase().trim();
-    const amount = PREPAID_CODES[code];
     const alreadyUsed = (this.activeChild?.usedRedeemCodes || []).includes(code);
 
     if (alreadyUsed) {
       this.showFeedback('error', 'Este código ya ha sido canjeado.');
-    } else if (amount) {
-      this.userService.redeemCode(code, amount);
-      this.showFeedback('success', `¡Felicidades! Has canjeado ${amount} Litros de Combustible.`);
+      return;
+    }
+
+    this.isValidatingCoupon = true;
+    try {
+      const coupon = await this.couponService.getCouponByCode(code);
+      
+      if (!coupon) {
+        this.showFeedback('error', 'El código ingresado no es válido.');
+        return;
+      }
+
+      // Validar expiración
+      if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
+        this.showFeedback('error', 'Este cupón ha expirado.');
+        return;
+      }
+
+      // Validar límite de usos
+      if (coupon.maxUses !== null && coupon.timesUsed >= coupon.maxUses) {
+        this.showFeedback('error', 'Este cupón ha alcanzado su límite de usos.');
+        return;
+      }
+
+      // Canjear
+      await this.userService.redeemCode(code, coupon.value, coupon.type);
+      await this.couponService.incrementUsage(code);
+      
+      const benefitText = coupon.type === 'liters' 
+        ? `${coupon.value} Litros de Combustible`
+        : `${coupon.value}% de Descuento para tu próxima compra`;
+
+      this.showFeedback('success', `¡Felicidades! Has canjeado: ${benefitText}. ${coupon.description}`);
       this.redeemCode = '';
-    } else {
-      this.showFeedback('error', 'El código ingresado no es válido.');
+    } catch (error) {
+      console.error('Error redeeming coupon:', error);
+      this.showFeedback('error', 'Hubo un error al procesar el cupón. Intentá más tarde.');
+    } finally {
+      this.isValidatingCoupon = false;
     }
   }
 
@@ -151,8 +194,11 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
 
     this.isCreatingPreference = true;
     try {
+      const price = this.calculateDiscountedPrice(this.selectedPackage.price);
+      const pkgWithDiscount = { ...this.selectedPackage, price };
+
       const { checkoutUrl } = await this.paymentService.createPreference(
-        this.selectedPackage,
+        pkgWithDiscount,
         child.id
       );
       // Redirigir al checkout de MP (sale de la app)
@@ -174,6 +220,12 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
 
   closeSuccessModal(): void {
     this.showSuccessModal = false;
+  }
+
+  calculateDiscountedPrice(originalPrice: number): number {
+    const discount = this.activeChild?.progress?.activeDiscount || 0;
+    if (discount <= 0) return originalPrice;
+    return Math.round(originalPrice * (1 - discount / 100));
   }
 
   private showFeedback(type: 'success' | 'error' | 'pending', text: string): void {

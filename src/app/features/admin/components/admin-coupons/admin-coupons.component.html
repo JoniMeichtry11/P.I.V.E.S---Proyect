@@ -1,0 +1,150 @@
+<div class="min-h-screen bg-slate-900 text-white p-4 sm:p-8">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div>
+        <button (click)="goBack()" class="text-slate-400 hover:text-white mb-2 flex items-center gap-2 transition-colors">
+          ← Volver al Panel
+        </button>
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+          Gestión de Cupones 🎟️
+        </h1>
+        <p class="text-slate-400">Crea códigos de beneficios para los usuarios</p>
+      </div>
+      <button (click)="openNewForm()" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
+        <span>+</span> Nuevo Cupón
+      </button>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+      <div class="flex justify-center py-20">
+        <div class="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }
+
+    <!-- Form Modal/Overlay -->
+    @if (showForm) {
+      <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg p-6 shadow-2xl">
+          <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+            {{ editingCoupon ? 'Editar Cupón' : 'Nuevo Cupón' }}
+          </h2>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm text-slate-400 mb-1">Código (Ej: PIVES2025)</label>
+              <input type="text" [(ngModel)]="couponForm.code" [disabled]="!!editingCoupon"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none uppercase font-mono">
+            </div>
+            <div>
+              <label class="block text-sm text-slate-400 mb-1">Tipo de Beneficio</label>
+              <select [(ngModel)]="couponForm.type" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none">
+                <option value="liters">Litros Fijos ⛽</option>
+                <option value="discount">Descuento (%) 🏷️</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-slate-400 mb-1">Descripción</label>
+              <input type="text" [(ngModel)]="couponForm.description"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-slate-400 mb-1">
+                  {{ couponForm.type === 'liters' ? 'Litros ⛽' : 'Descuento (%) 🏷️' }}
+                </label>
+                <input type="number" [(ngModel)]="couponForm.value"
+                  class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none text-amber-400 font-bold">
+              </div>
+              <div>
+                <label class="block text-sm text-slate-400 mb-1">Límite usos (vacio=∞)</label>
+                <input type="number" [(ngModel)]="couponForm.maxUses"
+                  class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm text-slate-400 mb-1">Expiración (Opcional)</label>
+              <input type="date" [(ngModel)]="couponForm.expiresAt"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none">
+            </div>
+          </div>
+
+          <div class="flex gap-3 mt-8">
+            <button (click)="showForm = false" class="flex-1 py-3 border border-slate-600 rounded-xl hover:bg-slate-700 transition-colors">
+              Cancelar
+            </button>
+            <button (click)="saveCoupon()" class="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-xl transition-colors">
+              Guardar Cupón
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Table -->
+    @if (!loading && coupons.length > 0) {
+      <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl overflow-hidden backdrop-blur-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+                <th class="px-6 py-4 font-semibold">Código</th>
+                <th class="px-6 py-4 font-semibold">Beneficio</th>
+                <th class="px-6 py-4 font-semibold text-center">Usos</th>
+                <th class="px-6 py-4 font-semibold">Expiración</th>
+                <th class="px-6 py-4 font-semibold text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700/50">
+              @for (coupon of coupons; track coupon.id) {
+                <tr class="hover:bg-slate-700/30 transition-colors">
+                  <td class="px-6 py-4 font-mono font-bold text-blue-400">{{ coupon.code }}</td>
+                  <td class="px-6 py-4">
+                    <div class="flex flex-col">
+                      <span class="text-white text-sm font-bold">
+                        @if (coupon.type === 'liters') {
+                          ⛽ {{ coupon.value }} Litros
+                        } @else {
+                          🏷️ {{ coupon.value }}% de Descuento
+                        }
+                      </span>
+                      <span class="text-slate-500 text-xs">{{ coupon.description }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center text-sm">
+                    <span class="text-emerald-400">{{ coupon.timesUsed }}</span>
+                    <span class="text-slate-500"> / {{ coupon.maxUses || '∞' }}</span>
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    {{ coupon.expiresAt ? (coupon.expiresAt | date:'dd/MM/yyyy') : 'Nunca' }}
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-2">
+                      <button (click)="editCoupon(coupon)" class="p-2 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors" title="Editar">
+                        ✏️
+                      </button>
+                      <button (click)="deleteCoupon(coupon.id)" class="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors" title="Eliminar">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    } @else if (!loading && coupons.length === 0) {
+      <div class="bg-slate-800/50 border border-slate-700 border-dashed rounded-2xl p-20 text-center">
+        <span class="text-5xl mb-4 block">🎫</span>
+        <h3 class="text-xl font-bold text-slate-300 mb-2">No hay cupones creados</h3>
+        <p class="text-slate-500 mb-6">Empezá creando el primero para premiar a tus corredores.</p>
+        <button (click)="openNewForm()" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
+          + Crear Cupón
+        </button>
+      </div>
+    }
+  </div>
+</div>

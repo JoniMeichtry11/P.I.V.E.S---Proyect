@@ -269,7 +269,7 @@ export class UserService {
     });
   }
 
-  async redeemCode(code: string, amount: number): Promise<void> {
+  async redeemCode(code: string, amount: number, type: 'liters' | 'discount' = 'liters'): Promise<void> {
     const child = this.getActiveChild();
     if (!child) return;
 
@@ -278,13 +278,39 @@ export class UserService {
       throw new Error('Este código ya ha sido canjeado.');
     }
 
+    const progress = { ...child.progress };
+    if (type === 'liters') {
+      progress.fuelLiters += amount;
+    } else {
+      progress.activeDiscount = amount;
+    }
+
     await this.updateActiveChild({
       usedRedeemCodes: [...usedCodes, code],
+      progress
+    });
+  }
+
+  async applyDiscount(percentage: number): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    await this.updateActiveChild({
       progress: {
         ...child.progress,
-        fuelLiters: child.progress.fuelLiters + amount
+        activeDiscount: percentage
       }
     });
+  }
+
+  async clearDiscount(): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    const progress = { ...child.progress };
+    delete progress.activeDiscount;
+
+    await this.updateActiveChild({ progress });
   }
 
   async updateActiveChildData(partialData: Partial<Child>): Promise<void> {
@@ -312,7 +338,8 @@ export class UserService {
             milestones: progress?.milestones ?? [],
             currentCardIndex: progress?.currentCardIndex ?? 0,
             fuelLiters: progress?.fuelLiters ?? 0,
-            familyActionsProgress: progress?.familyActionsProgress ?? 0
+            familyActionsProgress: progress?.familyActionsProgress ?? 0,
+            activeDiscount: progress?.activeDiscount ?? 0
           },
           bookings: child.bookings || [],
           hasCompletedOnboarding: child.hasCompletedOnboarding || false,

@@ -4,10 +4,13 @@ import { AdminUsersComponent } from './components/admin-users/admin-users.compon
 import { AdminBookingsComponent } from './components/admin-bookings/admin-bookings.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
+import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.component';
+
 const routes: Routes = [
   { path: '', component: AdminDashboardComponent },
   { path: 'users', component: AdminUsersComponent },
-  { path: 'bookings', component: AdminBookingsComponent }
+  { path: 'bookings', component: AdminBookingsComponent },
+  { path: 'coupons', component: AdminCouponsComponent }
 ];
 
 @NgModule({

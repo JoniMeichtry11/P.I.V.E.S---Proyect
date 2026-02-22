@@ -11,6 +11,7 @@ export interface Progress {
   currentCardIndex: number;
   fuelLiters: number;
   familyActionsProgress: number;
+  activeDiscount?: number; // Porcentaje de descuento activo (0-100)
 }
 
 export interface Accessories {
@@ -120,5 +121,21 @@ export interface AnswerSummary {
   correctAnswer: string;
   isCorrect: boolean;
 }
+
+export type CouponType = 'liters' | 'discount';
+
+export interface FuelCoupon {
+  id: string;          // Document ID
+  code: string;        // Uppercase code (same as id)
+  type: CouponType;
+  value: number;       // Litros o Porcentaje
+  description: string;
+  maxUses: number | null;
+  timesUsed: number;
+  expiresAt: string | null; // ISO string
+  createdAt: string;
+}
+
+
 
 
