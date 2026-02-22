@@ -24,7 +24,7 @@ import { SUPER_ADMIN_EMAIL } from './core/services/admin.service';
       @if (showHeader$ | async) {
         <app-breadcrumb></app-breadcrumb>
       }
-      <main [class.pt-24]="showHeader$ | async" class="transition-opacity duration-500 ease-in-out">
+      <main [class.pt-8]="showHeader$ | async" class="transition-opacity duration-500 ease-in-out">
         <router-outlet></router-outlet>
       </main>
     </div>
