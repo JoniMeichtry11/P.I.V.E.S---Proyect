@@ -43,19 +43,21 @@ export class TextToSpeechService {
       return;
     }
 
-    // Prioridad para una voz premium/natural:
-    // 1. Voces "Natural" u "Online" (Edge/Azure - suenan excelente)
-    // 2. Voces de Google (Chrome - suenan muy bien)
-    // 3. Voces locales específicas (preferencia es-ES para España o es-MX/es-AR para Latam)
-    // 4. Cualquier voz en español
+    // Prioridad Absoluta: Español Argentino (es-AR)
+    // Prioridad Secundaria: Español Mexicano (es-MX)
+    // 1. Voces "Natural" u "Online" (Edge/Azure) preferiblemente AR o MX
+    // 2. Voces de Google (Chrome) preferiblemente AR o MX
+    // 3. Voces locales es-AR, luego es-MX
     
     this.selectedVoice = 
-      spanishVoices.find(v => (v.name.includes('Natural') || v.name.includes('Online')) && (v.lang.includes('ES') || v.lang.includes('MX'))) ||
+      spanishVoices.find(v => (v.name.includes('Natural') || v.name.includes('Online')) && v.lang.includes('AR')) ||
+      spanishVoices.find(v => (v.name.includes('Natural') || v.name.includes('Online')) && v.lang.includes('MX')) ||
+      spanishVoices.find(v => v.name.includes('Google') && v.lang.includes('AR')) ||
+      spanishVoices.find(v => v.name.includes('Google') && v.lang.includes('MX')) ||
+      spanishVoices.find(v => v.lang.includes('AR')) ||
+      spanishVoices.find(v => v.lang.includes('MX')) ||
       spanishVoices.find(v => v.name.includes('Natural') || v.name.includes('Online')) ||
-      spanishVoices.find(v => v.name.includes('Google') && (v.lang.includes('ES') || v.lang.includes('MX'))) ||
       spanishVoices.find(v => v.name.includes('Google')) ||
-      spanishVoices.find(v => v.lang === 'es-ES') ||
-      spanishVoices.find(v => v.lang === 'es-MX') ||
       spanishVoices[0];
   }
 
