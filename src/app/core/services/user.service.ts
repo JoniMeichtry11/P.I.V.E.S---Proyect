@@ -177,6 +177,18 @@ export class UserService {
     console.log(`Progreso sincronizado en Firestore: Nivel ${currentCardIndex}, Ruedas ${ruedas}`);
   }
 
+  async updateFamilyActionsProgress(index: number): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) return;
+
+    await this.updateActiveChild({
+      progress: {
+        ...child.progress,
+        familyActionsProgress: index
+      }
+    });
+  }
+
   async advanceCardIndex(): Promise<void> {
     const child = this.getActiveChild();
     if (!child) return;

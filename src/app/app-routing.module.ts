@@ -67,13 +67,11 @@ const routes: Routes = [
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
     canActivate: [AuthGuard, AdminGuard]
   },
-  /*
   {
     path: 'family-actions',
     loadChildren: () => import('./features/family-actions/family-actions.module').then(m => m.FamilyActionsModule),
     canActivate: [AuthGuard, OnboardingGuard]
   },
-  */
   {
     path: '',
     loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)

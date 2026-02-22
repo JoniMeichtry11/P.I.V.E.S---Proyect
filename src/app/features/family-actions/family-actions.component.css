@@ -1,0 +1,24 @@
+/* Estilos específicos para el componente de acciones familiares */
+:host {
+    display: block;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .printable-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 2rem;
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+
+.font-display {
+    font-family: 'Fredoka One', cursive;
+}
