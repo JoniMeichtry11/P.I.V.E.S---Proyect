@@ -38,15 +38,23 @@ export class PaymentService {
     const user = this.authService.getCurrentUser();
     if (!user) throw new Error('Usuario no autenticado.');
 
+    const accessToken = environment.mercadopago.accessToken;
+    const isProductionToken = accessToken.startsWith('APP_USR-');
+
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${environment.mercadopago.accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
     });
 
-    // URL base de la app (ej: http://localhost:4200 en dev, o https://pives.com.ar en prod)
+    // URL base de la app
     const appUrl = window.location.origin;
+    const isLocalhost = appUrl.includes('localhost') || appUrl.includes('127.0.0.1');
 
-    const preferenceBody = {
+    // Mercado Pago requiere HTTPS y dominio real para auto_return: 'approved' con tokens de producción.
+    // Si estamos en localhost, lo desactivamos para evitar el error 400.
+    const autoReturn = (!isLocalhost && isProductionToken) ? 'approved' : undefined;
+
+    const preferenceBody: any = {
       items: [
         {
           id: `fuel-${pkg.liters}L`,
@@ -54,7 +62,7 @@ export class PaymentService {
           description: 'Combustible para reservar autos en la plataforma P.I.V.E.S.',
           quantity: 1,
           currency_id: 'ARS',
-          unit_price: pkg.price
+          unit_price: Number(pkg.price)
         }
       ],
       back_urls: {
@@ -62,28 +70,37 @@ export class PaymentService {
         failure: `${appUrl}/buy-fuel?status=failure`,
         pending: `${appUrl}/buy-fuel?status=pending&liters=${pkg.liters}&childId=${childId}`
       },
-      auto_return: 'approved',
+      notification_url: undefined, // No usamos webhooks por ahora para evitar problemas de localhost
       metadata: {
         user_id: user.uid,
         child_id: childId,
         liters: pkg.liters
       },
-      statement_descriptor: 'PIVES',
       external_reference: `${user.uid}_${childId}_${pkg.liters}L_${Date.now()}`
     };
 
-    const response = await firstValueFrom(
-      this.http.post<MpPreference>(
-        `${this.MP_API}/checkout/preferences`,
-        preferenceBody,
-        { headers }
-      )
-    );
+    if (autoReturn) {
+      preferenceBody.auto_return = autoReturn;
+    }
 
-    return {
-      preferenceId: response.id,
-      checkoutUrl: this.IS_PRODUCTION ? response.init_point : response.sandbox_init_point
-    };
+    try {
+      const response = await firstValueFrom(
+        this.http.post<any>(
+          `${this.MP_API}/checkout/preferences`,
+          preferenceBody,
+          { headers }
+        )
+      );
+
+      return {
+        preferenceId: response.id,
+        // Usar init_point si existe (preferido para producción), de lo contrario sandbox
+        checkoutUrl: response.init_point || response.sandbox_init_point
+      };
+    } catch (error: any) {
+      console.error('Detalle del error de Mercado Pago:', error.error);
+      throw error;
+    }
   }
 
   /**
