@@ -103,7 +103,7 @@ export class UserService {
         volantes: 0,
         milestones: [],
         currentCardIndex: 0,
-        fuelLiters: 0,
+        fuelLiters: 10,
         familyActionsProgress: 0
       },
       bookings: [],
