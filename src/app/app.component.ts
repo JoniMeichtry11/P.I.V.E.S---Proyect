@@ -9,7 +9,7 @@ import { SUPER_ADMIN_EMAIL } from './core/services/admin.service';
 @Component({
   selector: 'app-root',
   template: `
-    <div class="min-h-screen bg-sky-50 text-slate-800">
+    <div class="min-h-screen flex flex-col bg-sky-50 text-slate-800">
       @if (showHeader$ | async) {
         <app-header
           [activeChild]="activeChild$ | async"
@@ -24,7 +24,7 @@ import { SUPER_ADMIN_EMAIL } from './core/services/admin.service';
       @if (showHeader$ | async) {
         <app-breadcrumb></app-breadcrumb>
       }
-      <main [class.pt-8]="showHeader$ | async" class="transition-opacity duration-500 ease-in-out">
+      <main [class.pt-16]="showHeader$ | async" class="flex-1 transition-opacity duration-500 ease-in-out">
         <router-outlet></router-outlet>
       </main>
     </div>

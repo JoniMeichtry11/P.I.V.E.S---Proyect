@@ -1,81 +1,6 @@
 <div class="max-w-4xl mx-auto p-4 md:p-8 space-y-12">
 
-  <!-- ======================== MODALES ======================== -->
 
-  <!-- Modal: Verificando pago al regresar de MercadoPago -->
-  @if (isVerifyingPayment) {
-    <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
-        <h2 class="text-2xl font-display text-slate-700 mt-4">Confirmando tu pago...</h2>
-        <p class="text-slate-500 mt-2">Estamos verificando con MercadoPago. Tardará solo un momento.</p>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Crear preferencia / Redirigir a MP -->
-  @if (selectedPackage && !isCreatingPreference) {
-    <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full relative">
-        <button (click)="closePaymentModal()" title="Cerrar" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 text-3xl leading-none font-bold">&times;</button>
-
-        <h2 class="text-2xl font-display text-slate-800 text-center mb-4">Finalizar Carga</h2>
-
-        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center mb-6">
-          <p class="text-slate-500 text-sm">Estás cargando</p>
-          <p class="text-4xl font-display text-amber-600 mt-1">{{ selectedPackage.liters }} Litros ⛽</p>
-          
-          @if (activeChild?.progress?.activeDiscount) {
-            <div class="flex items-center justify-center gap-2 mt-1">
-              <span class="text-sm line-through text-slate-400">$ {{ selectedPackage.price.toLocaleString('es-AR') }}</span>
-              <span class="font-bold text-xl text-slate-800">$ {{ calculateDiscountedPrice(selectedPackage.price).toLocaleString('es-AR') }} ARS</span>
-            </div>
-          } @else {
-            <p class="font-bold text-xl text-slate-800 mt-1">$ {{ selectedPackage.price.toLocaleString('es-AR') }} ARS</p>
-          }
-        </div>
-
-
-        <button
-          (click)="handleFinalizePayment()"
-          class="w-full bg-[#FFE600] hover:bg-[#f0d900] active:scale-95 transition-all text-slate-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 shadow-md">
-          Comprar
-        </button>
-
-        <p class="text-center text-xs text-slate-400 mt-3">🔒 Pago seguro. Tarjetas, billeteras y más.</p>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Creando preferencia (loader) -->
-  @if (isCreatingPreference) {
-    <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-        <h2 class="text-2xl font-display text-slate-700 mt-4">Preparando tu pago...</h2>
-        <p class="text-slate-500 mt-2">Conectando con MercadoPago de forma segura.</p>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Éxito -->
-  @if (showSuccessModal) {
-    <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center">
-        <div class="text-6xl mb-4">⛽🎉</div>
-        <h2 class="text-2xl font-display text-slate-800">¡Carga Exitosa!</h2>
-        <p class="text-slate-600 my-4">Se han añadido <span class="font-bold text-amber-600">{{ purchasedAmount }} Litros</span> a tu tanque. ¿Qué querés hacer ahora?</p>
-        <div class="flex flex-col gap-3">
-          <button (click)="closeSuccessModal(); router.navigate(['/booking'])" class="w-full py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600">
-            Ir a Reservar un Coche
-          </button>
-          <button (click)="closeSuccessModal(); router.navigate(['/home'])" class="w-full py-2 bg-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-300">
-            Volver al Inicio
-          </button>
-        </div>
-      </div>
-    </div>
-  }
 
   <!-- ======================== CONTENIDO ======================== -->
 
@@ -97,7 +22,7 @@
     <p class="text-center text-slate-500 text-sm mb-6">Comprá litros y usálos para reservar autos en la pista</p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       @for (pkg of FUEL_PACKAGES; track pkg) {
-        <div [class]="'relative p-5 rounded-xl text-white bg-gradient-to-br ' + pkg.bgColor + ' flex flex-col items-center justify-between shadow-lg'">
+        <div [class]="'relative p-5 rounded-xl text-white bg-linear-to-br ' + pkg.bgColor + ' flex flex-col items-center justify-between shadow-lg'">
           @if (pkg.bonus) {
             <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">{{ pkg.bonus }}</span>
           }
@@ -158,3 +83,80 @@
   </div>
 
 </div>
+
+<!-- ======================== MODALES ======================== -->
+
+<!-- Modal: Verificando pago al regresar de MercadoPago -->
+@if (isVerifyingPayment) {
+  <div class="fixed inset-0 w-screen h-screen bg-black/70 z-100 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+      <h2 class="text-2xl font-display text-slate-700 mt-4">Confirmando tu pago...</h2>
+      <p class="text-slate-500 mt-2">Estamos verificando con MercadoPago. Tardará solo un momento.</p>
+    </div>
+  </div>
+}
+
+<!-- Modal: Crear preferencia / Redirigir a MP -->
+@if (selectedPackage && !isCreatingPreference) {
+  <div class="fixed inset-0 w-screen h-screen bg-black/60 z-100 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full relative">
+      <button (click)="closePaymentModal()" title="Cerrar" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 text-3xl leading-none font-bold">&times;</button>
+
+      <h2 class="text-2xl font-display text-slate-800 text-center mb-4">Finalizar Carga</h2>
+
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center mb-6">
+        <p class="text-slate-500 text-sm">Estás cargando</p>
+        <p class="text-4xl font-display text-amber-600 mt-1">{{ selectedPackage.liters }} Litros ⛽</p>
+        
+        @if (activeChild?.progress?.activeDiscount) {
+          <div class="flex items-center justify-center gap-2 mt-1">
+            <span class="text-sm line-through text-slate-400">$ {{ selectedPackage.price.toLocaleString('es-AR') }}</span>
+            <span class="font-bold text-xl text-slate-800">$ {{ calculateDiscountedPrice(selectedPackage.price).toLocaleString('es-AR') }} ARS</span>
+          </div>
+        } @else {
+          <p class="font-bold text-xl text-slate-800 mt-1">$ {{ selectedPackage.price.toLocaleString('es-AR') }} ARS</p>
+        }
+      </div>
+
+
+      <button
+        (click)="handleFinalizePayment()"
+        class="w-full bg-[#FFE600] hover:bg-[#f0d900] active:scale-95 transition-all text-slate-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 shadow-md">
+        Comprar con Mercado Pago
+      </button>
+
+      <p class="text-center text-xs text-slate-400 mt-3">🔒 Pago seguro. Tarjetas, billeteras y más.</p>
+    </div>
+  </div>
+}
+
+<!-- Modal: Creando preferencia (loader) -->
+@if (isCreatingPreference) {
+  <div class="fixed inset-0 w-screen h-screen bg-black/70 z-100 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+      <h2 class="text-2xl font-display text-slate-700 mt-4">Preparando tu pago...</h2>
+      <p class="text-slate-500 mt-2">Conectando con MercadoPago de forma segura.</p>
+    </div>
+  </div>
+}
+
+<!-- Modal: Éxito -->
+@if (showSuccessModal) {
+  <div class="fixed inset-0 w-screen h-screen bg-black/60 z-100 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center">
+      <div class="text-6xl mb-4">⛽🎉</div>
+      <h2 class="text-2xl font-display text-slate-800">¡Carga Exitosa!</h2>
+      <p class="text-slate-600 my-4">Se han añadido <span class="font-bold text-amber-600">{{ purchasedAmount }} Litros</span> a tu tanque. ¿Qué querés hacer ahora?</p>
+      <div class="flex flex-col gap-3">
+        <button (click)="closeSuccessModal(); router.navigate(['/booking'])" class="w-full py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600">
+          Ir a Reservar un Coche
+        </button>
+        <button (click)="closeSuccessModal(); router.navigate(['/home'])" class="w-full py-2 bg-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-300">
+          Volver al Inicio
+        </button>
+      </div>
+    </div>
+  </div>
+}
