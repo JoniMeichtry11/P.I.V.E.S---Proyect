@@ -212,6 +212,36 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
       this.isCreatingPreference = false;
     }
   }
+  // Borrar esta sección cuando esté sea funcional
+  /** Redirige al checkout de MercadoPago para pagar $1 */
+  async onTestPayment(): Promise<void> {
+    const child = this.userService.getActiveChild();
+    if (!child) {
+      this.showFeedback('error', 'No hay un niño seleccionado.');
+      return;
+    }
+
+    this.isCreatingPreference = true;
+    try {
+      const testPkg: FuelPackage = {
+        liters: 1,
+        price: 1,
+        bgColor: 'from-slate-400 to-slate-500', // Color decorativo
+        bonus: 'TEST'
+      };
+
+      const { checkoutUrl } = await this.paymentService.createPreference(
+        testPkg,
+        child.id
+      );
+      window.location.href = checkoutUrl;
+    } catch (err: any) {
+      console.error('Error al crear preferencia de prueba:', err);
+      this.showFeedback('error', 'Error al crear el pago de prueba.');
+    } finally {
+      this.isCreatingPreference = false;
+    }
+  }
 
   closePaymentModal(): void {
     this.selectedPackage = null;
