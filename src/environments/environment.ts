@@ -11,7 +11,7 @@ export const environment = {
   mercadopago: {
     // ⚠️ Reemplazá este valor con tu Access Token de TEST desde:
     // https://www.mercadopago.com.ar/developers → Tu aplicación → Credenciales
-    accessToken: 'TEST-REEMPLAZAR-CON-TU-TOKEN'
+    accessToken: 'TESTUSER6348258524670801045'
   }
 };
 

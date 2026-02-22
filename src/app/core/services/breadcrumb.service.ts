@@ -27,11 +27,14 @@ export class BreadcrumbService {
       const routeUrl = parentUrl.concat(route.url.map(url => url.path));
 
       if (route.data['breadcrumb']) {
-        const breadcrumb = {
-          label: this.getLabel(route.data),
-          url: '/' + routeUrl.join('/')
-        };
-        breadcrumbs.push(breadcrumb);
+        const url = '/' + routeUrl.join('/');
+        const label = this.getLabel(route.data);
+        
+        // Evitar duplicados si la URL es la misma que la anterior
+        const lastBreadcrumb = breadcrumbs[breadcrumbs.length - 1];
+        if (!lastBreadcrumb || lastBreadcrumb.url !== url) {
+          breadcrumbs.push({ label, url });
+        }
       }
 
       this.addBreadcrumb(route.firstChild!, routeUrl, breadcrumbs);
