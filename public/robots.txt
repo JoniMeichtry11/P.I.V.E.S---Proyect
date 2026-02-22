@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pives.com.ar/sitemap.xml
