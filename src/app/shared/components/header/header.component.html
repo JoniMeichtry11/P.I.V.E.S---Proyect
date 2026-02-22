@@ -61,12 +61,11 @@
       <div class="flex items-center gap-1 md:gap-2 shrink-0">
         @if (isAdmin) {
           <button (click)="navigateToAdmin()" class="bg-amber-100 text-amber-700 px-2 py-1.5 md:px-3 md:py-2 rounded-xl font-bold hover:bg-amber-200 transition-all text-[10px] sm:text-xs md:text-sm whitespace-nowrap" title="Panel de Administración">
-            ⚙️ <span class="hidden xs:inline">Admin</span>
+            ⚙️ <span class="xs:inline">Admin</span>
           </button>
         }
         <button (click)="switchProfile()" class="bg-blue-100 text-blue-700 px-2 py-1.5 md:px-3 md:py-2 rounded-xl font-bold hover:bg-blue-200 transition-all text-[10px] sm:text-xs md:text-sm whitespace-nowrap">
-          <span class="hidden xs:inline">Cambiar Conductor</span>
-          <span class="inline xs:hidden">🚗</span>
+          <span class="xs:inline">Cambiar Conductor</span>
         </button>
         <button (click)="logout()" class="bg-red-100 text-red-600 p-1.5 md:p-2 rounded-xl hover:bg-red-200 transition-all" title="Salir">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">

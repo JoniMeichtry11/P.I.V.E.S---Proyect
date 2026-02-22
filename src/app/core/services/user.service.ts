@@ -71,6 +71,17 @@ export class UserService {
     return this.activeChildIndexSubject.value;
   }
 
+  async updateActiveChildData(partialData: Partial<Child>): Promise<void> {
+    const child = this.getActiveChild();
+    if (!child) {
+      console.warn('UserService: No se pudo actualizar los datos porque no hay un niño activo seleccionado.');
+      return;
+    }
+
+    console.log('UserService: Actualizando datos del niño activo...', partialData);
+    await this.updateActiveChild(partialData);
+  }
+
   async updateUserAccount(account: UserAccount): Promise<void> {
     const user = this.authService.getCurrentUser();
     if (!user) return;
@@ -83,11 +94,15 @@ export class UserService {
     const account = this.getCurrentUserAccount();
     const index = this.activeChildIndexSubject.value;
     
-    if (!account || index === null) return;
+    if (!account || index === null) {
+      console.warn('UserService: No se pudo actualizar el niño. Cuenta o indice nulo.', { account: !!account, index });
+      return;
+    }
 
     const updatedChildren = [...account.children];
     updatedChildren[index] = { ...updatedChildren[index], ...childData };
     
+    console.log('UserService: Guardando cambios en Firestore para el niño en el índice:', index);
     await this.updateUserAccount({ ...account, children: updatedChildren });
   }
 
@@ -313,12 +328,6 @@ export class UserService {
     await this.updateActiveChild({ progress });
   }
 
-  async updateActiveChildData(partialData: Partial<Child>): Promise<void> {
-    const child = this.getActiveChild();
-    if (!child) return;
-
-    await this.updateActiveChild(partialData);
-  }
 
   async deleteAccount(): Promise<void> {
     await this.authService.deleteAccount();
