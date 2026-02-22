@@ -57,6 +57,10 @@ export class HeaderComponent {
   navigateToAdmin(): void {
     this.router.navigate(['/admin']);
   }
+
+  navigateToBookings(): void {
+    this.router.navigate(['/booking/my-bookings']);
+  }
 }
 
 

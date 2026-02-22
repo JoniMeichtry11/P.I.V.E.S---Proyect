@@ -252,24 +252,36 @@ export class UserService {
     return true;
   }
 
-  async cancelBooking(bookingId: string): Promise<void> {
-    const child = this.getActiveChild();
-    if (!child) return;
+  async cancelBooking(bookingId: string, childId?: string): Promise<void> {
+    const account = this.getCurrentUserAccount();
+    if (!account) return;
 
+    // Si no se provee childId, buscamos en el niño activo
+    const targetChildId = childId || this.getActiveChild()?.id;
+    if (!targetChildId) return;
+
+    const childIndex = account.children.findIndex(c => c.id === targetChildId);
+    if (childIndex === -1) return;
+
+    const child = account.children[childIndex];
     const booking = child.bookings.find(b => b.id === bookingId);
-    if (!booking) return;
+    if (!booking || booking.status === 'cancelled') return;
 
     const updatedBookings = child.bookings.map(b =>
       b.id === bookingId ? { ...b, status: 'cancelled' as const } : b
     );
 
-    await this.updateActiveChild({
+    const updatedChildren = [...account.children];
+    updatedChildren[childIndex] = {
+      ...child,
       bookings: updatedBookings,
       progress: {
         ...child.progress,
         fuelLiters: child.progress.fuelLiters + booking.car.pricePerSlot
       }
-    });
+    };
+
+    await this.updateUserAccount({ ...account, children: updatedChildren });
   }
 
   async addFuel(amount: number): Promise<void> {
