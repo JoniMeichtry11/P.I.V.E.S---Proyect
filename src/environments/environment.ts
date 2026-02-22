@@ -7,6 +7,11 @@ export const environment = {
     storageBucket: "pivesbasededatos.appspot.com",
     messagingSenderId: "415399502496",
     appId: "1:415399502496:web:20f5c73916a7a905f31fc5"
+  },
+  mercadopago: {
+    // ⚠️ Reemplazá este valor con tu Access Token de TEST desde:
+    // https://www.mercadopago.com.ar/developers → Tu aplicación → Credenciales
+    accessToken: 'TEST-REEMPLAZAR-CON-TU-TOKEN'
   }
 };
 

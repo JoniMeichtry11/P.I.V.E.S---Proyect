@@ -1,64 +1,61 @@
 <div class="max-w-4xl mx-auto p-4 md:p-8 space-y-12">
-  <!-- Payment Gateway Modal -->
-  @if (selectedPackage && !isProcessing) {
-    <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-xl p-6 max-w-md w-full relative">
-        <button (click)="closePaymentModal()" title="Cerrar" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 text-3xl leading-none font-bold">&times;</button>
-        <h2 class="text-2xl font-display text-slate-800 text-center">Finalizar Carga</h2>
-        <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 my-4 text-center">
-          <p>Estás cargando</p>
-          <p class="text-3xl font-display text-amber-600">{{ selectedPackage.liters }} Litros ⛽</p>
-          <p class="font-bold text-xl">por ${{ selectedPackage.price.toLocaleString('es-AR') }} ARS</p>
-        </div>
-        <div class="flex border-b border-slate-200">
-          <button (click)="paymentMethod = 'card'" [class.border-b-2]="paymentMethod === 'card'" [class.border-blue-500]="paymentMethod === 'card'" [class.text-blue-600]="paymentMethod === 'card'" [class.text-slate-500]="paymentMethod !== 'card'" class="flex-1 py-2 text-center font-bold">Tarjeta</button>
-          <button (click)="paymentMethod = 'wallet'" [class.border-b-2]="paymentMethod === 'wallet'" [class.border-blue-500]="paymentMethod === 'wallet'" [class.text-blue-600]="paymentMethod === 'wallet'" [class.text-slate-500]="paymentMethod !== 'wallet'" class="flex-1 py-2 text-center font-bold">Billetera Virtual</button>
-        </div>
-        @if (paymentMethod === 'card') {
-          <div class="space-y-3 pt-4">
-            <div><label class="text-xs">Número de Tarjeta</label><input type="text" placeholder="**** **** **** ****" class="w-full p-2 border rounded"/></div>
-            <div><label class="text-xs">Nombre en la Tarjeta</label><input type="text" placeholder="Nombre Apellido" class="w-full p-2 border rounded"/></div>
-            <div class="flex gap-2">
-              <div class="flex-1"><label class="text-xs">Vencimiento</label><input type="text" placeholder="MM/AA" class="w-full p-2 border rounded"/></div>
-              <div class="flex-1"><label class="text-xs">CVC</label><input type="text" placeholder="***" class="w-full p-2 border rounded"/></div>
-            </div>
-            <button (click)="handleFinalizePayment()" class="w-full mt-4 bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-600">Pagar ${{ selectedPackage.price.toLocaleString('es-AR') }}</button>
-          </div>
-        }
-        @if (paymentMethod === 'wallet') {
-          <div class="pt-4 text-center">
-            <p class="mb-2">Escanea el QR para pagar o elige tu Billetera:</p>
-            <img src="https://i.ibb.co/Kz0pHP2P/QR-encuesta.png" alt="Código QR de pago" class="w-40 h-40 mx-auto border-4 border-slate-200 rounded-lg"/>
-            <div class="flex justify-center gap-4 my-4">
-              <img src="https://i.ibb.co/5W3WGp79/MPago.png" alt="Mercado Pago" class="h-8"/>
-              <img src="https://i.ibb.co/dwBCVcV9/modo.png" alt="MODO" class="h-8"/>
-              <img src="https://i.ibb.co/MDzmhsYb/Pers-Pay.png" alt="Personal Pay" class="h-8"/>
-            </div>
-            <button (click)="handleFinalizePayment()" class="w-full mt-2 bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600">Ya realicé el pago</button>
-          </div>
-        }
+
+  <!-- ======================== MODALES ======================== -->
+
+  <!-- Modal: Verificando pago al regresar de MercadoPago -->
+  @if (isVerifyingPayment) {
+    <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+        <h2 class="text-2xl font-display text-slate-700 mt-4">Confirmando tu pago...</h2>
+        <p class="text-slate-500 mt-2">Estamos verificando con MercadoPago. Tardará solo un momento.</p>
       </div>
     </div>
   }
 
-  <!-- Processing Modal -->
-  @if (isProcessing) {
+  <!-- Modal: Crear preferencia / Redirigir a MP -->
+  @if (selectedPackage && !isCreatingPreference) {
+    <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full relative">
+        <button (click)="closePaymentModal()" title="Cerrar" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 text-3xl leading-none font-bold">&times;</button>
+
+        <h2 class="text-2xl font-display text-slate-800 text-center mb-4">Finalizar Carga</h2>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center mb-6">
+          <p class="text-slate-500 text-sm">Estás cargando</p>
+          <p class="text-4xl font-display text-amber-600 mt-1">{{ selectedPackage.liters }} Litros ⛽</p>
+          <p class="font-bold text-xl text-slate-800 mt-1">$ {{ selectedPackage.price.toLocaleString('es-AR') }} ARS</p>
+        </div>
+
+        <button
+          (click)="handleFinalizePayment()"
+          class="w-full bg-[#FFE600] hover:bg-[#f0d900] active:scale-95 transition-all text-slate-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 shadow-md">
+          Comprar
+        </button>
+
+        <p class="text-center text-xs text-slate-400 mt-3">🔒 Pago seguro. Tarjetas, billeteras y más.</p>
+      </div>
+    </div>
+  }
+
+  <!-- Modal: Creando preferencia (loader) -->
+  @if (isCreatingPreference) {
     <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-        <h2 class="text-2xl font-display text-slate-700 mt-4">Procesando Pago...</h2>
-        <p class="text-slate-500 mt-2">Estamos confirmando tu carga de forma segura. Por favor, espera un momento.</p>
+        <h2 class="text-2xl font-display text-slate-700 mt-4">Preparando tu pago...</h2>
+        <p class="text-slate-500 mt-2">Conectando con MercadoPago de forma segura.</p>
       </div>
     </div>
   }
 
-  <!-- Success Modal -->
+  <!-- Modal: Éxito -->
   @if (showSuccessModal) {
     <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center">
         <div class="text-6xl mb-4">⛽🎉</div>
         <h2 class="text-2xl font-display text-slate-800">¡Carga Exitosa!</h2>
-        <p class="text-slate-600 my-4">Se han añadido <span class="font-bold">{{ purchasedAmount }} Litros</span> a tu tanque. ¿Qué quieres hacer ahora?</p>
+        <p class="text-slate-600 my-4">Se han añadido <span class="font-bold text-amber-600">{{ purchasedAmount }} Litros</span> a tu tanque. ¿Qué querés hacer ahora?</p>
         <div class="flex flex-col gap-3">
           <button (click)="closeSuccessModal(); router.navigate(['/booking'])" class="w-full py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600">
             Ir a Reservar un Coche
@@ -71,41 +68,52 @@
     </div>
   }
 
+  <!-- ======================== CONTENIDO ======================== -->
+
   <h1 class="text-4xl md:text-5xl font-display text-center text-slate-700">Estación de Servicio</h1>
 
   @if (feedbackMessage) {
-    <div [class.bg-green-500]="feedbackMessage.type === 'success'" [class.bg-red-500]="feedbackMessage.type === 'error'" class="p-4 rounded-lg text-center font-bold text-white">
+    <div
+      [class.bg-green-500]="feedbackMessage.type === 'success'"
+      [class.bg-red-500]="feedbackMessage.type === 'error'"
+      [class.bg-amber-500]="feedbackMessage.type === 'pending'"
+      class="p-4 rounded-lg text-center font-bold text-white shadow-md">
       {{ feedbackMessage.text }}
     </div>
   }
 
+  <!-- Paquetes de Combustible -->
   <div class="bg-white p-6 rounded-2xl shadow-xl">
-    <h2 class="text-3xl font-display text-slate-800 mb-6 text-center">Paquetes de Combustible</h2>
+    <h2 class="text-3xl font-display text-slate-800 mb-2 text-center">Paquetes de Combustible</h2>
+    <p class="text-center text-slate-500 text-sm mb-6">Comprá litros y usálos para reservar autos en la pista</p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       @for (pkg of FUEL_PACKAGES; track pkg) {
         <div [class]="'relative p-5 rounded-xl text-white bg-gradient-to-br ' + pkg.bgColor + ' flex flex-col items-center justify-between shadow-lg'">
           @if (pkg.bonus) {
-            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">{{ pkg.bonus }}</span>
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">{{ pkg.bonus }}</span>
           }
-          <div class="text-center">
+          <div class="text-center pt-2">
             <p class="text-5xl font-display">{{ pkg.liters }}</p>
             <p class="font-bold text-2xl">⛽</p>
+            <p class="text-white/80 text-xs mt-1">Litros</p>
           </div>
-          <button (click)="handleSelectPackage(pkg)" class="w-full mt-4 bg-white/30 hover:bg-white/50 transition-colors font-bold py-2 px-4 rounded-lg">
-            ${{ pkg.price.toLocaleString('es-AR') }} ARS
+          <button (click)="handleSelectPackage(pkg)" class="w-full mt-4 bg-white/30 hover:bg-white/50 transition-all active:scale-95 font-bold py-2 px-4 rounded-lg">
+            $ {{ pkg.price.toLocaleString('es-AR') }} ARS
           </button>
         </div>
       }
     </div>
-    <p class="text-xs text-slate-400 mt-6 text-center">
-      Los pagos son simulados para esta demostración.
-    </p>
+    <div class="flex items-center justify-center gap-3 mt-6 pt-4 border-t border-slate-100">
+      <img src="https://i.ibb.co/5W3WGp79/MPago.png" alt="MercadoPago" class="h-6 opacity-60"/>
+      <p class="text-xs text-slate-400">Pagos procesados de forma segura por MercadoPago</p>
+    </div>
   </div>
 
+  <!-- Canjear Cupón -->
   <div class="bg-white p-6 rounded-2xl shadow-xl">
     <h2 class="text-3xl font-display text-slate-800 mb-6 text-center">Canjear Cupón de Combustible</h2>
     <p class="text-center text-slate-500 mb-4 max-w-md mx-auto">
-      Si tienes un cupón de un evento o regalo, ¡ingrésalo aquí para cargar tu tanque!
+      Si tenés un cupón de un evento o regalo, ¡ingresalo aquí para cargar tu tanque!
     </p>
     <form (ngSubmit)="handleRedeemCodeSubmit()" class="flex flex-col md:flex-row gap-2 max-w-sm mx-auto">
       <input
@@ -115,11 +123,10 @@
         placeholder="Ej: PIVESREGALO25"
         class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-mono uppercase"
         />
-        <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 whitespace-nowrap">
-          Canjear
-        </button>
-      </form>
-    </div>
+      <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 whitespace-nowrap">
+        Canjear
+      </button>
+    </form>
   </div>
 
-
+</div>

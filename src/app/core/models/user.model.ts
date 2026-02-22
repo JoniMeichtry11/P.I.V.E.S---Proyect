@@ -103,6 +103,17 @@ export interface FuelPackage {
   bgColor: string;
 }
 
+export interface FuelTransaction {
+  id: string;
+  userId: string;
+  childId: string;
+  packageLiters: number;
+  packagePrice: number;
+  mpPaymentId: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+}
+
 export interface AnswerSummary {
   question: string;
   userAnswer: string;
