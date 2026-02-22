@@ -23,17 +23,17 @@
         [options]="options"
       >
         <!-- Marcadores -->
-        @for (event of events; track event.id) {
+        @for (data of mapEventsData; track data.event.id) {
           <map-marker
             #marker="mapMarker"
-            [position]="{ lat: event.lat, lng: event.lng }"
-            [options]="getMarkerOptions(event)"
-            (mapClick)="openInfoWindow(marker, event)"
+            [position]="data.position"
+            [options]="data.markerOptions"
+            (mapClick)="openInfoWindow(marker, data.event)"
           ></map-marker>
 
           <!-- Recorrido -->
-          @if (event.route && event.route.length >= 2) {
-            <map-polyline [options]="getPolylineOptions(event)"></map-polyline>
+          @if (data.polylineOptions) {
+            <map-polyline [options]="data.polylineOptions"></map-polyline>
           }
         }
 

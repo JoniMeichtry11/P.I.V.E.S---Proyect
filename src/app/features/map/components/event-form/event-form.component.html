@@ -75,11 +75,11 @@
               (mapClick)="onMapClick($event)"
             >
               @if (markerPosition) {
-                <map-marker [position]="markerPosition" [options]="markerOptions"></map-marker>
+                <map-marker [position]="markerPosition" [options]="dynamicMarkerOptions"></map-marker>
               }
 
               @if (routePoints.length > 0) {
-                <map-polyline [path]="routePoints" [options]="polylineOptions"></map-polyline>
+                <map-polyline [options]="dynamicPolylineOptions"></map-polyline>
                 
                 @for (pt of routePoints; track pt) {
                   <map-circle [center]="pt" [options]="{radius: 5, fillColor: '#f59e0b', fillOpacity: 1, strokeColor: '#d97706', strokeWeight: 1}"></map-circle>

@@ -72,11 +72,15 @@
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border: 1px solid #334155;
+  height: 100%;
+  display: flex;
 }
 
 /* El componente google-map maneja su propio tamaño interno */
 google-map {
   display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* Events Panel */
@@ -358,35 +362,64 @@ google-map {
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .events-page {
+    padding: 1rem;
+  }
+
   .main-layout {
     grid-template-columns: 1fr;
     height: auto;
+    overflow-y: visible;
+    gap: 1.5rem;
   }
 
   .map-panel {
-    height: 400px;
+    height: 450px;
+    order: 1;
   }
 
   .events-panel {
-    max-height: 500px;
+    max-height: 600px;
+    height: 600px;
+    order: 2;
   }
 }
 
 @media (max-width: 640px) {
   .events-page {
-    padding: 1rem;
+    padding: 0.75rem;
   }
 
   .page-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
   }
 
   .header-content h1 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+  }
+  
+  .header-subtitle {
+    margin-top: 5px;
   }
 
   .map-panel {
-    height: 300px;
+    height: 350px;
+  }
+
+  .events-panel {
+    height: 500px;
+    padding: 1rem;
+  }
+  
+  .event-card {
+    padding: 0.85rem;
+  }
+  
+  .event-title {
+    font-size: 0.95rem;
   }
 }
+

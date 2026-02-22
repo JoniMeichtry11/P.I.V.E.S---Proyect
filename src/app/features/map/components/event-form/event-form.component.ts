@@ -26,24 +26,13 @@ export class EventFormComponent implements OnInit, OnChanges {
     draggableCursor: 'crosshair',
     clickableIcons: false,
     mapTypeControl: false,
-    streetViewControl: false
+    streetViewControl: false,
+    styles: [] // Estilo normal por defecto
   };
 
-  markerOptions: google.maps.MarkerOptions = {
-    draggable: false,
-    animation: google.maps.Animation.DROP
-  };
-
-  polylineOptions: google.maps.PolylineOptions = {
-    strokeColor: '#f59e0b',
-    strokeOpacity: 0.8,
-    strokeWeight: 4,
-    icons: [{
-      icon: { path: google.maps.SymbolPath.CIRCLE, scale: 2 },
-      offset: '0',
-      repeat: '15px'
-    }]
-  };
+  // Referencias estables para evitar parpadeos
+  dynamicMarkerOptions: google.maps.MarkerOptions = {};
+  dynamicPolylineOptions: google.maps.PolylineOptions = {};
 
   get isEditing(): boolean {
     return this.event !== null && this.event.id !== undefined;
@@ -58,6 +47,66 @@ export class EventFormComponent implements OnInit, OnChanges {
       description: ['', Validators.required],
       category: ['']
     });
+
+    // Actualizar icono si cambia la categoría
+    this.eventForm.get('category')?.valueChanges.subscribe(() => {
+      this.updateMapOptions();
+    });
+  }
+
+  // Colores vibrantes
+  private categoryColors: Record<string, string> = {
+    practica: '#22c55e',
+    presentacion: '#ec4899',
+    taller: '#f59e0b',
+    competencia: '#ef4444'
+  };
+
+  private updateMapOptions(): void {
+    if (this.markerPosition) {
+      const category = this.eventForm.get('category')?.value;
+      const color = this.categoryColors[category || ''] || '#0ea5e9';
+      const emoji = this.getCategoryEmoji(category);
+      
+      const svgPin = `
+        <svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 0C8.95 0 0 8.95 0 20c0 14 20 30 20 30s20-16 20-30c0-11.05-8.95-20-20-20z" fill="${color}" stroke="white" stroke-width="2"/>
+          <circle cx="20" cy="20" r="14" fill="white"/>
+          <text x="20" y="27" font-size="20" text-anchor="middle" font-family="Arial">${emoji}</text>
+        </svg>
+      `;
+
+      this.dynamicMarkerOptions = {
+        draggable: false,
+        icon: {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgPin),
+          scaledSize: new google.maps.Size(40, 50),
+          anchor: new google.maps.Point(20, 50)
+        }
+      };
+
+      this.dynamicPolylineOptions = {
+        path: this.routePoints,
+        strokeColor: color,
+        strokeOpacity: 0.8,
+        strokeWeight: 4,
+        icons: [{
+          icon: { path: google.maps.SymbolPath.CIRCLE, scale: 2, fillOpacity: 1, strokeColor: 'white' },
+          offset: '0',
+          repeat: '20px'
+        }]
+      };
+    }
+  }
+
+  getCategoryEmoji(category?: string): string {
+    switch (category) {
+      case 'practica': return '🏎️';
+      case 'presentacion': return '🎉';
+      case 'taller': return '📚';
+      case 'competencia': return '🏆';
+      default: return '📍';
+    }
   }
 
   ngOnInit(): void {
@@ -85,6 +134,7 @@ export class EventFormComponent implements OnInit, OnChanges {
     this.routePoints = this.event.route ? [...this.event.route] : [];
     if (this.event.lat && this.event.lng) {
       this.markerPosition = { lat: this.event.lat, lng: this.event.lng };
+      this.updateMapOptions();
       this.center = { ...this.markerPosition };
       this.zoom = 15;
     }
@@ -98,9 +148,9 @@ export class EventFormComponent implements OnInit, OnChanges {
       this.markerPosition = latlng;
     } else {
       this.routePoints.push(latlng);
-      // Forzar detección de cambios en el polyline
       this.routePoints = [...this.routePoints];
     }
+    this.updateMapOptions();
   }
 
   clearRoute(): void {

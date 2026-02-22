@@ -1,48 +1,48 @@
-<div class="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
-  <h1 class="text-4xl md:text-5xl font-display text-center text-slate-700">Mi Perfil</h1>
+<div class="max-w-6xl mx-auto p-2 md:p-8 space-y-4 md:space-y-8">
+  <h1 class="text-3xl md:text-5xl font-display text-center text-slate-700">Mi Perfil</h1>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
     <!-- Panel del Personaje -->
-    <div class="lg:col-span-1 bg-white p-8 rounded-3xl shadow-xl flex flex-col items-center">
-      <div class="relative text-9xl mb-6 bg-sky-50 rounded-full p-8 ring-4 ring-sky-200">
+    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col items-center">
+      <div class="relative text-7xl md:text-9xl mb-4 md:mb-6 bg-sky-50 rounded-full p-6 md:p-8 ring-4 ring-sky-200">
         <span>{{ activeChild?.avatar }}</span>
         @if (equippedAccessory) {
-          <span class="absolute -top-4 -right-4 text-7xl transform rotate-12 drop-shadow-md">{{ equippedAccessory.icon }}</span>
+          <span class="absolute -top-2 md:-top-4 -right-2 md:-right-4 text-5xl md:text-7xl transform rotate-12 drop-shadow-md">{{ equippedAccessory.icon }}</span>
         }
       </div>
-      <h3 class="text-3xl font-display text-blue-600 mb-6">{{ activeChild?.name }}</h3>
+      <h3 class="text-2xl md:text-3xl font-display text-blue-600 mb-4 md:mb-6">{{ activeChild?.name }}</h3>
 
-      <div class="grid grid-cols-3 gap-3 w-full">
-        <div class="bg-amber-100 p-3 rounded-2xl text-center flex flex-col items-center">
-          <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-amber-600 mb-1" xmlns="http://www.w3.org/2000/svg">
+      <div class="grid grid-cols-3 gap-2 md:gap-3 w-full">
+        <div class="bg-amber-100 p-2 md:p-3 rounded-2xl text-center flex flex-col items-center justify-center">
+          <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6 md:w-8 md:h-8 text-amber-600 mb-1" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
             <circle cx="12" cy="12" r="3" fill="currentColor"/>
             <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
-          <span class="font-display text-xl">{{ ruedas }}</span>
+          <span class="font-display text-lg md:text-xl">{{ ruedas }}</span>
         </div>
-        <div class="bg-blue-100 p-3 rounded-2xl text-center flex flex-col items-center">
-          <img src="https://i.ibb.co/TxxrB3Ln/rueda.jpg" alt="Volante" class="w-8 h-8 mb-1"/>
-          <span class="font-display text-xl">{{ volantes }}</span>
+        <div class="bg-blue-100 p-2 md:p-3 rounded-2xl text-center flex flex-col items-center justify-center">
+          <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" class="w-6 h-6 md:w-8 md:h-8 mb-1"/>
+          <span class="font-display text-lg md:text-xl">{{ volantes }}</span>
         </div>
-        <div class="bg-yellow-100 p-3 rounded-2xl text-center flex flex-col items-center">
-          <span class="text-3xl mb-1">⛽</span>
-          <span class="font-display text-xl">{{ fuelLiters }}</span>
+        <div class="bg-yellow-100 p-2 md:p-3 rounded-2xl text-center flex flex-col items-center justify-center">
+          <span class="text-2xl md:text-3xl mb-1">⛽</span>
+          <span class="font-display text-lg md:text-xl">{{ fuelLiters }}</span>
         </div>
       </div>
     </div>
 
     <!-- Panel de Progreso -->
-    <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-xl flex flex-col justify-center">
-      <h2 class="text-2xl font-display text-slate-700 mb-6 text-center">¡Mi Progreso!</h2>
+    <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col justify-center">
+      <h2 class="text-xl md:text-2xl font-display text-slate-700 mb-4 md:mb-6 text-center">¡Mi Progreso!</h2>
 
-      <div class="space-y-8">
+      <div class="space-y-6 md:space-y-8">
         <div>
-          <h4 class="font-bold text-amber-700 text-center text-lg">Ruedas para el próximo Volante</h4>
-          <div class="flex gap-3 justify-center my-4">
+          <h4 class="font-bold text-amber-700 text-center text-base md:text-lg">Ruedas para el próximo Volante</h4>
+          <div class="flex gap-2 md:gap-3 justify-center my-4">
             @for (i of [1,2,3,4]; track i) {
-              <div [class.bg-amber-100]="i <= ruedas" [class.scale-110]="i <= ruedas" [class.bg-slate-100]="i > ruedas" [class.opacity-30]="i > ruedas" class="p-2 rounded-full transition-all duration-300">
-                <svg viewBox="0 0 24 24" fill="none" [class.text-amber-600]="i <= ruedas" [class.text-slate-400]="i > ruedas" class="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+              <div [class.bg-amber-100]="i <= ruedas" [class.scale-110]="i <= ruedas" [class.bg-slate-100]="i > ruedas" [class.opacity-30]="i > ruedas" class="p-1.5 md:p-2 rounded-full transition-all duration-300">
+                <svg viewBox="0 0 24 24" fill="none" [class.text-amber-600]="i <= ruedas" [class.text-slate-400]="i > ruedas" class="w-8 h-8 md:w-10 md:h-10" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
                   <circle cx="12" cy="12" r="3" fill="currentColor"/>
                   <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -52,12 +52,12 @@
           </div>
         </div>
 
-        <div class="border-t border-slate-100 pt-8">
-          <h4 class="font-bold text-blue-700 text-center text-lg">Volantes para tu Licencia</h4>
-          <div class="flex gap-3 justify-center my-4">
+        <div class="border-t border-slate-100 pt-6 md:pt-8">
+          <h4 class="font-bold text-blue-700 text-center text-base md:text-lg">Volantes para tu Licencia</h4>
+          <div class="flex gap-2 md:gap-3 justify-center my-4">
             @for (i of [1,2,3,4]; track i) {
-              <div [class.bg-amber-100]="i <= volantes" [class.scale-110]="i <= volantes" [class.bg-slate-100]="i > volantes" [class.opacity-30]="i > volantes" class="p-2 rounded-full transition-all duration-300">
-                <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" [class.opacity-100]="i <= volantes" [class.opacity-40]="i > volantes" class="w-10 h-10"/>
+              <div [class.bg-blue-50]="i <= volantes" [class.scale-110]="i <= volantes" [class.bg-slate-100]="i > volantes" [class.opacity-30]="i > volantes" class="p-1.5 md:p-2 rounded-full transition-all duration-300">
+                <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" [class.opacity-100]="i <= volantes" [class.opacity-40]="i > volantes" class="w-8 h-8 md:w-10 md:h-10"/>
               </div>
             }
           </div>
@@ -67,13 +67,13 @@
   </div>
 
   <!-- Tienda de Accesorios -->
-  <div class="bg-white p-8 rounded-3xl shadow-xl">
-    <h2 class="text-3xl font-display text-slate-800 mb-8 text-center">Tienda de Accesorios</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+  <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl">
+    <h2 class="text-2xl md:text-3xl font-display text-slate-800 mb-6 md:mb-8 text-center">Tienda de Accesorios</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
       @for (acc of accessories; track acc) {
-        <div class="p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 flex flex-col items-center shadow-sm">
-          <div class="text-5xl mb-4 transform group-hover:scale-110 transition-transform">{{ acc.icon }}</div>
-          <p class="font-bold text-sm text-slate-700 text-center mb-4 min-h-[40px] flex items-center">{{ acc.name }}</p>
+        <div class="p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 flex flex-col items-center shadow-sm hover:border-blue-200 transition-colors group">
+          <div class="text-4xl md:text-5xl mb-3 md:mb-4 transform group-hover:scale-110 transition-transform">{{ acc.icon }}</div>
+          <p class="font-bold text-xs md:text-sm text-slate-700 text-center mb-3 md:mb-4 min-h-[32px] md:min-h-[40px] flex items-center">{{ acc.name }}</p>
           @if (!isUnlocked(acc.id)) {
             <button
               (click)="handlePurchase(acc)"
@@ -85,7 +85,7 @@
               [class.bg-slate-300]="!canAfford(acc.price)"
               [class.text-slate-500]="!canAfford(acc.price)"
               [class.cursor-not-allowed]="!canAfford(acc.price)"
-              class="w-full py-3 px-2 rounded-xl text-sm font-bold shadow-md flex items-center justify-center gap-1 transition-all"
+              class="w-full py-2.5 md:py-3 px-2 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center justify-center gap-1 transition-all"
               >
               {{ acc.price }}
               <svg viewBox="0 0 24 24" fill="none" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg">
@@ -103,7 +103,7 @@
               [class.hover:bg-red-600]="isEquipped(acc.id)"
               [class.bg-blue-500]="!isEquipped(acc.id)"
               [class.hover:bg-blue-600]="!isEquipped(acc.id)"
-              class="w-full py-3 px-2 rounded-xl text-sm font-bold shadow-md transition-all active:scale-95"
+              class="w-full py-2.5 md:py-3 px-2 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all active:scale-95"
               >
               {{ isEquipped(acc.id) ? 'Quitar' : 'Poner' }}
             </button>
@@ -112,30 +112,30 @@
       }
     </div>
   </div>
-</div>
 
-<!-- Zona de Peligro -->
-<div class="max-w-6xl mx-auto px-4 md:px-8 pb-12">
-  <div class="bg-red-50 p-8 rounded-3xl border-2 border-red-100 shadow-sm">
-    <h3 class="text-xl font-display text-red-700 mb-4">Zona de Peligro</h3>
-    <p class="text-red-600 mb-6 text-sm">
+  <!-- Zona de Peligro -->
+  <div class="bg-red-50 p-6 md:p-8 rounded-3xl border-2 border-red-100 shadow-sm">
+    <h3 class="text-xl font-display text-red-700 mb-4 text-center md:text-left">Zona de Peligro</h3>
+    <p class="text-red-600 mb-6 text-sm text-center md:text-left">
       Una vez que elimines tu cuenta, lo perderás todo. No habrá vuelta atrás y se borrarán todos tus datos, tus pilotos y su progreso.
     </p>
-    <button 
-      (click)="confirmDeleteAccount()"
-      class="bg-red-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors shadow-md active:scale-95">
-      Eliminar mi Cuenta
-    </button>
+    <div class="flex justify-center md:justify-start">
+      <button 
+        (click)="confirmDeleteAccount()"
+        class="bg-red-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors shadow-md active:scale-95 w-full md:w-auto">
+        Eliminar mi Cuenta
+      </button>
+    </div>
   </div>
 </div>
 
 <!-- Modal de Confirmación de Eliminación -->
 @if (isDeleteModalOpen) {
-  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-    <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border-4 border-red-100 animate-bounce-in">
-      <div class="text-6xl mb-4">⚠️</div>
-      <h2 class="text-3xl font-display text-slate-800 mb-2">¿Estás totalmente seguro?</h2>
-      <p class="text-slate-600 mb-8">
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full text-center border-4 border-red-100">
+      <div class="text-5xl md:text-6xl mb-4">⚠️</div>
+      <h2 class="text-2xl md:text-3xl font-display text-slate-800 mb-2">¿Estás totalmente seguro?</h2>
+      <p class="text-slate-600 mb-8 text-sm md:text-base">
         Esta acción es <strong>irreversible</strong>. Perderás todo tu progreso, tus volantes y tus accesorios desbloqueados.
       </p>
       
@@ -156,3 +156,4 @@
     </div>
   </div>
 }
+

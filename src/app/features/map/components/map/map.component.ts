@@ -34,21 +34,19 @@ export class MapComponent implements OnInit, OnDestroy {
     disableDoubleClickZoom: false,
     maxZoom: 19,
     minZoom: 2,
-    styles: [ // Estilo oscuro sutil opcional
-      {
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#747474" }, { "lightness": -40 }]
-      }
-    ]
+    // Estilos por defecto del mapa normal
+    styles: []
   };
+
+  // Data pre-calculada para el mapa para evitar parpadeos
+  mapEventsData: any[] = [];
 
   private unsubscribeEvents: Unsubscribe | null = null;
 
-  // Colores por categoría (para los marcadores personalizados en el futuro o polylines)
+  // Colores vibrantes
   private categoryColors: Record<string, string> = {
-    practica: '#10b981',
-    presentacion: '#8b5cf6',
+    practica: '#22c55e',
+    presentacion: '#ec4899',
     taller: '#f59e0b',
     competencia: '#ef4444'
   };
@@ -64,7 +62,12 @@ export class MapComponent implements OnInit, OnDestroy {
     if (user) {
       this.isAdmin = await this.adminService.isUserAdmin(user.uid, user.email || undefined);
     }
-    this.loadEvents();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.loadEvents();
+    }, 500);
   }
 
   ngOnDestroy(): void {
@@ -77,42 +80,99 @@ export class MapComponent implements OnInit, OnDestroy {
     this.unsubscribeEvents = this.eventService.subscribeToEvents((events) => {
       this.events = events;
       this.isLoading = false;
-      this.fitBounds();
+      this.prepareMapData();
+      
+      setTimeout(() => this.fitBounds(), 300);
+    });
+  }
+
+  private prepareMapData(): void {
+    // Pre-calculamos todo aquí para que el HTML reciba una referencia estable
+    this.mapEventsData = this.events.map(event => {
+      const color = this.categoryColors[event.category || ''] || '#0ea5e9';
+      const emoji = this.getCategoryEmoji(event.category);
+      
+      const svgPin = `
+        <svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 0C8.95 0 0 8.95 0 20c0 14 20 30 20 30s20-16 20-30c0-11.05-8.95-20-20-20z" fill="${color}" stroke="white" stroke-width="2"/>
+          <circle cx="20" cy="20" r="14" fill="white"/>
+          <text x="20" y="27" font-size="20" text-anchor="middle" font-family="Arial">${emoji}</text>
+        </svg>
+      `;
+
+      return {
+        event,
+        position: { lat: event.lat, lng: event.lng },
+        markerOptions: {
+          title: event.title,
+          icon: {
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgPin),
+            scaledSize: new google.maps.Size(40, 50),
+            anchor: new google.maps.Point(20, 50)
+          }
+        },
+        polylineOptions: event.route && event.route.length >= 2 ? {
+          path: event.route,
+          strokeColor: color,
+          strokeOpacity: 0.8,
+          strokeWeight: 4,
+          icons: [{
+            icon: { path: google.maps.SymbolPath.CIRCLE, scale: 2, fillOpacity: 1, strokeColor: 'white' },
+            offset: '0',
+            repeat: '20px'
+          }]
+        } : null
+      };
     });
   }
 
   fitBounds(): void {
-    if (this.events.length === 0) return;
+    if (this.events.length === 0 || typeof google === 'undefined') return;
     
-    // Pequeño delay para que el mapa esté listo
-    setTimeout(() => {
-      if (typeof google === 'undefined') return;
-      const bounds = new google.maps.LatLngBounds();
-      this.events.forEach(event => {
-        if (event.lat && event.lng) {
-          bounds.extend({ lat: event.lat, lng: event.lng });
-        }
-      });
-      if (this.map && this.map.googleMap) {
-        this.map.googleMap.fitBounds(bounds);
+    const bounds = new google.maps.LatLngBounds();
+    let hasValidPoints = false;
+    
+    this.events.forEach(event => {
+      if (event.lat && event.lng) {
+        bounds.extend({ lat: event.lat, lng: event.lng });
+        hasValidPoints = true;
       }
-    }, 500);
+    });
+
+    if (hasValidPoints && this.map && this.map.googleMap) {
+      this.map.googleMap.fitBounds(bounds);
+      
+      if (this.events.length === 1) {
+        setTimeout(() => {
+          if (this.map.googleMap) this.map.googleMap.setZoom(14);
+        }, 100);
+      }
+    }
   }
 
-  // Google Maps Marker Options
+  // Google Maps Marker Options - Personalizados y divertidos
   getMarkerOptions(event: Event): google.maps.MarkerOptions {
     const color = this.categoryColors[event.category || ''] || '#0ea5e9';
+    const emoji = this.getCategoryEmoji(event.category);
+    
+    // Crear un marcador SVG dinámico con el emoji
+    const svgPin = `
+      <svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 0C8.95 0 0 8.95 0 20c0 14 20 30 20 30s20-16 20-30c0-11.05-8.95-20-20-20z" fill="${color}" stroke="white" stroke-width="2"/>
+        <circle cx="20" cy="20" r="14" fill="white"/>
+        <text x="20" y="27" font-size="20" text-anchor="middle" font-family="Arial">${emoji}</text>
+      </svg>
+    `;
+
     return {
       draggable: false,
       title: event.title,
       icon: {
-        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        fillColor: color,
-        fillOpacity: 1,
-        strokeWeight: 2,
-        strokeColor: '#FFFFFF',
-        scale: 7
-      }
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgPin),
+        scaledSize: new google.maps.Size(40, 50),
+        anchor: new google.maps.Point(20, 50)
+      },
+      animation: google.maps.Animation.DROP
     };
   }
 
@@ -122,9 +182,9 @@ export class MapComponent implements OnInit, OnDestroy {
       path: event.route,
       strokeColor: color,
       strokeOpacity: 0.8,
-      strokeWeight: 4,
+      strokeWeight: 5,
       icons: [{
-        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 2 },
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 3, fillOpacity: 1, strokeColor: 'white' },
         offset: '0',
         repeat: '20px'
       }]

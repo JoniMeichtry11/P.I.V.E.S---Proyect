@@ -1,95 +1,96 @@
-<div class="container mx-auto p-4 md:p-8">
-  <h1 class="text-4xl md:text-5xl font-display text-center text-slate-700 mb-8">¿Qué quieres hacer hoy?</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-    <div class="lg:col-span-2">
+<div class="container mx-auto p-4 md:p-8 max-w-7xl">
+  <h1 class="text-3xl md:text-5xl font-display text-center text-slate-700 mb-6 md:mb-12">¿Qué quieres hacer hoy?</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+    <div class="md:col-span-2">
       <button
         (click)="navigateTo('flashcards')"
-        class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-blue-500 to-indigo-600"
+        class="w-full p-6 md:p-8 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-4 md:gap-8 bg-linear-to-br from-blue-500 to-indigo-600 group"
         >
-        <div class="text-5xl mb-4">📖</div>
+        <div class="text-5xl md:text-6xl group-hover:rotate-12 transition-transform">📖</div>
         <div>
-          <h2 class="text-2xl font-display">Desafío de Señales</h2>
-          <p class="mt-1 font-light">¡Completa tarjetas didacticas, gana Ruedas y Volantes para obtener tu licencia!</p>
+          <h2 class="text-2xl md:text-3xl font-display">Desafío de Señales</h2>
+          <p class="mt-2 font-light text-blue-50 text-sm md:text-base opacity-90">¡Completa tarjetas didacticas, gana Ruedas y Volantes para obtener tu licencia!</p>
         </div>
       </button>
     </div>
 
     <button
       (click)="navigateTo('profile')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-slate-500 to-slate-700"
+      class="w-full p-6 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-slate-500 to-slate-700 group"
       >
-      <div class="text-5xl mb-4">👤</div>
+      <div class="text-5xl group-hover:scale-110 transition-transform">👤</div>
       <div>
         <h2 class="text-2xl font-display">Mi Perfil</h2>
-        <p class="mt-1 font-light">Revisa tu progreso, logros y personaliza tu avatar.</p>
+        <p class="mt-1 font-light text-slate-100 text-sm opacity-90">Revisa tu progreso, logros y personaliza tu avatar.</p>
       </div>
     </button>
 
     <button
       (click)="navigateTo('booking')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-green-500 to-emerald-600"
+      class="w-full p-6 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-green-500 to-emerald-600 group"
       >
-      <div class="text-5xl mb-4">🚗</div>
+      <div class="text-5xl group-hover:bounce transition-transform">🚗</div>
       <div>
         <h2 class="text-2xl font-display">Reservar un Coche</h2>
-        <p class="mt-1 font-light">Elige tu coche a batería favorito y prepárate para conducir.</p>
+        <p class="mt-1 font-light text-green-50 text-sm opacity-90">Elige tu coche a batería favorito y prepárate para conducir.</p>
       </div>
     </button>
 
     <button
       (click)="navigateTo('map')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-amber-500 to-orange-600"
+      class="w-full p-6 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-amber-500 to-orange-600 group"
       >
-      <div class="text-5xl mb-4">🗺️</div>
+      <div class="text-5xl group-hover:-rotate-12 transition-transform">🗺️</div>
       <div>
         <h2 class="text-2xl font-display">Mapa de Eventos</h2>
-        <p class="mt-1 font-light">Descubre los próximos eventos y lugares de práctica.</p>
+        <p class="mt-1 font-light text-amber-50 text-sm opacity-90">Descubre los próximos eventos y lugares de práctica.</p>
       </div>
     </button>
 
     <button
       (click)="navigateTo('buy-fuel')"
-      class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-purple-500 to-pink-600"
+      class="w-full p-6 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-purple-500 to-pink-600 group"
       >
-      <div class="text-5xl mb-4">⛽</div>
+      <div class="text-5xl group-hover:scale-110 transition-transform">⛽</div>
       <div>
         <h2 class="text-2xl font-display">Cargar Combustible</h2>
-        <p class="mt-1 font-light">¡Consigue más Litros para reservar coches y más!</p>
+        <p class="mt-1 font-light text-purple-50 text-sm opacity-90">¡Consigue más Litros para reservar coches y más!</p>
       </div>
     </button>
 
-    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
       <button
         (click)="navigateTo('family-actions')"
         [disabled]="!hasCompletedBookings"
         [class.opacity-50]="!hasCompletedBookings"
         [class.cursor-not-allowed]="!hasCompletedBookings"
-        class="relative w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-teal-500 to-cyan-600"
+        class="relative w-full p-6 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-teal-500 to-cyan-600 group"
         >
-        <div class="text-5xl mb-4">{{ hasCompletedBookings ? '👍' : '🔒' }}</div>
+        <div class="text-5xl">{{ hasCompletedBookings ? '👍' : '🔒' }}</div>
         <div>
-          <h2 class="text-2xl font-display">Lo que mi familia hizo bien</h2>
-          <p class="mt-1 font-light">Después de tu práctica, ¡evalúa las buenas acciones de tus conductores!</p>
+          <h2 class="text-2xl font-display">Acciones Familiares</h2>
+          <p class="mt-1 font-light text-teal-50 text-sm opacity-90">¡Evalúa las buenas acciones de tus conductores!</p>
         </div>
         @if (!hasCompletedBookings) {
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40 rounded-2xl">
-            <p class="text-center font-bold px-4">Completa una práctica de manejo para desbloquear</p>
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-3xl p-4">
+            <p class="text-center font-bold text-sm">Completa una práctica de manejo para desbloquear</p>
           </div>
         }
       </button>
 
       <button
         (click)="logout()"
-        class="w-full p-6 rounded-2xl text-left text-white transform transition-transform hover:scale-105 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-rose-500 to-red-600"
+        class="w-full p-6 rounded-3xl text-left text-white transform transition-all hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-2xl flex items-center gap-6 bg-linear-to-br from-rose-500 to-red-600 group"
         >
-        <div class="text-5xl mb-4">🚪</div>
+        <div class="text-5xl group-hover:translate-x-1 transition-transform">🚪</div>
         <div>
           <h2 class="text-2xl font-display">Cerrar Sesión</h2>
-          <p class="mt-1 font-light">¿Ya terminaste por hoy? ¡Nos vemos pronto!</p>
+          <p class="mt-1 font-light text-rose-50 text-sm opacity-90">¿Ya terminaste por hoy? ¡Nos vemos pronto!</p>
         </div>
       </button>
     </div>
   </div>
 </div>
+
 
 
