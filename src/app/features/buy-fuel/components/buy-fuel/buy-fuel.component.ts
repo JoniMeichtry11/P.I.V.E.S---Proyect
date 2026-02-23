@@ -28,8 +28,6 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
   purchasedAmount = 0;
   /** Cuando es true se está creando la preferencia de pago en MP */
   isCreatingPreference = false;
-  /** Cuando es true se está verificando el pago que regresó de MP */
-  isVerifyingPayment = false;
   /** Cuando es true se está validando un cupón */
   isValidatingCoupon = false;
   paymentMethod: 'card' | 'wallet' = 'card';
@@ -57,76 +55,12 @@ export class BuyFuelComponent implements OnInit, OnDestroy {
         this.activeChild = child;
       })
     );
-
-    // Manejar el retorno desde MercadoPago
-    this.subscriptions.add(
-      this.route.queryParams.subscribe(params => {
-        if (params['status']) {
-          this.handlePaymentReturn(params);
-          // Limpiar los query params de la URL sin recargar
-          this.router.navigate([], { replaceUrl: true, queryParams: {} });
-        }
-      })
-    );
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  private async handlePaymentReturn(params: Record<string, string>): Promise<void> {
-    const status = params['status'];
-    const paymentId = params['payment_id'];
-    const liters = parseInt(params['liters'] || '0', 10);
-
-    if (status === 'approved' && liters > 0) {
-      this.isVerifyingPayment = true;
-      try {
-        // Verificar el pago con la API de MP para evitar manipulación de URL
-        if (paymentId) {
-          const { status: mpStatus } = await this.paymentService.getPaymentStatus(paymentId);
-          if (mpStatus !== 'approved') {
-            this.showFeedback('error', 'El pago no pudo ser confirmado. Contactanos si el dinero fue descontado.');
-            return;
-          }
-        }
-
-        await this.userService.addFuel(liters);
-
-        const user = this.authService.getCurrentUser();
-        const child = this.userService.getActiveChild();
-        if (user && child && paymentId) {
-          const pkg = FUEL_PACKAGES.find(p => p.liters === liters);
-          await this.paymentService.saveTransaction({
-            userId: user.uid,
-            childId: child.id,
-            packageLiters: liters,
-            packagePrice: pkg?.price ?? 0,
-            mpPaymentId: paymentId,
-            status: 'approved',
-            createdAt: new Date().toISOString()
-          });
-        }
-        
-        // Limpiar descuento si el pago fue aprobado
-        if (this.activeChild?.progress?.activeDiscount) {
-          await this.userService.clearDiscount();
-        }
-
-        this.purchasedAmount = liters;
-        this.showSuccessModal = true;
-      } catch (err) {
-        console.error('Error al confirmar el pago:', err);
-        this.showFeedback('error', 'Hubo un error al acreditar el combustible. Por favor contactanos.');
-      } finally {
-        this.isVerifyingPayment = false;
-      }
-    } else if (status === 'failure') {
-      this.showFeedback('error', 'El pago fue rechazado. Por favor intentá con otro medio de pago.');
-    } else if (status === 'pending') {
-      this.showFeedback('pending', 'Tu pago está siendo procesado. Los litros se acreditarán en breve.');
-    }
-  }
 
   async handleRedeemCodeSubmit(): Promise<void> {
     if (!this.redeemCode.trim()) return;

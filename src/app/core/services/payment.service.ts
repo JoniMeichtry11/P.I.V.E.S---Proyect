@@ -66,9 +66,9 @@ export class PaymentService {
         }
       ],
       back_urls: {
-        success: `${appUrl}/buy-fuel?status=approved&liters=${pkg.liters}&childId=${childId}`,
-        failure: `${appUrl}/buy-fuel?status=failure`,
-        pending: `${appUrl}/buy-fuel?status=pending&liters=${pkg.liters}&childId=${childId}`
+        success: `${appUrl}/buy-fuel/status?status=approved&liters=${pkg.liters}&childId=${childId}`,
+        failure: `${appUrl}/buy-fuel/status?status=failure`,
+        pending: `${appUrl}/buy-fuel/status?status=pending&liters=${pkg.liters}&childId=${childId}`
       },
       notification_url: undefined, // No usamos webhooks por ahora para evitar problemas de localhost
       metadata: {
