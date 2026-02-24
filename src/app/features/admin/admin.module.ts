@@ -5,13 +5,15 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { AdminBookingsComponent } from './components/admin-bookings/admin-bookings.component';
 import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.component';
+import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-flashcards.component';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
     AdminUsersComponent,
     AdminBookingsComponent,
-    AdminCouponsComponent
+    AdminCouponsComponent,
+    AdminFlashcardsComponent
   ],
   imports: [
     SharedModule,

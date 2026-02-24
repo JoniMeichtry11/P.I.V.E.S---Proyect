@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { TextToSpeechService } from '../../../../core/services/text-to-speech.service';
 import { Child, Question, AnswerSummary } from '../../../../core/models/user.model';
-import { QUESTIONS, QUESTIONS_PER_CARD, MARA_HAPPY_URL, MARA_THINKING_URL } from '../../../../core/constants/app.constants';
+import { QUESTIONS_PER_CARD, MARA_HAPPY_URL, MARA_THINKING_URL } from '../../../../core/constants/app.constants';
+import { FlashcardService } from '../../../../core/services/flashcard.service';
 import { Subscription } from 'rxjs';
 
 type ViewMode = 'menu' | 'game' | 'result';
@@ -31,21 +32,29 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
   isSpeaking = false;
   currentlySpeakingIndex: number | null = null;
   isSavingProgress = false;
+  questions: Question[] = [];
+  loadingQuestions = true;
   
   readonly MARA_HAPPY_URL = MARA_HAPPY_URL;
   readonly MARA_THINKING_URL = MARA_THINKING_URL;
   readonly QUESTIONS_PER_CARD = QUESTIONS_PER_CARD;
 
   private subscriptions = new Subscription();
-  readonly TOTAL_CARDS = Math.floor(QUESTIONS.length / QUESTIONS_PER_CARD);
-  readonly levels: number[] = Array.from({ length: this.TOTAL_CARDS }, (_, i) => i);
+  get TOTAL_CARDS(): number {
+    return Math.floor(this.questions.length / QUESTIONS_PER_CARD);
+  }
+  
+  get levels(): number[] {
+    return Array.from({ length: this.TOTAL_CARDS }, (_, i) => i);
+  }
 
   router: Router;
 
   constructor(
     private _router: Router,
     private userService: UserService,
-    private textToSpeech: TextToSpeechService
+    private textToSpeech: TextToSpeechService,
+    private flashcardService: FlashcardService
   ) {
     this.router = this._router;
   }
@@ -72,6 +81,23 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
         this.currentlySpeakingIndex = index;
       })
     );
+
+    this.loadQuestions();
+  }
+
+  async loadQuestions(): Promise<void> {
+    this.loadingQuestions = true;
+    try {
+      this.questions = await this.flashcardService.getFlashcards();
+      if (this.activeChild) {
+        this.playingCardIndex = this.activeChild.progress.currentCardIndex;
+        this.questionIndex = this.activeChild.progress.currentCardIndex * QUESTIONS_PER_CARD;
+      }
+    } catch (err) {
+      console.error('Error loading questions from Firestore:', err);
+    } finally {
+      this.loadingQuestions = false;
+    }
   }
 
   ngOnDestroy(): void {
@@ -80,7 +106,7 @@ export class FlashcardsComponent implements OnInit, OnDestroy {
   }
 
   get currentQuestion(): Question | null {
-    return QUESTIONS[this.questionIndex] || null;
+    return this.questions[this.questionIndex] || null;
   }
 
   get questionInCardIndex(): number {

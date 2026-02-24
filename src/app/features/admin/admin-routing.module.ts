@@ -5,12 +5,14 @@ import { AdminBookingsComponent } from './components/admin-bookings/admin-bookin
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.component';
+import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-flashcards.component';
 
 const routes: Routes = [
   { path: '', component: AdminDashboardComponent },
   { path: 'users', component: AdminUsersComponent },
   { path: 'bookings', component: AdminBookingsComponent },
-  { path: 'coupons', component: AdminCouponsComponent }
+  { path: 'coupons', component: AdminCouponsComponent },
+  { path: 'flashcards', component: AdminFlashcardsComponent }
 ];
 
 @NgModule({
