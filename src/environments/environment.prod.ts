@@ -9,10 +9,9 @@ export const environment = {
     appId: "1:415399502496:web:20f5c73916a7a905f31fc5"
   },
   mercadopago: {
-    // ⚠️ Reemplazá con tu Access Token de PRODUCCIÓN antes de hacer deploy:
-    // https://www.mercadopago.com.ar/developers → Tu aplicación → Credenciales de producción
-    accessToken: 'APP_USR-REEMPLAZAR-CON-TU-TOKEN-DE-PRODUCCION'
-  }
+    // El token ahora se maneja en el servidor Node.js por seguridad
+  },
+  backendUrl: 'https://pives-backend.onrender.com' // Cambiá esto cuando crees el servicio en Render
 };
 
 
