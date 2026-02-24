@@ -10,7 +10,7 @@ import { Question } from '../../../../core/models/user.model';
   standalone: false
 })
 export class AdminFlashcardsComponent implements OnInit {
-  flashcards: (Question & { id: string })[] = [];
+  flashcards: (Question & { id: string, orderIndex?: number })[] = [];
   loading = true;
   savingId: string | null = null;
   error: string | null = null;
@@ -55,7 +55,7 @@ export class AdminFlashcardsComponent implements OnInit {
     }
   }
 
-  async saveFlashcard(flashcard: Question & { id: string }): Promise<void> {
+  async saveFlashcard(flashcard: Question & { id: string, orderIndex?: number }): Promise<void> {
     this.savingId = flashcard.id;
     try {
       const { id, ...data } = flashcard;
@@ -67,6 +67,64 @@ export class AdminFlashcardsComponent implements OnInit {
       this.error = 'Error al guardar los cambios.';
     } finally {
       this.savingId = null;
+    }
+  }
+
+  async handleAddCard(): Promise<void> {
+    this.loading = true;
+    try {
+      let maxOrderIndex = -1;
+      this.flashcards.forEach(f => {
+        if (f.orderIndex !== undefined && f.orderIndex > maxOrderIndex) {
+          maxOrderIndex = f.orderIndex;
+        }
+      });
+      
+      const newCardIndex = this.getGroupedFlashcards().length + 1;
+      
+      for (let i = 0; i < 3; i++) {
+        const orderIndex = maxOrderIndex + 1 + i;
+        const newQuestion: Question & { orderIndex: number } = {
+          image: '',
+          text: `Nueva pregunta ${i + 1} para la Tarjeta ${newCardIndex}`,
+          options: ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4'],
+          correctAnswerIndex: 0,
+          explanation: 'Explicación del admin',
+          audience: 'child',
+          orderIndex: orderIndex
+        };
+        await this.flashcardService.addFlashcard(newQuestion);
+      }
+      
+      this.successMessage = 'Nueva tarjeta añadida correctamente.';
+      setTimeout(() => this.successMessage = null, 3000);
+      await this.loadFlashcards();
+    } catch (err) {
+      console.error('Error adding new card:', err);
+      this.error = 'Error al añadir una nueva tarjeta.';
+      this.loading = false; 
+    }
+  }
+
+  async handleDeleteCard(groupIndex: number): Promise<void> {
+    if (!confirm(`¿Seguro que quieres eliminar la TARJETA ${groupIndex}? Se borrarán las 3 preguntas asociadas.`)) return;
+    
+    this.loading = true;
+    try {
+      const groups = this.getGroupedFlashcards();
+      const groupToDelete = groups.find(g => g.cardIndex === groupIndex);
+      if (groupToDelete) {
+        for (const question of groupToDelete.questions) {
+          await this.flashcardService.deleteFlashcard(question.id);
+        }
+        this.successMessage = `Tarjeta ${groupIndex} eliminada correctamente.`;
+        setTimeout(() => this.successMessage = null, 3000);
+        await this.loadFlashcards();
+      }
+    } catch (err) {
+      console.error('Error deleting card:', err);
+      this.error = 'Error al eliminar la tarjeta.';
+      this.loading = false;
     }
   }
 

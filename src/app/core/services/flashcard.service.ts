@@ -41,6 +41,18 @@ export class FlashcardService {
     await updateDoc(flashcardDoc, data as any);
   }
 
+  async addFlashcard(data: Question & { orderIndex: number }): Promise<string> {
+    const flashcardsCol = collection(this.firestore, this.collectionName);
+    const newDocRef = doc(flashcardsCol);
+    await setDoc(newDocRef, data);
+    return newDocRef.id;
+  }
+
+  async deleteFlashcard(id: string): Promise<void> {
+    const flashcardDoc = doc(this.firestore, this.collectionName, id);
+    await deleteDoc(flashcardDoc);
+  }
+
   async migrateHardcodedData(): Promise<void> {
     const flashcardsCol = collection(this.firestore, this.collectionName);
     const snapshot = await getDocs(flashcardsCol);
