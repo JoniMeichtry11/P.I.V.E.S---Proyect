@@ -10,6 +10,7 @@ const routes: Routes = [
     path: "",
     component: BuyFuelComponent,
     canActivate: [OnboardingGuard],
+    pathMatch: "full",
   },
   {
     path: "status",

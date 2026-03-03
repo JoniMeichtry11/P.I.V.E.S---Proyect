@@ -4,7 +4,8 @@ import { PaymentService } from "../../../../core/services/payment.service";
 import { UserService } from "../../../../core/services/user.service";
 import { AuthService } from "../../../../core/services/auth.service";
 import { FUEL_PACKAGES } from "../../../../core/constants/app.constants";
-import { filter, firstValueFrom, take } from "rxjs";
+import { firstValueFrom } from "rxjs";
+import { filter, take } from "rxjs/operators";
 
 @Component({
   selector: "app-payment-result",
@@ -28,16 +29,22 @@ export class PaymentResultComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.paymentId = params["payment_id"];
-      const statusParam = params["status"];
+      this.paymentId = params["payment_id"] || params["collection_id"];
+      // Usamos 'result' (nuestro) o 'status' (MP) como fallback
+      const statusParam = params["result"] || params["status"];
       const childId = params["childId"];
       this.liters = parseInt(params["liters"] || "0", 10);
 
-      if (statusParam === "approved") {
+      // Si statusParam es un array (duplicado), tomamos el primero
+      const finalStatus = Array.isArray(statusParam)
+        ? statusParam[0]
+        : statusParam;
+
+      if (finalStatus === "approved") {
         this.processApprovedPayment(childId);
-      } else if (statusParam === "failure") {
+      } else if (finalStatus === "failure") {
         this.status = "failure";
-      } else if (statusParam === "pending") {
+      } else if (finalStatus === "pending") {
         this.status = "pending";
       } else {
         this.status = "failure";

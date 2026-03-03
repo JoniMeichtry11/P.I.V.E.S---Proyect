@@ -35,6 +35,7 @@ export class ChildSelectionComponent implements OnInit {
   selectChild(index: number): void {
     const child = this.account?.children[index];
     if (!child) return;
+    console.log("ID del niño seleccionado:", child.id);
 
     this.userService.setActiveChildIndex(index);
     
