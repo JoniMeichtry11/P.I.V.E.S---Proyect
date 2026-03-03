@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@core/services/auth.service';
-import { UserService } from '@core/services/user.service';
-import { Parent, Child } from '@core/models/user.model';
-import { AVATARS } from '@core/constants/app.constants';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from "@core/services/auth.service";
+import { UserService } from "@core/services/user.service";
+import { Parent, Child } from "@core/models/user.model";
+import { AVATARS } from "@core/constants/app.constants";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  standalone: false
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
+  standalone: false,
 })
 export class LoginComponent implements OnInit {
-  mode: 'login' | 'register' = 'login';
+  mode: "login" | "register" = "login";
   form: FormGroup;
-  children: Array<{ name: string; avatar?: string; gender?: 'male' | 'female' }> = [{ name: '', avatar: undefined, gender: undefined }];
+  children: Array<{
+    name: string;
+    avatar?: string;
+    gender?: "male" | "female";
+  }> = [{ name: "", avatar: undefined, gender: undefined }];
   showVerification = false;
-  verificationCode = '';
+  verificationCode = "";
   pendingAccount: any = null;
-  error = '';
+  error = "";
+  success = "";
   loading = false;
   avatars = AVATARS;
 
@@ -28,28 +33,53 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      parentName: [''],
-      phone: ['']
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(6)]],
+      parentName: [""],
+      phone: [""],
     });
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.mode = data['mode'] || 'login';
-      if (this.mode === 'register') {
-        this.form.get('parentName')?.setValidators([Validators.required]);
-        this.form.get('phone')?.setValidators([Validators.required]);
+    this.route.data.subscribe((data) => {
+      this.mode = data["mode"] || "login";
+      if (this.mode === "register") {
+        this.form.get("parentName")?.setValidators([Validators.required]);
+        this.form.get("phone")?.setValidators([Validators.required]);
+      }
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      const mode = params["mode"];
+      const oobCode = params["oobCode"];
+
+      if (mode === "verifyEmail" && oobCode) {
+        this.handleEmailVerification(oobCode);
       }
     });
   }
 
+  async handleEmailVerification(oobCode: string) {
+    this.loading = true;
+    this.error = "";
+    this.success = "";
+    try {
+      await this.authService.verifyEmail(oobCode);
+      this.success =
+        "¡Correo verificado con éxito! Ahora puedes iniciar sesión.";
+      this.mode = "login";
+    } catch (err: any) {
+      this.error = "El enlace de verificación es inválido o ha expirado.";
+    } finally {
+      this.loading = false;
+    }
+  }
+
   addChild(): void {
-    this.children.push({ name: '', avatar: undefined, gender: undefined });
+    this.children.push({ name: "", avatar: undefined, gender: undefined });
   }
 
   handleChildDataChange(index: number, field: string, value: any): void {
@@ -57,23 +87,33 @@ export class LoginComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    this.error = '';
+    this.error = "";
+    this.success = "";
     this.loading = true;
 
-    if (this.mode === 'login') {
+    if (this.mode === "login") {
       try {
-        await this.authService.login(this.form.value.email, this.form.value.password);
-        this.router.navigate(['/home']);
+        await this.authService.login(
+          this.form.value.email,
+          this.form.value.password,
+        );
+        this.router.navigate(["/home"]);
       } catch (err: any) {
-        this.error = err.message || 'Error al iniciar sesión';
+        this.error = err.message || "Error al iniciar sesión";
       } finally {
         this.loading = false;
       }
     } else {
       // Register
-      const isAnyChildFieldEmpty = this.children.some(c => !c.name || !c.avatar || !c.gender);
-      if (!this.form.value.parentName || !this.form.value.phone || isAnyChildFieldEmpty) {
-        this.error = 'Por favor, completa todos los campos para registrarte.';
+      const isAnyChildFieldEmpty = this.children.some(
+        (c) => !c.name || !c.avatar || !c.gender,
+      );
+      if (
+        !this.form.value.parentName ||
+        !this.form.value.phone ||
+        isAnyChildFieldEmpty
+      ) {
+        this.error = "Por favor, completa todos los campos para registrarte.";
         this.loading = false;
         return;
       }
@@ -83,16 +123,16 @@ export class LoginComponent implements OnInit {
           name: this.form.value.parentName,
           email: this.form.value.email,
           phone: this.form.value.phone,
-          password: this.form.value.password
+          password: this.form.value.password,
         },
-        children: this.children
+        children: this.children,
       };
-      
+
       this.loading = true;
       try {
         const user = await this.authService.register(
           this.pendingAccount.parent.email,
-          this.pendingAccount.parent.password
+          this.pendingAccount.parent.password,
         );
 
         await this.authService.sendEmailVerification(user);
@@ -101,7 +141,7 @@ export class LoginComponent implements OnInit {
           parent: {
             name: this.pendingAccount.parent.name,
             email: this.pendingAccount.parent.email,
-            phone: this.pendingAccount.parent.phone
+            phone: this.pendingAccount.parent.phone,
           },
           children: this.pendingAccount.children.map((child: any) => ({
             ...child,
@@ -112,20 +152,20 @@ export class LoginComponent implements OnInit {
               milestones: [],
               currentCardIndex: 0,
               fuelLiters: 10,
-              familyActionsProgress: 0
+              familyActionsProgress: 0,
             },
             bookings: [],
             hasCompletedOnboarding: false,
             accessories: { unlocked: [], equipped: null },
-            usedRedeemCodes: []
-          }))
+            usedRedeemCodes: [],
+          })),
         };
 
         await this.authService.saveUserData(user.uid, finalAccount);
         await this.authService.logout();
         this.showVerification = true;
       } catch (err: any) {
-        this.error = err.message || 'Error al registrar';
+        this.error = err.message || "Error al registrar";
       } finally {
         this.loading = false;
       }
@@ -134,9 +174,7 @@ export class LoginComponent implements OnInit {
 
   async handleVerificationSubmit(): Promise<void> {
     this.showVerification = false;
-    this.mode = 'login';
-    this.error = '';
+    this.mode = "login";
+    this.error = "";
   }
 }
-
-
