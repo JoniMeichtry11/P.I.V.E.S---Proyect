@@ -1,91 +1,111 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
-import { OnboardingGuard } from './core/guards/onboarding.guard';
-import { AdminGuard } from './core/guards/admin.guard';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { AuthGuard } from "./core/guards/auth.guard";
+import { OnboardingGuard } from "./core/guards/onboarding.guard";
+import { AdminGuard } from "./core/guards/admin.guard";
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/welcome',
-    pathMatch: 'full'
+    path: "",
+    redirectTo: "/welcome",
+    pathMatch: "full",
   },
   {
-    path: 'child-selection',
-    loadChildren: () => import('./features/child-selection/child-selection.module').then(m => m.ChildSelectionModule),
-    canActivate: [AuthGuard]
+    path: "child-selection",
+    loadChildren: () =>
+      import("./features/child-selection/child-selection.module").then(
+        (m) => m.ChildSelectionModule,
+      ),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'onboarding',
-    loadChildren: () => import('./features/onboarding/onboarding.module').then(m => m.OnboardingModule),
-    canActivate: [AuthGuard]
+    path: "onboarding",
+    loadChildren: () =>
+      import("./features/onboarding/onboarding.module").then(
+        (m) => m.OnboardingModule,
+      ),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'home',
-    loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule),
+    path: "home",
+    loadChildren: () =>
+      import("./features/home/home.module").then((m) => m.HomeModule),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Página de Inicio' }
+    data: { breadcrumb: "Página de Inicio" },
   },
   {
-    path: 'flashcards',
-    loadChildren: () => import('./features/flashcards/flashcards.module').then(m => m.FlashcardsModule),
+    path: "flashcards",
+    loadChildren: () =>
+      import("./features/flashcards/flashcards.module").then(
+        (m) => m.FlashcardsModule,
+      ),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Desafío de Señales' }
+    data: { breadcrumb: "Desafío de Señales" },
   },
   {
-    path: 'booking',
-    loadChildren: () => import('./features/booking/booking.module').then(m => m.BookingModule),
+    path: "booking",
+    loadChildren: () =>
+      import("./features/booking/booking.module").then((m) => m.BookingModule),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Reservar un Coche' }
+    data: { breadcrumb: "Reservar un Coche" },
   },
   {
-    path: 'profile',
-    loadChildren: () => import('./features/profile/profile.module').then(m => m.ProfileModule),
+    path: "profile",
+    loadChildren: () =>
+      import("./features/profile/profile.module").then((m) => m.ProfileModule),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Mi Perfil' }
+    data: { breadcrumb: "Mi Perfil" },
   },
   {
-    path: 'buy-fuel',
-    loadChildren: () => import('./features/buy-fuel/buy-fuel.module').then(m => m.BuyFuelModule),
+    path: "buy-fuel",
+    loadChildren: () =>
+      import("./features/buy-fuel/buy-fuel.module").then(
+        (m) => m.BuyFuelModule,
+      ),
+    canActivate: [AuthGuard],
+    data: { breadcrumb: "Cargar Combustible" },
+  },
+  {
+    path: "map",
+    loadChildren: () =>
+      import("./features/map/map.module").then((m) => m.MapModule),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Cargar Combustible' }
+    data: { breadcrumb: "Mapa de Eventos" },
   },
   {
-    path: 'map',
-    loadChildren: () => import('./features/map/map.module').then(m => m.MapModule),
+    path: "help",
+    loadChildren: () =>
+      import("./features/help/help.module").then((m) => m.HelpModule),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Mapa de Eventos' }
+    data: { breadcrumb: "Ayuda y Contacto" },
   },
   {
-    path: 'help',
-    loadChildren: () => import('./features/help/help.module').then(m => m.HelpModule),
+    path: "admin",
+    loadChildren: () =>
+      import("./features/admin/admin.module").then((m) => m.AdminModule),
+    canActivate: [AuthGuard, AdminGuard],
+  },
+  {
+    path: "family-actions",
+    loadChildren: () =>
+      import("./features/family-actions/family-actions.module").then(
+        (m) => m.FamilyActionsModule,
+      ),
     canActivate: [AuthGuard, OnboardingGuard],
-    data: { breadcrumb: 'Ayuda y Contacto' }
   },
   {
-    path: 'admin',
-    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
-    canActivate: [AuthGuard, AdminGuard]
+    path: "",
+    loadChildren: () =>
+      import("./features/auth/auth.module").then((m) => m.AuthModule),
   },
   {
-    path: 'family-actions',
-    loadChildren: () => import('./features/family-actions/family-actions.module').then(m => m.FamilyActionsModule),
-    canActivate: [AuthGuard, OnboardingGuard]
+    path: "**",
+    redirectTo: "/welcome",
   },
-  {
-    path: '',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
-  },
-  {
-    path: '**',
-    redirectTo: '/welcome'
-  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
-
-
+export class AppRoutingModule {}
