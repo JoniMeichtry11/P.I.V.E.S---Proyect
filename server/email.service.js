@@ -27,8 +27,9 @@ const createTransport = () => {
         options.family = 4; // Fuerza IPv4
         dns.lookup(host, options, callback);
       },
-      connectionTimeout: 10000, // 10 segundos
-      socketTimeout: 10000,
+      connectionTimeout: 30000, // Aumentado a 30 segundos para dar más tiempo en Render
+      socketTimeout: 30000,
+      greetingTimeout: 10000,
       tls: {
         // No fallar si el certificado tiene discrepancias de nombre (común en servers compartidos)
         rejectUnauthorized: false 
@@ -46,6 +47,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
   if (!transporter) return false;
 
   try {
+    console.log(`[SMTP] Intentando conectar a ${process.env.SMTP_HOST}:${process.env.SMTP_PORT}...`);
     const info = await transporter.sendMail({
       from: process.env.SMTP_FROM || '"Programa P.I.V.E.S" <noreply@pives.com.ar>',
       to,
@@ -57,8 +59,12 @@ const sendEmail = async ({ to, subject, text, html }) => {
     return true;
   } catch (error) {
     console.error("ERROR CRÍTICO SMTP:", error.message);
-    if (error.code === 'EAUTH') console.error("Error de Autenticación: Usuario o contraseña incorrectos.");
-    if (error.code === 'ESOCKET') console.error("Error de Conexión: No se pudo conectar al servidor SMTP (Revisa host/puerto).");
+    console.error("Código de error:", error.code);
+    console.error("Stack:", error.stack);
+    if (error.code === 'EAUTH') console.error("❌ Error de Autenticación: Usuario o contraseña incorrectos.");
+    if (error.code === 'ESOCKET') console.error("❌ Error de Socket: Problemas de red en la conexión.");
+    if (error.code === 'ETIMEDOUT') console.error("❌ Error de Timeout: El servidor SMTP no responde. Verifica que host/puerto sean correctos y que Ferozo no tenga bloqueado Render.");
+    if (error.message.includes('timeout')) console.error("❌ Connection Timeout: No hay conectividad con el servidor SMTP.");
     return false;
   }
 };
