@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
 const admin = require("firebase-admin");
+const { sendConfirmationEmail, sendReminderEmail } = require("./email.service");
 
 // Inicialización de Firebase Admin
 let serviceAccount;
@@ -158,6 +159,104 @@ app.post("/api/delete-user/:uid", async (req, res) => {
       error:
         "No se pudo eliminar el usuario de Authentication. Verifica que el servidor tenga permisos.",
     });
+  }
+});
+
+// Endpoint para enviar email de confirmación (llamado desde el frontend)
+app.post("/api/send-confirmation", async (req, res) => {
+  try {
+    const { userAccount, childName, booking } = req.body;
+    
+    if (!userAccount || !userAccount.parent || !userAccount.parent.email) {
+      return res.status(400).json({ error: "Datos del usuario o email faltantes" });
+    }
+
+    const success = await sendConfirmationEmail(userAccount.parent.email, childName, booking);
+    
+    if (success) {
+      res.json({ success: true, message: "Email de confirmación enviado" });
+    } else {
+      res.status(500).json({ error: "No se pudo enviar el email de confirmación" });
+    }
+  } catch (error) {
+    console.error("Error en /api/send-confirmation:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// Endpoint para revisar y enviar recordatorios (llamado por cron externo)
+app.get("/api/check-reminders", async (req, res) => {
+  try {
+    console.log("[CRON] Iniciando revisión de recordatorios...");
+    
+    if (admin.apps.length === 0) {
+      return res.status(500).json({ error: "Firebase no inicializado" });
+    }
+
+    const db = admin.firestore();
+    const usersSnapshot = await db.collection("users").get();
+    
+    const now = new Date();
+    // Ajustar a zona horaria local (Argentina -03:00) si es necesario
+    // Para simplificar, comparamos fechas en formato YYYY-MM-DD
+    const todayStr = now.toISOString().split('T')[0];
+    
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+    let remindersCount = 0;
+
+    for (const userDoc of usersSnapshot.docs) {
+      const userData = userDoc.data();
+      let userUpdated = false;
+
+      if (!userData.children) continue;
+
+      for (const child of userData.children) {
+        if (!child.bookings) continue;
+
+        for (const booking of child.bookings) {
+          if (booking.status !== "active") continue;
+
+          let shouldSendDayBefore = booking.date === tomorrowStr && !booking.remindersSent?.dayBefore;
+          let shouldSendSameDay = booking.date === todayStr && !booking.remindersSent?.sameDay;
+
+          if (shouldSendDayBefore || shouldSendSameDay) {
+            const emailSuccess = await sendReminderEmail(
+              userData.parent.email,
+              child.name,
+              booking,
+              shouldSendSameDay
+            );
+
+            if (emailSuccess) {
+              if (!booking.remindersSent) {
+                booking.remindersSent = { dayBefore: false, sameDay: false };
+              }
+              
+              if (shouldSendDayBefore) booking.remindersSent.dayBefore = true;
+              if (shouldSendSameDay) booking.remindersSent.sameDay = true;
+              
+              userUpdated = true;
+              remindersCount++;
+            }
+          }
+        }
+      }
+
+      if (userUpdated) {
+        await db.collection("users").doc(userDoc.id).update({
+          children: userData.children
+        });
+      }
+    }
+
+    console.log(`[CRON] Revisión finalizada. Recordatorios enviados: ${remindersCount}`);
+    res.json({ success: true, remindersSent: remindersCount });
+  } catch (error) {
+    console.error("Error en /api/check-reminders:", error);
+    res.status(500).json({ error: "Error procesando recordatorios" });
   }
 });
 

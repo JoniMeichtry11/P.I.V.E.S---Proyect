@@ -4,6 +4,8 @@ import { UserService } from '../../../../core/services/user.service';
 import { AdminService } from '../../../../core/services/admin.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Child, CarModel, UserAccount, Booking } from '../../../../core/models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 import { CAR_MODELS, TIME_SLOTS } from '../../../../core/constants/app.constants';
 import { Subscription } from 'rxjs';
 
@@ -54,7 +56,8 @@ export class BookingComponent implements OnInit, OnDestroy {
     private _router: Router,
     private userService: UserService,
     private adminService: AdminService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private http: HttpClient
   ) {
     this.router = this._router;
   }
@@ -205,6 +208,16 @@ export class BookingComponent implements OnInit, OnDestroy {
       this.closeModal();
       this.confirmedForChildName = targetChild.name;
       this.step = 4;
+      
+      // Enviar email de confirmación
+      this.sendConfirmationEmail(this.currentUserAccount!, targetChild.name, {
+        car: this.selectedCar,
+        date: this.selectedDate,
+        time: this.selectedTime,
+        id: '', // No importa para el email
+        status: 'active',
+        remindersSent: { dayBefore: false, sameDay: false }
+      });
     } else {
       alert('Ocurrió un error al reasignar la reserva.');
     }
@@ -227,6 +240,16 @@ export class BookingComponent implements OnInit, OnDestroy {
     if (success) {
       this.confirmedForChildName = this.activeChild?.name || '';
       this.step = 4;
+
+      // Enviar email de confirmación
+      this.sendConfirmationEmail(this.currentUserAccount!, this.confirmedForChildName, {
+        car: this.selectedCar,
+        date: this.selectedDate,
+        time: this.selectedTime,
+        id: '', 
+        status: 'active',
+        remindersSent: { dayBefore: false, sameDay: false }
+      });
     } else {
       alert('Ocurrió un error al procesar tu reserva. Inténtalo de nuevo.');
     }
@@ -301,6 +324,14 @@ export class BookingComponent implements OnInit, OnDestroy {
   get remainingFuel(): number {
     if (!this.selectedCar) return this.userFuel;
     return this.userFuel - this.selectedCar.pricePerSlot;
+  }
+
+  private sendConfirmationEmail(userAccount: UserAccount, childName: string, booking: Booking): void {
+    const url = `${environment.backendUrl}/api/send-confirmation`;
+    this.http.post(url, { userAccount, childName, booking }).subscribe({
+      next: () => console.log('Email de confirmación solicitado con éxito'),
+      error: (err) => console.error('Error solicitando email de confirmación:', err)
+    });
   }
 }
 
