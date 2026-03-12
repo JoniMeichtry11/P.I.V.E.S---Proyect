@@ -1,80 +1,169 @@
-<header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md p-2 md:p-3">
-  <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
-    <!-- Sección Izquierda: Avatar y Stats -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md">
+  <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
+    <!-- Sección Izquierda: Avatar y Nombre (Always visible) -->
     <button (click)="navigateToHome()" class="flex items-center gap-2 md:gap-3 group shrink-0">
       <div class="relative">
-        <div class="text-3xl md:text-4xl bg-slate-100 rounded-full p-1">{{ activeChild?.avatar }}</div>
+        <div class="text-3xl md:text-5xl bg-slate-100 rounded-full p-1.5 md:p-2 shadow-inner group-hover:scale-105 transition-transform">
+          {{ activeChild?.avatar }}
+        </div>
         @if (equippedAccessory) {
-          <div class="absolute -top-1 md:-top-2 -right-1 md:-right-2 text-xl md:text-2xl transform rotate-12">
+          <div class="absolute -top-1 md:-top-2 -right-1 md:-right-2 text-xl md:text-3xl transform rotate-12 drop-shadow-sm">
             {{ equippedAccessory.icon }}
           </div>
         }
       </div>
       <div class="text-left">
-        <span class="font-bold text-slate-700 text-sm md:text-base block group-hover:text-blue-600 transition-colors leading-none mb-1">
+        <span class="font-black text-slate-800 text-base md:text-xl block group-hover:text-blue-600 transition-colors leading-none tracking-tight">
           {{ activeChild?.name }}
         </span>
-        <div class="flex items-center gap-2 md:gap-3">
-          <!-- RUEDAS -->
-          <div class="flex items-center gap-1" title="Ruedas">
-            <span class="font-display text-base md:text-lg text-amber-600">{{ activeChild?.progress?.ruedas }}</span>
-            <svg viewBox="0 0 24 24" fill="none" class="w-4 h-4 md:w-5 md:h-5 text-amber-600" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-              <circle cx="12" cy="12" r="3" fill="currentColor"/>
-              <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <!-- VOLANTES -->
-          <div class="flex items-center gap-1" title="Volantes">
-            <span class="font-display text-base md:text-lg text-blue-600">{{ activeChild?.progress?.volantes }}</span>
-            <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" class="w-4 h-4 md:w-5 md:h-5"/>
-          </div>
-          <!-- GASOLINA -->
-          <div class="flex items-center gap-1" title="Combustible">
-            <span class="font-display text-base md:text-lg text-yellow-600">{{ activeChild?.progress?.fuelLiters }}</span>
-            <span class="text-lg md:text-xl">⛽</span>
-          </div>
-        </div>
       </div>
     </button>
 
-    <!-- Sección Media/Derecha: Documentos y Acciones -->
-    <div class="flex items-center justify-between w-full sm:w-auto gap-2 md:gap-4 overflow-x-auto no-scrollbar sm:overflow-visible py-1">
-      <!-- DOCUMENTOS -->
-      <div class="flex items-center gap-1 border-l-2 border-slate-300 sm:border-l-0 sm:pl-0 pl-2 lg:border-l-2 lg:pl-3" title="Mis Documentos">
+    <!-- Desktop: Stats, Milestones y Acciones -->
+    <div class="hidden lg:flex items-center gap-6">
+      <!-- STATS -->
+      <div class="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-2xl shadow-sm">
+        <!-- RUEDAS -->
+        <div class="flex items-center gap-1.5" title="Ruedas">
+          <span class="font-display text-xl text-amber-600 font-bold">{{ activeChild?.progress?.ruedas }}</span>
+          <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 text-amber-600" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+            <path d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <!-- VOLANTES -->
+        <div class="flex items-center gap-1.5" title="Volantes">
+          <span class="font-display text-xl text-blue-600 font-bold">{{ activeChild?.progress?.volantes }}</span>
+          <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="Volante" class="w-5 h-5"/>
+        </div>
+        <!-- GASOLINA -->
+        <div class="flex items-center gap-1.5" title="Combustible">
+          <span class="font-display text-xl text-yellow-600 font-bold">{{ activeChild?.progress?.fuelLiters }}</span>
+          <span class="text-2xl">⛽</span>
+        </div>
+      </div>
+
+      <!-- MILESTONES -->
+      <div class="flex items-center gap-2 border-x border-slate-200 px-4">
         @for (milestone of cachedMilestones; track milestone.name) {
           <span
             [class.opacity-100]="milestone.isUnlocked"
             [class.opacity-20]="!milestone.isUnlocked"
-            [class.grayscale-0]="milestone.isUnlocked"
-            [class.grayscale]="!milestone.isUnlocked"
             [class.scale-110]="milestone.isUnlocked"
             [class.scale-90]="!milestone.isUnlocked"
-            class="text-lg md:text-xl transition-all duration-300 shrink-0"
+            class="text-2xl transition-all duration-300 transform hover:scale-125 cursor-help"
             [title]="milestone.isUnlocked ? milestone.name : 'Bloqueado'">
             {{ milestone.icon }}
           </span>
         }
       </div>
 
-      <!-- Botones de Acción -->
-      <div class="flex items-center gap-1 md:gap-2 shrink-0">
+      <!-- BOTONES ACCIÓN -->
+      <div class="flex items-center gap-2">
         @if (isAdmin) {
-          <button (click)="navigateToAdmin()" class="bg-amber-100 text-amber-700 px-2 py-1.5 md:px-3 md:py-2 rounded-xl font-bold hover:bg-amber-200 transition-all text-[10px] sm:text-xs md:text-sm whitespace-nowrap" title="Panel de Administración">
-            ⚙️ <span class="xs:inline md:hidden lg:inline">Admin</span>
+          <button (click)="navigateToAdmin()" class="flex items-center gap-1.5 bg-amber-100 text-amber-700 px-3 py-2 rounded-xl font-bold hover:bg-amber-200 transition-all text-sm shadow-sm" title="Panel de Administración">
+            ⚙️ <span>Admin</span>
           </button>
         }
-        <button (click)="navigateToBookings()" class="bg-green-100 text-green-700 px-2 py-1.5 md:px-3 md:py-2 rounded-xl font-bold hover:bg-green-200 transition-all text-[10px] sm:text-xs md:text-sm whitespace-nowrap" title="Mis Reservas">
-          📅 <span class="xs:inline md:hidden lg:inline">Reservas</span>
+        <button (click)="navigateToBookings()" class="flex items-center gap-1.5 bg-green-100 text-green-700 px-3 py-2 rounded-xl font-bold hover:bg-green-200 transition-all text-sm shadow-sm" title="Mis Reservas">
+          📅 <span>Reservas</span>
         </button>
-        <button (click)="switchProfile()" class="bg-blue-100 text-blue-700 px-2 py-1.5 md:px-3 md:py-2 rounded-xl font-bold hover:bg-blue-200 transition-all text-[10px] sm:text-xs md:text-sm whitespace-nowrap">
-          <span class="xs:inline md:hidden lg:inline">Cambiar Conductor</span>
-          <span class="hidden md:inline lg:hidden">Perfil</span>
+        <button (click)="switchProfile()" class="flex items-center gap-1.5 bg-blue-100 text-blue-700 px-3 py-2 rounded-xl font-bold hover:bg-blue-200 transition-all text-sm shadow-sm">
+          👥 <span>Cambiar Conductor</span>
         </button>
-        <button (click)="logout()" class="bg-red-100 text-red-600 p-1.5 md:p-2 rounded-xl hover:bg-red-200 transition-all" title="Salir">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+        <button (click)="logout()" class="bg-red-50 text-red-500 p-2.5 rounded-xl hover:bg-red-100 transition-all border border-red-100" title="Cerrar Sesión">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Button & Hamburger -->
+    <div class="flex items-center gap-2 lg:hidden">
+      <!-- Quick Stats Mobile (Visible even when closed) -->
+      <div class="flex items-center gap-2 bg-slate-100/80 px-2 py-1 rounded-full mr-2">
+        <div class="flex items-center gap-0.5">
+          <span class="text-amber-600 font-bold text-sm">{{ activeChild?.progress?.ruedas }}</span>
+          <svg viewBox="0 0 24 24" fill="none" class="w-3.5 h-3.5 text-amber-600" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        </div>
+        <div class="flex items-center gap-0.5">
+          <span class="text-blue-600 font-bold text-sm">{{ activeChild?.progress?.volantes }}</span>
+          <img src="https://i.ibb.co/YFvCYYbS/volante-editado.png" alt="V" class="w-3.5 h-3.5"/>
+        </div>
+      </div>
+
+      <button (click)="toggleMenu()" class="p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
+        @if (!isMenuOpen) {
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div 
+    class="lg:hidden absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 overflow-hidden transition-all duration-300 ease-in-out"
+    [style.max-height]="isMenuOpen ? '500px' : '0'"
+    [style.opacity]="isMenuOpen ? '1' : '0'"
+    [class.invisible]="!isMenuOpen"
+  >
+    <div class="p-4 flex flex-col gap-6 bg-gradient-to-b from-white to-slate-50">
+      <!-- Mobile Stats Detailed -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-amber-50 p-3 rounded-2xl text-center border border-amber-100">
+          <span class="block text-amber-600 text-xl font-black">{{ activeChild?.progress?.ruedas }}</span>
+          <span class="text-[10px] text-amber-500 font-bold uppercase tracking-wider">Ruedas</span>
+        </div>
+        <div class="bg-blue-50 p-3 rounded-2xl text-center border border-blue-100">
+          <span class="block text-blue-600 text-xl font-black">{{ activeChild?.progress?.volantes }}</span>
+          <span class="text-[10px] text-blue-500 font-bold uppercase tracking-wider">Volantes</span>
+        </div>
+        <div class="bg-yellow-50 p-3 rounded-2xl text-center border border-yellow-100">
+          <span class="block text-yellow-600 text-xl font-black">{{ activeChild?.progress?.fuelLiters }}</span>
+          <span class="text-[10px] text-yellow-500 font-bold uppercase tracking-wider">⛽ Litros</span>
+        </div>
+      </div>
+
+      <!-- Mobile Milestones -->
+      <div class="flex items-center justify-center gap-3 py-2 bg-slate-100/50 rounded-2xl">
+        @for (milestone of cachedMilestones; track milestone.name) {
+          <span
+            [class.opacity-100]="milestone.isUnlocked"
+            [class.opacity-20]="!milestone.isUnlocked"
+            class="text-3xl transition-all"
+            [title]="milestone.name">
+            {{ milestone.icon }}
+          </span>
+        }
+      </div>
+
+      <!-- Mobile Actions -->
+      <div class="flex flex-col gap-2 pb-2">
+        @if (isAdmin) {
+          <button (click)="navigateToAdmin()" class="flex items-center justify-between bg-amber-100 text-amber-700 p-4 rounded-2xl font-bold hover:bg-amber-200 transition-all">
+            <span class="flex items-center gap-3">⚙️ Panel de Admin</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-50" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+          </button>
+        }
+        <button (click)="navigateToBookings()" class="flex items-center justify-between bg-green-100 text-green-700 p-4 rounded-2xl font-bold hover:bg-green-200 transition-all">
+          <span class="flex items-center gap-3">📅 Mis Reservas</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-50" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+        </button>
+        <button (click)="switchProfile()" class="flex items-center justify-between bg-blue-100 text-blue-700 p-4 rounded-2xl font-bold hover:bg-blue-200 transition-all">
+          <span class="flex items-center gap-3">👥 Cambiar Conductor</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-50" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+        </button>
+        <button (click)="logout()" class="flex items-center justify-center gap-2 bg-red-50 text-red-600 p-4 rounded-2xl font-bold hover:bg-red-100 transition-all mt-2">
+          <span>Cerrar Sesión</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
         </button>
       </div>
     </div>

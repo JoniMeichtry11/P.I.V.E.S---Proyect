@@ -19,6 +19,7 @@ export class HeaderComponent {
   get activeChild(): Child | null { return this._activeChild; }
   @Input() isAdmin = false;
 
+  isMenuOpen = false;
   private _activeChild: Child | null = null;
   cachedMilestones: Array<{name: string; icon: string; isUnlocked: boolean}> = [];
 
@@ -27,6 +28,10 @@ export class HeaderComponent {
     private userService: UserService,
     private authService: AuthService
   ) {}
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   get equippedAccessory(): Accessory | undefined {
     if (!this.activeChild?.accessories?.equipped) return undefined;
@@ -41,24 +46,29 @@ export class HeaderComponent {
   }
 
   navigateToHome(): void {
+    this.isMenuOpen = false;
     this.router.navigate(['/home']);
   }
 
   switchProfile(): void {
+    this.isMenuOpen = false;
     this.userService.setActiveChildIndex(null);
     this.router.navigate(['/child-selection']);
   }
 
   logout(): void {
+    this.isMenuOpen = false;
     this.authService.logout();
     this.router.navigate(['/welcome']);
   }
 
   navigateToAdmin(): void {
+    this.isMenuOpen = false;
     this.router.navigate(['/admin']);
   }
 
   navigateToBookings(): void {
+    this.isMenuOpen = false;
     this.router.navigate(['/booking/my-bookings']);
   }
 }
