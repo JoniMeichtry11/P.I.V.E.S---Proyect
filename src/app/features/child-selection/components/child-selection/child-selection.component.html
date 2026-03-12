@@ -96,12 +96,14 @@
           <!-- Avatar -->
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-2 uppercase tracking-wider">Elige tu Avatar</label>
-            <div class="grid grid-cols-6 gap-3">
+            <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
               @for (avatar of avatars; track avatar) {
                 <button 
                   (click)="newChild.avatar = avatar"
-                  [class]="newChild.avatar === avatar ? 'bg-blue-100 border-blue-500 scale-110 shadow-md' : 'bg-slate-50 border-transparent hover:bg-slate-100'"
-                  class="text-3xl p-2 rounded-xl border-2 transition-all hover:scale-110"
+                  class="aspect-square flex items-center justify-center text-2xl md:text-3xl rounded-2xl transition-all duration-300 transform active:scale-90 hover:shadow-md border-2"
+                  [class]="newChild.avatar === avatar 
+                    ? 'bg-blue-100 border-blue-500 scale-110 shadow-md z-10' 
+                    : 'bg-slate-50 border-transparent hover:bg-slate-100'"
                 >
                   {{ avatar }}
                 </button>
