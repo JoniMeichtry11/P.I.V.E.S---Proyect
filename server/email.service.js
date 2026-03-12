@@ -9,12 +9,21 @@ const createTransport = () => {
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: process.env.SMTP_PORT === "465",
+      port: parseInt(process.env.SMTP_PORT || "465"),
+      secure: process.env.SMTP_PORT === "465", // true para 465, false para otros
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      // FUERZA IPv4: Render a veces tiene problemas conectando por IPv6
+      // Esto soluciona el error ENETUNREACH
+      family: 4, 
+      connectionTimeout: 10000, // 10 segundos
+      socketTimeout: 10000,
+      tls: {
+        // No fallar si el certificado tiene discrepancias de nombre (común en servers compartidos)
+        rejectUnauthorized: false 
+      }
     });
   } else {
     // Si no hay configuración, logueamos pero no fallamos (para no romper el server)
