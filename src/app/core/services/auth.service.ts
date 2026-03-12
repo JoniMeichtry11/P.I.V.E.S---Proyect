@@ -76,7 +76,7 @@ export class AuthService {
       this.currentUserSubject.next(user);
       return user;
     } catch (error) {
-      if (error instanceof Error && error.message.includes("verificada")) {
+      if (error instanceof Error && error.message?.includes("verificada")) {
         throw error;
       }
       throw this.getFriendlyErrorMessage(error as AuthError);

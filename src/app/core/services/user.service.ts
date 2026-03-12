@@ -17,6 +17,7 @@ export class UserService {
   private currentUserAccountSubject = new ReplaySubject<UserAccount | null>(1);
   public currentUserAccount$ = this.currentUserAccountSubject.asObservable();
   private _currentAccount: UserAccount | null = null;
+  private userDataUnsubscribe: (() => void) | null = null;
 
   private activeChildIndexSubject = new BehaviorSubject<number | null>(null);
   public activeChildIndex$ = this.activeChildIndexSubject.asObservable();
@@ -35,8 +36,13 @@ export class UserService {
 
   constructor(private authService: AuthService) {
     this.authService.currentUser$.subscribe((user: any) => {
+      if (this.userDataUnsubscribe) {
+        this.userDataUnsubscribe();
+        this.userDataUnsubscribe = null;
+      }
+
       if (user) {
-        this.authService.subscribeToUserData(
+        this.userDataUnsubscribe = this.authService.subscribeToUserData(
           user.uid,
           (data: UserAccount | null) => {
             const migratedData = data ? this.migrateUserData(data) : null;
