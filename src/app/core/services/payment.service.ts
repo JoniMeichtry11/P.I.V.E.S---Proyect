@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { firstValueFrom } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AuthService } from "./auth.service";
+import { LoadingService } from "./loading.service";
+import { ErrorService } from "./error.service";
 import { FuelPackage, FuelTransaction } from "../models/user.model";
 import { doc, setDoc, Firestore } from "firebase/firestore";
 import { FirebaseService } from "./firebase.service";
@@ -25,6 +27,8 @@ export class PaymentService {
     private http: HttpClient,
     private authService: AuthService,
     private firebaseService: FirebaseService,
+    private loadingService: LoadingService,
+    private errorService: ErrorService
   ) {
     this.firestore = this.firebaseService.firestore;
   }
@@ -70,19 +74,24 @@ export class PaymentService {
     };
 
     try {
-      const response = await firstValueFrom(
-        this.http.post<any>(
-          `${environment.backendUrl}/api/create-preference`,
-          preferenceBody,
+      const response = await this.loadingService.executeWithLoading(
+        () => firstValueFrom(
+          this.http.post<any>(
+            `${environment.backendUrl}/api/create-preference`,
+            preferenceBody,
+          ),
         ),
+        "Preparando el pago..."
       );
 
+      this.errorService.showInfo("Pago listo", "Redirigiéndote al pago seguro ✅");
       return {
         preferenceId: response.id,
         checkoutUrl: response.init_point || response.sandbox_init_point,
       };
     } catch (error: any) {
       console.error("Error al contactar con el backend (Mercado Pago):", error);
+      this.errorService.handleError(error, "Error en el pago", "No pudimos procesar tu pago. Por favor intenta de nuevo.");
       throw error;
     }
   }
@@ -93,13 +102,21 @@ export class PaymentService {
   async getPaymentStatus(
     paymentId: string,
   ): Promise<{ status: string; statusDetail: string }> {
-    const response = await firstValueFrom(
-      this.http.get<{ status: string; status_detail: string }>(
-        `${environment.backendUrl}/api/payment-status/${paymentId}`,
-      ),
-    );
+    try {
+      const response = await this.loadingService.executeWithLoading(
+        () => firstValueFrom(
+          this.http.get<{ status: string; status_detail: string }>(
+            `${environment.backendUrl}/api/payment-status/${paymentId}`,
+          ),
+        ),
+        "Verificando el pago..."
+      );
 
-    return { status: response.status, statusDetail: response.status_detail };
+      return { status: response.status, statusDetail: response.status_detail };
+    } catch (error) {
+      this.errorService.handleError(error, "Error al verificar pago", "No pudimos verificar el estado de tu pago. Por favor intenta de nuevo.");
+      throw error;
+    }
   }
 
   /**
@@ -109,14 +126,23 @@ export class PaymentService {
     const user = this.authService.getCurrentUser();
     if (!user) return;
 
-    const txId = `${Date.now()}-${tx.mpPaymentId}`;
-    const txRef = doc(
-      this.firestore,
-      "users",
-      user.uid,
-      "fuelTransactions",
-      txId,
-    );
-    await setDoc(txRef, { ...tx, id: txId });
+    try {
+      await this.loadingService.executeWithLoading(
+        async () => {
+          const txId = `${Date.now()}-${tx.mpPaymentId}`;
+          const txRef = doc(
+            this.firestore,
+            "users",
+            user.uid,
+            "fuelTransactions",
+            txId,
+          );
+          await setDoc(txRef, { ...tx, id: txId });
+        },
+        "Guardando transacción..."
+      );
+    } catch (error) {
+      this.errorService.handleError(error, "Error al guardar transacción", "No pudimos guardar tu transacción. Por favor intenta de nuevo.");
+    }
   }
 }

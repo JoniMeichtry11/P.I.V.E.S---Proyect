@@ -1,0 +1,31 @@
+<div class="fixed top-4 right-4 z-40 max-w-md space-y-3" role="region" aria-live="polite" aria-label="Notificaciones">
+  <div
+    *ngFor="let error of errors"
+    [class]="'notification-' + error.type + ' animate-slide-in'"
+    class="notification p-4 rounded-2xl shadow-lg backdrop-blur-md flex justify-between items-start gap-4 min-w-64"
+  >
+    <!-- Contenido principal -->
+    <div class="flex gap-3 flex-1">
+      <!-- Icono -->
+      <div class="text-2xl flex-shrink-0">
+        {{ getIconByType(error.type) }}
+      </div>
+
+      <!-- Texto -->
+      <div class="flex-1">
+        <h3 class="font-bold text-sm">{{ error.title }}</h3>
+        <p class="text-sm mt-1 opacity-90">{{ error.message }}</p>
+      </div>
+    </div>
+
+    <!-- Botón cerrar -->
+    <button
+      (click)="dismiss(error.id)"
+      class="flex-shrink-0 text-xl hover:opacity-70 transition-opacity"
+      aria-label="Cerrar notificación"
+      type="button"
+    >
+      ✕
+    </button>
+  </div>
+</div>

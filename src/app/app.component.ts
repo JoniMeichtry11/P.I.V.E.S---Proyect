@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { LoadingService } from "./core/services/loading.service";
 import { UserService } from "./core/services/user.service";
 import { AuthService } from "./core/services/auth.service";
-import { Router, NavigationEnd } from "@angular/router";
+import { Router, NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
 import {
   filter,
   map,
@@ -17,6 +18,12 @@ import { SUPER_ADMIN_EMAIL } from "./core/services/admin.service";
   selector: "app-root",
   template: `
     <div class="min-h-screen flex flex-col bg-sky-50 text-slate-800">
+      <!-- Loader global -->
+      <app-loader></app-loader>
+      
+      <!-- Notificaciones de error -->
+      <app-error-notifications></app-error-notifications>
+      
       @if (showHeader$ | async) {
         <app-header
           [activeChild]="activeChild$ | async"
@@ -61,14 +68,20 @@ export class AppComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
+    private loadingService: LoadingService,
   ) {
     this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError),
         takeUntil(this.destroy$),
       )
       .subscribe((event: any) => {
-        this.currentUrl$.next(event.urlAfterRedirects || event.url);
+        // Al terminar (o cancelar/fallar) una navegación, ocultamos cualquier loader global pendiente
+        this.loadingService.hide();
+        
+        if (event instanceof NavigationEnd) {
+          this.currentUrl$.next(event.urlAfterRedirects || event.url);
+        }
       });
 
     this.showHeader$ = this.userService.activeChild$.pipe(

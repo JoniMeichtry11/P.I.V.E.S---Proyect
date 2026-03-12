@@ -97,10 +97,11 @@ export class LoginComponent implements OnInit {
           this.form.value.email,
           this.form.value.password,
         );
-        this.router.navigate(["/home"]);
+        // El app.component.ts se encarga de la redirección automáticamente basándose
+        // en el estado del usuario descargado desde Firestore (Onboarding, Home, etc)
+        // Mantenemos loading = true para mostrar el spinner durante la transición de pantallas
       } catch (err: any) {
         this.error = err.message || "Error al iniciar sesión";
-      } finally {
         this.loading = false;
       }
     } else {
