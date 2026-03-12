@@ -86,6 +86,15 @@ export class AdminUsersComponent implements OnInit {
     await this.loadUsers();
   }
 
+  async verifyUser(uid: string): Promise<void> {
+    try {
+      await this.adminService.verifyUser(uid);
+      await this.loadUsers();
+    } catch (error) {
+      console.error('Error al verificar usuario:', error);
+    }
+  }
+
   confirmDeleteUser(user: UserAccount): void {
     this.confirmModal = {
       isOpen: true,

@@ -162,6 +162,45 @@ app.post("/api/delete-user/:uid", async (req, res) => {
   }
 });
 
+// Endpoint para verificar manualmente el email de un usuario en Firebase Authentication
+app.post("/api/verify-user/:uid", async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res
+        .status(401)
+        .json({ error: "No autorizado: Falta token de administrador" });
+    }
+
+    const idToken = authHeader.split("Bearer ")[1];
+
+    if (admin.apps.length === 0) {
+      return res.status(500).json({ error: "Firebase no inicializado" });
+    }
+
+    // Verificar el token del administrador
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+
+    // 2. Marcar email como verificado en Authentication
+    await admin.auth().updateUser(uid, {
+      emailVerified: true
+    });
+    
+    console.log(
+      `[AUTH] Usuario ${uid} marcado como verificado por ${decodedToken.email}`,
+    );
+
+    res.json({ success: true, message: "Usuario verificado correctamente" });
+  } catch (error) {
+    console.error("Error al verificar usuario en Authentication:", error);
+    res.status(500).json({
+      error: "No se pudo verificar el usuario. Verifica los permisos del servidor.",
+    });
+  }
+});
+
 // Endpoint para enviar email de confirmación (llamado desde el frontend)
 app.post("/api/send-confirmation", async (req, res) => {
   try {

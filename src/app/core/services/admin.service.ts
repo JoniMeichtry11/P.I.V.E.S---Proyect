@@ -222,6 +222,24 @@ export class AdminService {
     }
   }
 
+  async verifyUser(uid: string): Promise<void> {
+    try {
+      const idToken = await this.firebaseService.auth.currentUser?.getIdToken();
+      await this.http
+        .post(
+          `${environment.backendUrl}/api/verify-user/${uid}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${idToken}` },
+          },
+        )
+        .toPromise();
+    } catch (error) {
+      console.error("Error al verificar usuario:", error);
+      throw error;
+    }
+  }
+
   async isUserAdmin(uid: string, email?: string): Promise<boolean> {
     if (email === SUPER_ADMIN_EMAIL) return true;
 
