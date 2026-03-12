@@ -1,38 +1,66 @@
 const nodemailer = require("nodemailer");
 const dns = require("dns");
+const net = require("net");
 
-// Fuerza IPv4 globalmente en el lookup de DNS
+// Fuerza IPv4 globalmente en el lookup de DNS - CRÍTICO para Render
 dns.setDefaultResultOrder("ipv4first");
+
+/**
+ * Resuelve un hostname a su dirección IPv4 de forma explícita.
+ * Esto evita que Render intente conectarse por IPv6 (lo cual falla con ENETUNREACH).
+ */
+const resolveIPv4 = (host) => {
+  return new Promise((resolve, reject) => {
+    // Si ya es una IP, la devolvemos directo
+    if (net.isIPv4(host)) return resolve(host);
+    
+    dns.resolve4(host, (err, addresses) => {
+      if (err || !addresses || addresses.length === 0) {
+        // Fallback: intentar con lookup forzando IPv4
+        dns.lookup(host, { family: 4 }, (err2, address) => {
+          if (err2) return reject(err2);
+          resolve(address);
+        });
+      } else {
+        resolve(addresses[0]);
+      }
+    });
+  });
+};
 
 // Configuración del transportador de nodemailer
 // Se recomienda usar variables de entorno para las credenciales.
-const createTransport = () => {
-  // Para pruebas/desarrollo, si no hay credenciales, usamos Ethereal (ficticio)
-  const isProd = process.env.NODE_ENV === "production";
-  
+const createTransport = async () => {
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    let smtpHost = process.env.SMTP_HOST;
+    
+    // Resolvemos el hostname a IPv4 antes de conectar para evitar el error
+    // ENETUNREACH en Render (que no soporta IPv6 saliente)
+    try {
+      const resolvedIP = await resolveIPv4(smtpHost);
+      console.log(`[SMTP] Host '${smtpHost}' resuelto a IPv4: ${resolvedIP}`);
+      smtpHost = resolvedIP;
+    } catch (resolveErr) {
+      console.warn(`[SMTP] No se pudo resolver '${smtpHost}' a IPv4, usando hostname original. Error: ${resolveErr.message}`);
+    }
+
     return nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
+      host: smtpHost,
       port: parseInt(process.env.SMTP_PORT || "465"),
-      secure: process.env.SMTP_PORT === "465", // true para 465, false para otros
+      secure: parseInt(process.env.SMTP_PORT || "465") === 465, // true para 465, false para otros
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      // FUERZA IPv4: Render a veces tiene problemas conectando por IPv6
-      // Esto soluciona el error ENETUNREACH
+      // Doble protección IPv4: forzamos también a nivel de socket
       family: 4,
-      // Resolver solo IPv4 (no IPv6)
-      lookup: (host, options, callback) => {
-        options.family = 4; // Fuerza IPv4
-        dns.lookup(host, options, callback);
-      },
-      connectionTimeout: 30000, // Aumentado a 30 segundos para dar más tiempo en Render
+      connectionTimeout: 30000,
       socketTimeout: 30000,
-      greetingTimeout: 10000,
+      greetingTimeout: 15000,
       tls: {
         // No fallar si el certificado tiene discrepancias de nombre (común en servers compartidos)
-        rejectUnauthorized: false 
+        rejectUnauthorized: false,
+        servername: process.env.SMTP_HOST, // Usamos el hostname original para TLS (no la IP)
       }
     });
   } else {
@@ -43,7 +71,7 @@ const createTransport = () => {
 };
 
 const sendEmail = async ({ to, subject, text, html }) => {
-  const transporter = createTransport();
+  const transporter = await createTransport(); // ahora es async
   if (!transporter) return false;
 
   try {
@@ -60,10 +88,13 @@ const sendEmail = async ({ to, subject, text, html }) => {
   } catch (error) {
     console.error("ERROR CRÍTICO SMTP:", error.message);
     console.error("Código de error:", error.code);
-    console.error("Stack:", error.stack);
     if (error.code === 'EAUTH') console.error("❌ Error de Autenticación: Usuario o contraseña incorrectos.");
     if (error.code === 'ESOCKET') console.error("❌ Error de Socket: Problemas de red en la conexión.");
-    if (error.code === 'ETIMEDOUT') console.error("❌ Error de Timeout: El servidor SMTP no responde. Verifica que host/puerto sean correctos y que Ferozo no tenga bloqueado Render.");
+    if (error.code === 'ECONNECTION' || error.message.includes('ENETUNREACH')) {
+      console.error("❌ Error de Conexión: No se pudo conectar al servidor SMTP (Revisa host/puerto).");
+      console.error("   SUGERENCIA: Cambia SMTP_HOST a 'c2731777.ferozo.com' en las variables de entorno de Render.");
+    }
+    if (error.code === 'ETIMEDOUT') console.error("❌ Error de Timeout: El servidor SMTP no responde.");
     if (error.message.includes('timeout')) console.error("❌ Connection Timeout: No hay conectividad con el servidor SMTP.");
     return false;
   }
