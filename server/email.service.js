@@ -1,4 +1,8 @@
 const nodemailer = require("nodemailer");
+const dns = require("dns");
+
+// Fuerza IPv4 globalmente en el lookup de DNS
+dns.setDefaultResultOrder("ipv4first");
 
 // Configuración del transportador de nodemailer
 // Se recomienda usar variables de entorno para las credenciales.
@@ -17,7 +21,12 @@ const createTransport = () => {
       },
       // FUERZA IPv4: Render a veces tiene problemas conectando por IPv6
       // Esto soluciona el error ENETUNREACH
-      family: 4, 
+      family: 4,
+      // Resolver solo IPv4 (no IPv6)
+      lookup: (host, options, callback) => {
+        options.family = 4; // Fuerza IPv4
+        dns.lookup(host, options, callback);
+      },
       connectionTimeout: 10000, // 10 segundos
       socketTimeout: 10000,
       tls: {
