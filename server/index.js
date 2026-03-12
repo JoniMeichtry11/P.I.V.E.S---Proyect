@@ -6,31 +6,47 @@ const admin = require("firebase-admin");
 
 // Inicialización de Firebase Admin
 let serviceAccount;
+
 try {
   // Intentar cargar desde el archivo local (para desarrollo)
   serviceAccount = require("./serviceAccountKey.json");
+  console.log("Firebase Admin: Cargado desde serviceAccountKey.json");
 } catch (e) {
-  // Si no está el archivo (producción/Render), intentar cargarlo desde variable de entorno
+  // Si no está el archivo (producción/Render), intentar cargarlo desde variables de entorno
   if (process.env.FIREBASE_SERVICE_ACCOUNT) {
     try {
       serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      console.log("Firebase Admin: Cargado desde FIREBASE_SERVICE_ACCOUNT");
     } catch (parseError) {
       console.error(
         "Error al parsear FIREBASE_SERVICE_ACCOUNT:",
-        parseError.message,
+        parseError.message
       );
     }
+  } else if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
+    // Alternativa: Variables individuales (más fácil de configurar en Render)
+    serviceAccount = {
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    };
+    console.log("Firebase Admin: Cargado desde variables de entorno individuales");
   }
 }
 
 if (serviceAccount) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-  console.log("Firebase Admin inicializado correctamente");
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+    console.log("Firebase Admin inicializado correctamente");
+  } catch (initError) {
+    console.error("Error al inicializar Firebase Admin:", initError.message);
+  }
 } else {
-  console.warn(
-    "ADVERTENCIA: No se pudo inicializar Firebase Admin. La eliminación de usuarios no funcionará.",
+  console.error(
+    "ERROR CRÍTICO: No se pudo inicializar Firebase Admin. Las rutas que usan Auth fallarán en Render.",
+    "\nPara solucionar esto: Agrega la variable de entorno FIREBASE_SERVICE_ACCOUNT con el contenido de tu JSON o configura FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY y FIREBASE_CLIENT_EMAIL."
   );
 }
 
@@ -113,7 +129,15 @@ app.post("/api/delete-user/:uid", async (req, res) => {
 
     const idToken = authHeader.split("Bearer ")[1];
 
-    // 1. Verificar el token del administrador
+    // 1. Verificar que Firebase esté inicializado
+    if (admin.apps.length === 0) {
+      console.error("Error: Intentando usar Firebase Auth sin inicializar la App.");
+      return res.status(500).json({ 
+        error: "El servidor no está configurado correctamente para usar Firebase. Contacta al administrador." 
+      });
+    }
+
+    // 2. Verificar el token del administrador
     const decodedToken = await admin.auth().verifyIdToken(idToken);
 
     // Opcional: Validar si el usuario es realmente administrador
