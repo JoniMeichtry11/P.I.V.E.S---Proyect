@@ -65,6 +65,21 @@ export class MyBookingsComponent implements OnInit {
   async cancelBooking(booking: BookingWithChild): Promise<void> {
     if (booking.status !== 'active') return;
 
+    // Calcular diferencia de horas
+    const now = new Date();
+    // booking.date es 'YYYY-MM-DD' y booking.time es 'HH:mm'
+    const eventDateTime = new Date(`${booking.date}T${booking.time}:00`);
+    
+    // Diferencia en milisegundos
+    const diffMs = eventDateTime.getTime() - now.getTime();
+    // Diferencia en horas
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    if (diffHours < 12) {
+      alert('Lo sentimos, las reservas solo pueden cancelarse con un mínimo de 12 horas de anticipación. No se devolverán los litros de nafta.');
+      return;
+    }
+
     if (confirm(`¿Estás seguro de que quieres cancelar la reserva de ${booking.childName}? Se te devolverán los ${booking.car.pricePerSlot}⛽.`)) {
       try {
         await this.userService.cancelBooking(booking.id, booking.childId);
