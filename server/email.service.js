@@ -44,10 +44,18 @@ const createTransport = async () => {
       console.warn(`[SMTP] No se pudo resolver '${smtpHost}' a IPv4, usando hostname original. Error: ${resolveErr.message}`);
     }
 
+    const smtpPort = parseInt(process.env.SMTP_PORT || "587");
+    // Puerto 465 = SSL directo (secure: true)
+    // Puerto 587 = STARTTLS (secure: false, el cifrado se negocia después)
+    // Render suele bloquear el 465, por eso se recomienda usar el 587
+    const isSecure = smtpPort === 465;
+
+    console.log(`[SMTP] Configurando transporte: host=${smtpHost}, port=${smtpPort}, secure=${isSecure}`);
+
     return nodemailer.createTransport({
       host: smtpHost,
-      port: parseInt(process.env.SMTP_PORT || "465"),
-      secure: parseInt(process.env.SMTP_PORT || "465") === 465, // true para 465, false para otros
+      port: smtpPort,
+      secure: isSecure,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -58,9 +66,8 @@ const createTransport = async () => {
       socketTimeout: 30000,
       greetingTimeout: 15000,
       tls: {
-        // No fallar si el certificado tiene discrepancias de nombre (común en servers compartidos)
         rejectUnauthorized: false,
-        servername: process.env.SMTP_HOST, // Usamos el hostname original para TLS (no la IP)
+        servername: process.env.SMTP_HOST, // Hostname original para TLS (no la IP resuelta)
       }
     });
   } else {
