@@ -35,10 +35,12 @@ const sendEmail = async ({ to, subject, text, html }) => {
       text,
       html,
     });
-    console.log("Email enviado: %s", info.messageId);
+    console.log("Email enviado satisfactoriamente: %s", info.messageId);
     return true;
   } catch (error) {
-    console.error("Error enviando email:", error);
+    console.error("ERROR CRÍTICO SMTP:", error.message);
+    if (error.code === 'EAUTH') console.error("Error de Autenticación: Usuario o contraseña incorrectos.");
+    if (error.code === 'ESOCKET') console.error("Error de Conexión: No se pudo conectar al servidor SMTP (Revisa host/puerto).");
     return false;
   }
 };

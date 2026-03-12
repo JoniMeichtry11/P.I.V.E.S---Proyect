@@ -166,17 +166,21 @@ app.post("/api/delete-user/:uid", async (req, res) => {
 app.post("/api/send-confirmation", async (req, res) => {
   try {
     const { userAccount, childName, booking } = req.body;
+    console.log(`[EMAIL] Solicitando confirmación para: ${userAccount?.parent?.email}, Niño: ${childName}`);
     
     if (!userAccount || !userAccount.parent || !userAccount.parent.email) {
+      console.warn("[EMAIL] Error: Faltan datos del usuario o email");
       return res.status(400).json({ error: "Datos del usuario o email faltantes" });
     }
 
     const success = await sendConfirmationEmail(userAccount.parent.email, childName, booking);
     
     if (success) {
+      console.log("[EMAIL] Confirmación enviada con éxito");
       res.json({ success: true, message: "Email de confirmación enviado" });
     } else {
-      res.status(500).json({ error: "No se pudo enviar el email de confirmación" });
+      console.error("[EMAIL] Falló el envío del email (revisar configuración SMTP)");
+      res.status(500).json({ error: "No se pudo enviar el email de confirmación. Revisa los logs del servidor." });
     }
   } catch (error) {
     console.error("Error en /api/send-confirmation:", error);
