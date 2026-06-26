@@ -7,7 +7,8 @@ import { AdminGuard } from "./core/guards/admin.guard";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "/welcome",
+    loadChildren: () =>
+      import("./features/landing/landing-module").then((m) => m.LandingModule),
     pathMatch: "full",
   },
   {

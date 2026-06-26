@@ -56,6 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private currentUrl$ = new BehaviorSubject<string>("/");
   private readonly ROUTES_WITHOUT_HEADER = [
+    "/",
     "/welcome",
     "/auth/login",
     "/auth/register",
