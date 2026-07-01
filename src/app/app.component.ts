@@ -89,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
       combineLatestWith(this.currentUrl$),
       map(([child, url]) => {
         if (!child) return false;
-        if (this.ROUTES_WITHOUT_HEADER.some((r) => url.startsWith(r)))
+        if (this.ROUTES_WITHOUT_HEADER.some((r) => url === r || url.startsWith(r + '/')))
           return false;
         return child.hasCompletedOnboarding;
       }),
