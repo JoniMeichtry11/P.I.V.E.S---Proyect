@@ -1,0 +1,1 @@
+Antes de realizar cualquier tarea, leé AGENTS.md y la documentación de docs/. Usá esos archivos como fuente principal de contexto. Solo inspeccioná el código cuando esa documentación no sea suficiente.
