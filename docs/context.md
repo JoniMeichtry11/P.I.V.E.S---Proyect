@@ -70,11 +70,12 @@ Marcadores del mapa interactivo.
 Códigos promocionales de combustible o descuentos. El ID del documento es el código en mayúsculas (ej: `PIVESREGALO2`).
 - Campos: `id`, `code`, `type` (`'liters' | 'discount'`), `value` (cantidad de litros o porcentaje de dto), `description`, `maxUses` (número o null), `timesUsed` (número), `expiresAt` (ISO string o null), `createdAt`.
 
-### Colección `/flashcards/{questionId}`
-Banco de preguntas del cuestionario vial.
-- Campos: `id`, `text`, `image` (URL), `options` (arreglo de strings), `correctAnswerIndex`, `explanation`, `audience` (`'child' | 'parent'`), `orderIndex`.
+### Colección `/sponsors/{sponsorId}`
+Representa las instituciones, comercios y auspiciantes que apoyan el proyecto y se muestran en la landing page.
+- Campos: `id`, `name`, `description`, `logoUrl`, `websiteUrl` (opcional), `category` (`'institution' | 'business' | 'sponsor'`), `isActive`, `order`, `createdAt`.
 
 ---
+
 
 ## 3. Endpoints del Backend REST (Node.js/Express)
 

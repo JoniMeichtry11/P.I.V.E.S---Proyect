@@ -41,7 +41,8 @@ angular-pives/
 │   │   │   │   ├── coupon.service.ts       # Gestión de códigos de nafta
 │   │   │   │   ├── event.service.ts        # Administración de marcadores del mapa
 │   │   │   │   ├── breadcrumb.service.ts   # Manejador del mapa de navegación
-│   │   │   │   └── notification.service.ts # Generador de Google Calendar y WhatsApp links
+│   │   │   │   ├── notification.service.ts # Generador de Google Calendar y WhatsApp links
+│   │   │   │   └── sponsor.service.ts      # Gestión de sponsors e instituciones
 │   │   │   └── core.module.ts  # Declaración e inyección inicial de servicios
 │   │   ├── shared/             # Módulo compartido (UI reutilizable)
 │   │   │   ├── components/     # Componentes compartidos globales
@@ -64,7 +65,9 @@ angular-pives/
 │   │   │   ├── family-actions/ # checklist de acciones viales para copilotos
 │   │   │   ├── profile/        # Tienda de accesorios para avatares y borrado de cuenta
 │   │   │   ├── help/           # Preguntas frecuentes y chat con soporte
-│   │   │   └── admin/          # Dashboard, usuarios, cupones, turnos y editor de trivias
+│   │   │   └── admin/          # Dashboard, usuarios, cupones, turnos, sponsors y editor de trivias
+│   │   │       └── components/
+│   │   │           └── admin-sponsors/ # CRUD de sponsors, instituciones y auspiciantes
 │   │   ├── app-routing.module.ts # Enrutador principal de Angular (rutas y guards)
 │   │   ├── app.component.ts      # Componente raíz (redirección por estado del usuario)
 │   │   └── app.module.ts         # Registro global de módulos y Service Worker PWA

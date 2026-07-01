@@ -65,7 +65,7 @@ src/app/
 - **Manejo de Errores y Carga (Global UI):**
   - Para mostrar loaders dinámicos en promesas: `await this.loadingService.executeWithLoading(() => miAccionAsync(), 'Mensaje...')`.
   - Para manejar errores amigablemente en pantalla: `this.errorService.handleError(error, 'Título de error', 'Mensaje alternativo')`.
-- **Base de Datos (Firestore):** Se interactúa directamente utilizando los métodos del Web SDK v10 (ej. `doc()`, `setDoc()`, `getDocs()`, `updateDoc()`) encapsulados dentro de servicios de Angular del módulo `core/services/` (ej. `CouponService`, `EventService`, `FlashcardService`).
+- **Base de Datos (Firestore):** Se interactúa directamente utilizando los métodos del Web SDK v10 (ej. `doc()`, `setDoc()`, `getDocs()`, `updateDoc()`) encapsulados dentro de servicios de Angular del módulo `core/services/` (ej. `CouponService`, `EventService`, `FlashcardService`, `SponsorService`).
 
 ---
 
@@ -96,7 +96,7 @@ src/app/
   - `constants/`: Datos estáticos (ej. Avatares disponibles, Accesorios, Preguntas por defecto).
   - `guards/`: Control de acceso a rutas (`AuthGuard`, `OnboardingGuard`, `AdminGuard`).
   - `models/`: Tipos de TypeScript (`user.model.ts`).
-  - `services/`: Lógica central (Auth, User, Admin, Coupons, Events, Payment, Text-To-Speech).
+  - `services/`: Lógica central (Auth, User, Admin, Coupons, Events, Payment, Text-To-Speech, Sponsors).
 - `src/app/shared/`: Componentes comunes reutilizables (Header, Breadcrumb, Loader, NotificationManager).
 - `src/app/features/`: Módulos autónomos lazy-loaded que encapsulan componentes, rutas y estilos locales de cada feature de la aplicación.
 - `server/`: Código backend Node.js que gestiona las integraciones SMTP/Resend, MercadoPago y acciones administrativas en Firebase Auth.

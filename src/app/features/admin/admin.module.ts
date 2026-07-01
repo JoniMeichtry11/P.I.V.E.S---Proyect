@@ -6,6 +6,7 @@ import { AdminUsersComponent } from './components/admin-users/admin-users.compon
 import { AdminBookingsComponent } from './components/admin-bookings/admin-bookings.component';
 import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.component';
 import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-flashcards.component';
+import { AdminSponsorsComponent } from './components/admin-sponsors/admin-sponsors.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-fl
     AdminUsersComponent,
     AdminBookingsComponent,
     AdminCouponsComponent,
-    AdminFlashcardsComponent
+    AdminFlashcardsComponent,
+    AdminSponsorsComponent
   ],
   imports: [
     SharedModule,

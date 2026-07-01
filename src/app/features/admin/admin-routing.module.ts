@@ -6,13 +6,15 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 
 import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.component';
 import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-flashcards.component';
+import { AdminSponsorsComponent } from './components/admin-sponsors/admin-sponsors.component';
 
 const routes: Routes = [
   { path: '', component: AdminDashboardComponent },
   { path: 'users', component: AdminUsersComponent },
   { path: 'bookings', component: AdminBookingsComponent },
   { path: 'coupons', component: AdminCouponsComponent },
-  { path: 'flashcards', component: AdminFlashcardsComponent }
+  { path: 'flashcards', component: AdminFlashcardsComponent },
+  { path: 'sponsors', component: AdminSponsorsComponent }
 ];
 
 @NgModule({

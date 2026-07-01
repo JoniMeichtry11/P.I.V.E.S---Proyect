@@ -136,6 +136,16 @@ export interface FuelCoupon {
   createdAt: string;
 }
 
+export type SponsorCategory = 'institution' | 'business' | 'sponsor';
 
-
-
+export interface Sponsor {
+  id: string;
+  name: string;
+  description: string;
+  logoUrl: string;
+  websiteUrl?: string;
+  category: SponsorCategory;
+  isActive: boolean;
+  order: number;
+  createdAt: string;
+}

@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-sky-50 text-slate-800 font-sans flex flex-col">
   <!-- Header / Nav -->
-  <header class="w-full bg-white shadow-xs py-4 px-4 sm:px-6 md:px-12 flex justify-between items-center z-20 sticky top-0" role="banner">
+  <header class="w-full bg-white/90 backdrop-blur-md shadow-sm py-4 px-4 sm:px-6 md:px-12 flex justify-between items-center z-20 sticky top-0 border-b border-sky-100" role="banner">
     <div class="flex items-center gap-2 sm:gap-3">
       <img src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg" alt="Logo de Proyecto P.I.V.E.S." class="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-full shadow-sm" fetchpriority="high" />
       <span class="text-lg sm:text-xl md:text-2xl font-display font-bold text-blue-600 tracking-wide whitespace-nowrap">P.I.V.E.S.</span>
@@ -19,7 +19,7 @@
     <div class="absolute bottom-[-20%] left-[20%] w-72 h-72 md:w-96 md:h-96 bg-sky-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-4000 pointer-events-none" aria-hidden="true"></div>
 
     <div class="w-full md:w-1/2 z-10 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
-      <span class="inline-block py-1 px-3 rounded-full bg-sky-100 text-sky-800 text-xs sm:text-sm font-semibold tracking-wider">¡Bienvenido a la aventura!</span>
+      <span class="inline-block py-1 px-3 rounded-full bg-sky-100 text-sky-800 text-xs sm:text-sm font-semibold tracking-wider">Programa Infantil de Vialidad y Educación Vial</span>
       <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-blue-700 leading-tight">
         Educación Vial <br/>
         <span class="text-green-500 relative inline-block mt-1">
@@ -28,7 +28,7 @@
         </span>
       </h1>
       <p class="text-base sm:text-lg md:text-xl text-slate-600 max-w-lg leading-relaxed">
-        El Proyecto P.I.V.E.S. es una plataforma interactiva diseñada para enseñar a los niños sobre seguridad vial de una manera divertida, segura y familiar.
+        P.I.V.E.S. es una plataforma interactiva y gamificada que enseña a los niños y sus familias sobre seguridad vial de una manera divertida, segura y educativa. ¡Aprendé jugando y convertite en un conductor responsable!
       </p>
       
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 w-full justify-center md:justify-start max-w-md md:max-w-none">
@@ -61,36 +61,174 @@
     </div>
   </main>
 
-  <!-- Features Section -->
-  <section class="bg-white py-16 px-4 sm:px-8 md:px-12 z-10" aria-labelledby="features-heading">
-    <div class="max-w-6xl mx-auto">
-      <h2 id="features-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-slate-800 mb-12">¿Qué ofrece P.I.V.E.S.?</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        <!-- Feature 1 -->
-        <div class="bg-sky-50 rounded-3xl p-6 sm:p-8 border border-sky-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🎮</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Juegos Interactivos</h3>
-          <p class="text-sm sm:text-base text-slate-600">Aprende sobre señales de tránsito y reglas viales mientras te diviertes superando desafíos diseñados para cada edad.</p>
+  <!-- ¿Qué es P.I.V.E.S.? Section -->
+  <section class="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="about-heading">
+    <div class="max-w-5xl mx-auto text-center">
+      <span class="inline-block py-1 px-4 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider uppercase mb-6">Conocé el Proyecto</span>
+      <h2 id="about-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-6">¿Qué es P.I.V.E.S.?</h2>
+      <p class="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed mb-8">
+        El <strong class="text-blue-700">Programa Infantil de Vialidad y Educación Vial</strong> es una iniciativa educativa que combina tecnología, juegos interactivos y experiencias prácticas para enseñar a los más chicos las reglas de tránsito, la importancia de la seguridad vial y la responsabilidad ciudadana.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div class="bg-sky-50 rounded-2xl p-6 border border-sky-100">
+          <span class="text-4xl block mb-3" aria-hidden="true">🎯</span>
+          <h3 class="font-bold text-slate-800 mb-2">Misión</h3>
+          <p class="text-sm text-slate-600">Formar conductores y peatones responsables desde la infancia, creando conciencia vial en toda la familia.</p>
         </div>
-        <!-- Feature 2 -->
-        <div class="bg-green-50 rounded-3xl p-6 sm:p-8 border border-green-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 text-xl sm:text-2xl mb-6" aria-hidden="true">👨‍👩‍👧‍👦</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Control Familiar</h3>
-          <p class="text-sm sm:text-base text-slate-600">Los padres pueden crear perfiles para sus hijos, seguir su progreso y acompañarlos en su camino de aprendizaje seguro.</p>
+        <div class="bg-green-50 rounded-2xl p-6 border border-green-100">
+          <span class="text-4xl block mb-3" aria-hidden="true">🌱</span>
+          <h3 class="font-bold text-slate-800 mb-2">Visión</h3>
+          <p class="text-sm text-slate-600">Un futuro con cero accidentes viales gracias a la educación temprana, lúdica y familiar.</p>
         </div>
-        <!-- Feature 3 -->
-        <div class="bg-amber-50 rounded-3xl p-6 sm:p-8 border border-amber-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2 sm:col-span-2 lg:col-span-1">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🏆</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Recompensas</h3>
-          <p class="text-sm sm:text-base text-slate-600">Gana puntos y desbloquea logros a medida que completas lecciones, motivando el interés constante por la seguridad vial.</p>
+        <div class="bg-amber-50 rounded-2xl p-6 border border-amber-100">
+          <span class="text-4xl block mb-3" aria-hidden="true">💡</span>
+          <h3 class="font-bold text-slate-800 mb-2">Método</h3>
+          <p class="text-sm text-slate-600">Aprender jugando: cuestionarios interactivos, recompensas, pista de conducción real y acciones familiares.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Partes del Proyecto Section -->
+  <section class="bg-sky-50 py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="features-heading">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="inline-block py-1 px-4 rounded-full bg-green-100 text-green-700 text-xs font-bold tracking-wider uppercase mb-4">Todo en un solo lugar</span>
+        <h2 id="features-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800">¿Qué ofrece P.I.V.E.S.?</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <!-- Feature 1: Flashcards -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-sky-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🎮</div>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Desafíos de Señales</h3>
+          <p class="text-sm sm:text-base text-slate-600">Respondé cuestionarios interactivos sobre señales de tránsito y reglas viales. Ganá "Ruedas" por cada respuesta correcta y desbloqueá hitos.</p>
+        </div>
+        <!-- Feature 2: Pista Real -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-green-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🏎️</div>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Pista de Conducción Real</h3>
+          <p class="text-sm sm:text-base text-slate-600">Agendá turnos para que tus hijos conduzcan autos eléctricos reales en una pista segura y supervisada. ¡La experiencia más emocionante!</p>
+        </div>
+        <!-- Feature 3: Recompensas -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-amber-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🏆</div>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Sistema de Recompensas</h3>
+          <p class="text-sm sm:text-base text-slate-600">Ganá Ruedas, Volantes y desbloqueá documentos ficticios (licencia, seguro, tarjeta verde). Equipá accesorios a tu avatar y personalizá tu perfil.</p>
+        </div>
+        <!-- Feature 4: Control Familiar -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-purple-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-xl sm:text-2xl mb-6" aria-hidden="true">👨‍👩‍👧‍👦</div>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Control Familiar</h3>
+          <p class="text-sm sm:text-base text-slate-600">Los padres crean perfiles para cada hijo, supervisan su progreso y los acompañan en su camino de aprendizaje seguro y divertido.</p>
+        </div>
+        <!-- Feature 5: Mapa de Eventos -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-rose-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🗺️</div>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Mapa de Eventos</h3>
+          <p class="text-sm sm:text-base text-slate-600">Encontrá en el mapa interactivo las próximas prácticas, talleres, presentaciones y competencias de educación vial cerca tuyo.</p>
+        </div>
+        <!-- Feature 6: Acciones Familiares -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🛡️</div>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Acciones de Copiloto</h3>
+          <p class="text-sm sm:text-base text-slate-600">Actividades familiares que refuerzan los conceptos viales en la vida cotidiana. Padres e hijos aprenden juntos cómo ser mejores en la vía.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instituciones que nos apoyan -->
+  @if (sponsorsLoaded && institutions.length > 0) {
+    <section class="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="institutions-heading">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <span class="inline-block py-1 px-4 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold tracking-wider uppercase mb-4">Respaldo Institucional</span>
+          <h2 id="institutions-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4">Instituciones que nos apoyan</h2>
+          <p class="text-slate-600 max-w-2xl mx-auto">Organizaciones e instituciones que creen en la educación vial y respaldan el proyecto P.I.V.E.S.</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          @for (inst of institutions; track inst.id) {
+            <div class="group bg-sky-50/50 rounded-2xl p-6 border border-sky-100 text-center hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-xl overflow-hidden bg-white border border-slate-200 flex items-center justify-center p-2 group-hover:shadow-md transition-shadow">
+                <img [src]="inst.logoUrl" [alt]="inst.name" class="w-full h-full object-contain" loading="lazy" />
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-slate-800 mb-1">{{ inst.name }}</h3>
+              <p class="text-xs text-slate-500 line-clamp-2">{{ inst.description }}</p>
+              @if (inst.websiteUrl) {
+                <a [href]="inst.websiteUrl" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-xs text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                  Visitar sitio →
+                </a>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- Comercios que nos acompañan -->
+  @if (sponsorsLoaded && businesses.length > 0) {
+    <section class="bg-sky-50 py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="businesses-heading">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <span class="inline-block py-1 px-4 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold tracking-wider uppercase mb-4">Aliados Comerciales</span>
+          <h2 id="businesses-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4">Comercios que nos acompañan</h2>
+          <p class="text-slate-600 max-w-2xl mx-auto">Negocios y emprendimientos locales que apoyan la educación vial infantil y forman parte de la comunidad P.I.V.E.S.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          @for (biz of businesses; track biz.id) {
+            <a [href]="biz.websiteUrl || '#'" [target]="biz.websiteUrl ? '_blank' : '_self'" rel="noopener noreferrer"
+               class="group block bg-white rounded-3xl p-6 border border-green-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-green-300 no-underline">
+              <div class="flex items-start gap-4">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-sky-50 border border-slate-200 flex-shrink-0 flex items-center justify-center p-2 group-hover:shadow-md transition-shadow">
+                  <img [src]="biz.logoUrl" [alt]="biz.name" class="w-full h-full object-contain" loading="lazy" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-base sm:text-lg font-bold text-slate-800 group-hover:text-green-700 transition-colors truncate">{{ biz.name }}</h3>
+                  <p class="text-sm text-slate-500 mt-1 line-clamp-3">{{ biz.description }}</p>
+                  @if (biz.websiteUrl) {
+                    <span class="inline-flex items-center gap-1 mt-3 text-xs text-green-600 font-semibold group-hover:text-green-700">
+                      Visitar comercio
+                      <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                  }
+                </div>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- Nuestros Auspiciantes -->
+  @if (sponsorsLoaded && sponsors.length > 0) {
+    <section class="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="sponsors-heading">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <span class="inline-block py-1 px-4 rounded-full bg-amber-100 text-amber-700 text-xs font-bold tracking-wider uppercase mb-4">Con el apoyo de</span>
+          <h2 id="sponsors-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4">Nuestros Auspiciantes</h2>
+          <p class="text-slate-600 max-w-2xl mx-auto">Empresas y marcas que hacen posible que la educación vial llegue a más familias.</p>
+        </div>
+        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          @for (sp of sponsors; track sp.id) {
+            <a [href]="sp.websiteUrl || '#'" [target]="sp.websiteUrl ? '_blank' : '_self'" rel="noopener noreferrer"
+               class="group flex flex-col items-center text-center no-underline">
+              <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-sky-50 border-2 border-slate-200 flex items-center justify-center p-3 group-hover:border-amber-400 group-hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
+                <img [src]="sp.logoUrl" [alt]="sp.name" class="w-full h-full object-contain group-hover:scale-105 transition-transform" loading="lazy" />
+              </div>
+              <span class="mt-3 text-sm font-semibold text-slate-700 group-hover:text-amber-700 transition-colors">{{ sp.name }}</span>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
   <!-- How It Works Section -->
   <section class="bg-sky-50 py-16 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="steps-heading">
     <div class="max-w-5xl mx-auto text-center">
+      <span class="inline-block py-1 px-4 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider uppercase mb-4">Empezar es gratis</span>
       <h2 id="steps-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-10">Es muy fácil empezar</h2>
       <div class="flex flex-col md:flex-row gap-8 justify-center items-center relative">
         <!-- Connecting Line for desktop -->
@@ -99,20 +237,20 @@
         <!-- Step 1 -->
         <div class="relative z-10 flex flex-col items-center max-w-xs">
           <div class="w-16 h-16 rounded-full bg-blue-600 text-white font-display text-2xl flex items-center justify-center shadow-lg mb-4 ring-4 ring-sky-50">1</div>
-          <h3 class="font-bold text-lg text-slate-800">Regístrate</h3>
-          <p class="text-slate-600 text-sm mt-2">Crea una cuenta gratuita como padre o tutor en menos de un minuto.</p>
+          <h3 class="font-bold text-lg text-slate-800">Registrate</h3>
+          <p class="text-slate-600 text-sm mt-2">Creá una cuenta gratuita como padre o tutor en menos de un minuto.</p>
         </div>
         <!-- Step 2 -->
         <div class="relative z-10 flex flex-col items-center max-w-xs">
           <div class="w-16 h-16 rounded-full bg-green-500 text-white font-display text-2xl flex items-center justify-center shadow-lg mb-4 ring-4 ring-sky-50">2</div>
-          <h3 class="font-bold text-lg text-slate-800">Crea Perfiles</h3>
-          <p class="text-slate-600 text-sm mt-2">Agrega a tus hijos para que cada uno tenga su propia experiencia y progreso.</p>
+          <h3 class="font-bold text-lg text-slate-800">Creá Perfiles</h3>
+          <p class="text-slate-600 text-sm mt-2">Agregá a tus hijos para que cada uno tenga su propia experiencia y progreso.</p>
         </div>
         <!-- Step 3 -->
         <div class="relative z-10 flex flex-col items-center max-w-xs">
           <div class="w-16 h-16 rounded-full bg-amber-500 text-white font-display text-2xl flex items-center justify-center shadow-lg mb-4 ring-4 ring-sky-50">3</div>
           <h3 class="font-bold text-lg text-slate-800">¡A Aprender!</h3>
-          <p class="text-slate-600 text-sm mt-2">Los niños exploran el mapa interactivo y superan divertidos desafíos viales.</p>
+          <p class="text-slate-600 text-sm mt-2">Los niños exploran desafíos interactivos, ganan recompensas y pueden manejar en la pista real.</p>
         </div>
       </div>
     </div>
