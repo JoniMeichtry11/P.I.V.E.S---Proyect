@@ -19,7 +19,7 @@ export class HeaderComponent {
   get activeChild(): Child | null { return this._activeChild; }
   @Input() isAdmin = false;
 
-  isMenuOpen = false;
+  isMenuOpen = true;
   private _activeChild: Child | null = null;
   cachedMilestones: Array<{name: string; icon: string; isUnlocked: boolean}> = [];
 
