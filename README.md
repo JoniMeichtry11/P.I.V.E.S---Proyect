@@ -36,30 +36,36 @@ npm start
 ```
 
 ### 2. Configuración del Frontend (`/`)
-El frontend utiliza Angular CLI para compilar y ejecutar el proyecto:
+El frontend utiliza Angular CLI para compilar y ejecutar el proyecto, y maneja las credenciales mediante variables de entorno a través de un archivo `.env`:
 ```bash
 npm install
 ```
-Define tu configuración de Firebase en el archivo de entorno `src/environments/environment.ts`:
-```typescript
-export const environment = {
-  production: false,
-  firebase: {
-    apiKey: "tu_api_key",
-    authDomain: "tu_auth_domain",
-    projectId: "tu_project_id",
-    storageBucket: "tu_storage_bucket",
-    messagingSenderId: "tu_sender_id",
-    appId: "tu_app_id"
-  },
-  backendUrl: 'http://localhost:3000' // Dirección del servidor Node.js
-};
+Crea un archivo `.env` en la raíz del proyecto (puedes copiar el archivo de ejemplo `.env.example`):
+```bash
+cp .env.example .env
 ```
+Y define las variables correspondientes con tus claves:
+```ini
+# Firebase Configuration
+FIREBASE_API_KEY=tu_api_key
+FIREBASE_AUTH_DOMAIN=tu_auth_domain.firebaseapp.com
+FIREBASE_PROJECT_ID=tu_project_id
+FIREBASE_STORAGE_BUCKET=tu_storage_bucket.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
+FIREBASE_APP_ID=tu_app_id
+
+# Backend URLs
+DEV_BACKEND_URL=http://localhost:3000
+PROD_BACKEND_URL=https://tu-prod-backend-url.com
+```
+
+Al ejecutar `npm run start` o `npm run build`, se ejecuta automáticamente un script (`scripts/set-env.js`) que genera dinámicamente los archivos en `src/environments/` (`environment.ts` y `environment.prod.ts`) a partir de tu archivo `.env`.
+
 Para ejecutar el servidor de desarrollo en `http://localhost:4200`:
 ```bash
 npm run start
 ```
-*(Nota: El comando `npm start` corre `ng serve --host 0.0.0.0` para que el frontend pueda ser accesible en dispositivos móviles dentro de la misma red local).*
+*(Nota: El comando `npm start` corre `node scripts/set-env.js && ng serve --host 0.0.0.0` para generar los archivos de configuración y permitir que el frontend sea accesible en dispositivos móviles dentro de la misma red local).*
 
 ---
 
