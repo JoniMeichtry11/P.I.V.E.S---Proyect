@@ -1,286 +1,1527 @@
-<div class="min-h-screen bg-sky-50 text-slate-800 font-sans flex flex-col">
+<div class="min-h-screen bg-[#f7f6fb] text-slate-950">
   <!-- Header / Nav -->
-  <header class="w-full bg-white/90 backdrop-blur-md shadow-sm py-4 px-4 sm:px-6 md:px-12 flex justify-between items-center z-20 sticky top-0 border-b border-sky-100" role="banner">
-    <div class="flex items-center gap-2 sm:gap-3">
-      <img src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg" alt="Logo de Proyecto P.I.V.E.S." class="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-full shadow-sm" fetchpriority="high" />
-      <span class="text-lg sm:text-xl md:text-2xl font-display font-bold text-blue-600 tracking-wide whitespace-nowrap">P.I.V.E.S.</span>
+<div>
+  <header class="sticky top-0 z-50 border-b border-black/10 bg-[#f7f6fb]/90 backdrop-blur-xl">
+    <div class="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+      <a routerLink="/" class="flex shrink-0 items-center gap-3 no-underline">
+        <img
+          src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg"
+          alt="Logo de P.I.V.E.S."
+          class="h-11 w-11 rounded-full object-cover"
+        />
+
+        <span class="text-lg font-semibold tracking-[-0.02em] text-slate-950">
+          P.I.V.E.S.
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-8 md:flex" aria-label="Navegación principal">
+        <a
+          href="#proyecto"
+          class="text-sm font-medium text-slate-600 transition-colors hover:text-slate-950"
+        >
+          Proyecto
+        </a>
+
+        <a
+          href="#beneficios"
+          class="text-sm font-medium text-slate-600 transition-colors hover:text-slate-950"
+        >
+          Beneficios
+        </a>
+
+        <a
+          href="#como-funciona"
+          class="text-sm font-medium text-slate-600 transition-colors hover:text-slate-950"
+        >
+          Cómo funciona
+        </a>
+      </nav>
+
+      <div class="flex shrink-0 items-center gap-2 sm:gap-3">
+        <a
+          routerLink="/login"
+          class="hidden rounded-full px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-black/5 hover:text-slate-950 sm:inline-flex"
+        >
+          Ingresar
+        </a>
+
+        <a
+          routerLink="/register"
+          class="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-4 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-violet-600 sm:px-5"
+        >
+          Crear cuenta
+        </a>
+      </div>
     </div>
-    <nav class="flex gap-2 sm:gap-4" aria-label="Navegación principal">
-      <button routerLink="/login" class="px-3 sm:px-5 py-2 text-sm sm:text-base text-blue-600 font-medium hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors whitespace-nowrap" aria-label="Ingresar a tu cuenta">Ingresar</button>
-      <button routerLink="/register" class="px-3 sm:px-5 py-2 text-sm sm:text-base bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 whitespace-nowrap" aria-label="Crear una cuenta nueva">Registrarse</button>
-    </nav>
   </header>
+</div>
+ <!-- Hero Section -->
+<main
+  id="main-content"
+  class="relative isolate overflow-hidden bg-[#f7f6fb] font-['Roobert']"
+>
+  <!-- Decoración violeta superior -->
+  <div
+    class="pointer-events-none absolute -right-32 -top-32 -z-10 h-96 w-96 rounded-full bg-violet-300/40 blur-3xl"
+    aria-hidden="true"
+  ></div>
 
-  <!-- Hero Section -->
-  <main id="main-content" class="flex-1 flex flex-col md:flex-row items-center justify-center px-4 sm:px-8 md:px-16 py-12 md:py-24 relative overflow-hidden">
-    <!-- Decorative background elements -->
-    <div class="absolute top-[-10%] left-[-10%] w-72 h-72 md:w-96 md:h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute top-[20%] right-[-10%] w-72 h-72 md:w-96 md:h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000 pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute bottom-[-20%] left-[20%] w-72 h-72 md:w-96 md:h-96 bg-sky-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-4000 pointer-events-none" aria-hidden="true"></div>
+  <!-- Decoración verde inferior -->
+  <div
+    class="pointer-events-none absolute -bottom-40 -left-32 -z-10 h-96 w-96 rounded-full bg-lime-200/50 blur-3xl"
+    aria-hidden="true"
+  ></div>
 
-    <div class="w-full md:w-1/2 z-10 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
-      <span class="inline-block py-1 px-3 rounded-full bg-sky-100 text-sky-800 text-xs sm:text-sm font-semibold tracking-wider">Programa Infantil de Vialidad y Educación Vial</span>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-blue-700 leading-tight">
-        Educación Vial <br/>
-        <span class="text-green-500 relative inline-block mt-1">
-          que salva vidas
-          <svg class="absolute w-full h-3 -bottom-1 left-0 text-green-300" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="4" fill="none"/></svg>
+  <!-- Contenedor central -->
+  <div
+    class="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-14 px-4 py-16 sm:px-6 sm:py-20 lg:min-h-[calc(100svh-5rem)] lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-6 xl:items-center xl:gap-20 xl:py-12"
+>
+    <!-- Columna izquierda: contenido -->
+    <div class="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
+      <!-- Etiqueta superior -->
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-medium text-slate-800 shadow-sm backdrop-blur"
+      >
+        <span
+          class="h-2 w-2 rounded-full bg-violet-600"
+          aria-hidden="true"
+        ></span>
+
+        Educación vial para toda la familia
+      </span>
+
+      <!-- Título principal -->
+      <h1
+        class="mt-7 text-[clamp(3.5rem,8vw,7.25rem)] font-medium leading-[0.9] tracking-[-0.065em] text-slate-950 lg:mt-5 lg:text-[clamp(3.4rem,5.5vw,5.75rem)] xl:text-[clamp(4rem,6vw,7rem)]"
+      >
+        Aprender también puede ser una
+
+        <span class="block text-violet-600 font-['Roobert']">
+          gran aventura.
         </span>
       </h1>
-      <p class="text-base sm:text-lg md:text-xl text-slate-600 max-w-lg leading-relaxed">
-        P.I.V.E.S. es una plataforma interactiva y gamificada que enseña a los niños y sus familias sobre seguridad vial de una manera divertida, segura y educativa. ¡Aprendé jugando y convertite en un conductor responsable!
+
+      <!-- Descripción -->
+      <p
+        class="mx-auto mt-8 max-w-2xl text-base font-medium leading-7 text-slate-600 sm:text-lg sm:leading-8 lg:mx-0 lg:mt-5 lg:text-lg"
+      >
+        P.I.V.E.S. combina desafíos interactivos, experiencias prácticas y
+        acompañamiento familiar para enseñar seguridad vial de una forma
+        divertida y responsable.
       </p>
-      
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 w-full justify-center md:justify-start max-w-md md:max-w-none">
-        <button routerLink="/register" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-green-500 text-white font-bold text-base sm:text-lg rounded-2xl hover:bg-green-600 shadow-xl shadow-green-500/20 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-2">
-          ¡Comenzar ahora!
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </button>
-        <button routerLink="/login" class="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-blue-600 font-bold text-base sm:text-lg rounded-2xl border-2 border-blue-100 hover:border-blue-200 hover:bg-blue-50 shadow-xs transition-all flex items-center justify-center">
-          Ya tengo una cuenta
-        </button>
+
+      <!-- Botones -->
+      <div
+        class="mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:mt-6 lg:justify-start"
+      >
+        <a
+          routerLink="/register"
+          class="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-slate-950 px-7 text-base font-medium text-white shadow-xl shadow-slate-950/15 transition duration-200 hover:-translate-y-1 hover:bg-violet-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-600"
+        >
+          Comenzar gratis
+
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <a
+          href="#proyecto"
+          class="inline-flex min-h-13 items-center justify-center rounded-full border border-black/10 bg-white px-7 text-base font-medium text-slate-950 transition duration-200 hover:-translate-y-1 hover:border-violet-300 hover:bg-violet-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-600"
+        >
+          Conocer el proyecto
+        </a>
+      </div>
+
+      <!-- Beneficios breves -->
+      <ul
+        class="mt-8 flex flex-col items-center justify-center gap-3 text-sm font-medium text-slate-600 sm:flex-row sm:flex-wrap sm:gap-6 lg:justify-start"
+        aria-label="Beneficios de P.I.V.E.S."
+      >
+        <li class="flex items-center gap-2">
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full bg-lime-300 text-xs text-slate-950"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+
+          Cuenta gratuita
+        </li>
+
+        <li class="flex items-center gap-2">
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full bg-lime-300 text-xs text-slate-950"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+
+          Progreso familiar
+        </li>
+
+        <li class="flex items-center gap-2">
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full bg-lime-300 text-xs text-slate-950"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+
+          Aprendizaje interactivo
+        </li>
+      </ul>
+    </div>
+
+    <!-- Columna derecha: presentación visual -->
+    <div class="relative mx-auto w-full max-w-xl">
+      <!-- Resplandor detrás de la tarjeta -->
+      <div
+        class="pointer-events-none absolute inset-10 rounded-full bg-violet-400/30 blur-3xl"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Tarjeta oscura -->
+      <div
+        class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950 p-3 shadow-2xl shadow-violet-950/25 sm:p-4"
+      >
+        <!-- Barra superior -->
+        <div
+          class="flex items-center justify-between border-b border-white/10 px-3 py-3 sm:px-4"
+        >
+          <div class="flex gap-1.5" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-white/25"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-white/25"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-white/25"></span>
+          </div>
+
+          <span class="text-xs font-medium text-white/55">
+            Mi progreso vial
+          </span>
+
+          <span
+            class="rounded-full bg-lime-300/15 px-2.5 py-1 text-xs font-medium text-lime-300"
+          >
+            En línea
+          </span>
+        </div>
+
+        <!-- Contenido interno -->
+        <div class="relative min-h-[410px] p-5 sm:min-h-[480px] sm:p-8 lg:min-h-[340px] lg:p-6 xl:min-h-[480px] xl:p-8">
+          <!-- Datos principales -->
+          <div class="relative z-10">
+            <span class="text-sm font-medium text-white/50">
+              Nivel actual
+            </span>
+
+            <div class="mt-2 flex items-end justify-between gap-4">
+              <h2 class="text-2xl font-medium tracking-[-0.03em] text-white">
+                Conductor inicial
+              </h2>
+
+              <strong class="text-xl font-medium text-lime-300">
+                72%
+              </strong>
+            </div>
+
+            <!-- Barra de progreso -->
+            <div
+              class="mt-5 h-2.5 overflow-hidden rounded-full bg-white/10"
+              role="progressbar"
+              aria-label="Progreso de aprendizaje"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="72"
+            >
+              <div
+                class="h-full w-[72%] rounded-full bg-gradient-to-r from-violet-500 to-lime-300"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Imagen de Mara -->
+          <img
+            src="https://i.ibb.co/WNZJtpHZ/Mara.png"
+            alt="Mara, mascota educativa de P.I.V.E.S."
+            class="absolute bottom-0 right-0 z-0 h-[70%] w-[70%] object-contain object-bottom drop-shadow-2xl sm:h-[76%] sm:w-[76%]"
+            fetchpriority="high"
+          />
+
+          <!-- Tarjeta pequeña -->
+          <div
+            class="absolute bottom-5 left-5 z-10 max-w-48 rounded-2xl border border-white/10 bg-white/10 p-4 text-white shadow-xl backdrop-blur-md sm:bottom-8 sm:left-8 lg:bottom-5 lg:left-6 lg:p-3 xl:bottom-8 xl:left-8 xl:p-4"
+          >
+            <span class="text-xs font-medium text-white/55">
+              Próximo desafío
+            </span>
+
+            <strong class="mt-1 block text-sm font-medium">
+              Señales preventivas
+            </strong>
+
+            <div class="mt-3 flex items-center gap-2 text-xs text-lime-300">
+              <span class="h-2 w-2 rounded-full bg-lime-300"></span>
+              Listo para comenzar
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insignia flotante -->
+      <div
+        class="absolute -bottom-5 -right-2 hidden rounded-2xl border border-black/10 bg-white/90 px-5 py-4 shadow-xl backdrop-blur sm:block lg:-right-8"
+      >
+        <strong class="block text-lg font-medium text-slate-950">
+          +120 ruedas
+        </strong>
+
+        <span class="mt-1 block text-xs font-medium text-slate-500">
+          Recompensas obtenidas
+        </span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ¿Qué es P.I.V.E.S.? Section -->
+<section
+  id="proyecto"
+  class="scroll-mt-20 border-t border-black/10 bg-white py-20 font-['Roobert'] sm:py-24 lg:py-28"
+  aria-labelledby="about-heading"
+>
+  <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Encabezado de la sección -->
+    <div
+      class="grid grid-cols-1 gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-20"
+    >
+      <!-- Título -->
+      <div>
+        <span
+          class="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-sm font-medium text-violet-700"
+        >
+          <span
+            class="h-2 w-2 rounded-full bg-violet-600"
+            aria-hidden="true"
+          ></span>
+
+          Conocé el proyecto
+        </span>
+
+        <h2
+          id="about-heading"
+          class="mt-6 text-[clamp(3rem,6vw,5.75rem)] font-medium leading-[0.94] tracking-[-0.055em] text-slate-950"
+        >
+          ¿Qué es
+
+          <span class="block text-violet-600">
+            P.I.V.E.S.?
+          </span>
+        </h2>
+      </div>
+
+      <!-- Descripción -->
+      <div class="max-w-2xl lg:pb-2">
+        <p class="text-lg font-medium leading-8 text-slate-600 sm:text-xl">
+          El Programa Infantil de Vialidad y Educación Vial es una iniciativa
+          que combina tecnología, experiencias prácticas y aprendizaje
+          interactivo para enseñar seguridad vial desde la infancia.
+        </p>
+
+        <div class="mt-7 flex items-start gap-4 border-l-2 border-lime-300 pl-5">
+          <p class="text-base font-medium leading-7 text-slate-700">
+            No buscamos que los niños solamente memoricen señales. Queremos que
+            comprendan cómo actuar de manera responsable en la vía pública.
+          </p>
+        </div>
       </div>
     </div>
 
-    <div class="w-full md:w-1/2 mt-12 md:mt-0 z-10 flex justify-center relative">
-      <div class="relative w-60 h-60 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 max-w-full">
-        <!-- Floating elements -->
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-sky-300 rounded-full shadow-2xl opacity-20 animate-pulse" aria-hidden="true"></div>
-        <img src="https://i.ibb.co/WNZJtpHZ/Mara.png" alt="Mascota Mara sonriendo e invitando a aprender" class="absolute inset-0 w-full h-full object-contain transform hover:scale-105 transition-transform duration-500 drop-shadow-2xl animate-float" fetchpriority="high" />
-        
-        <!-- Decorative badges -->
-        <div class="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 bg-white p-2.5 sm:p-3 rounded-2xl shadow-xl animate-float animation-delay-2000" aria-hidden="true">
-          <span class="text-xl sm:text-2xl">🚦</span>
+    <!-- Tarjetas -->
+    <div class="mt-14 grid grid-cols-1 gap-4 lg:grid-cols-12">
+      <!-- Misión -->
+      <article
+        class="group relative flex min-h-[500px] flex-col overflow-hidden rounded-[2rem] bg-slate-950 p-7 text-white shadow-2xl shadow-slate-950/15 sm:p-9 lg:col-span-7 lg:row-span-2 lg:min-h-[620px]"
+      >
+        <!-- Cabecera de la tarjeta -->
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <span
+            class="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/10 text-sm font-medium"
+          >
+            01
+          </span>
+
+          <span
+            class="rounded-full bg-lime-300 px-4 py-2 text-sm font-medium text-slate-950"
+          >
+            Misión
+          </span>
         </div>
-        <div class="absolute bottom-6 -left-4 sm:bottom-10 sm:-left-6 bg-white p-2.5 sm:p-3 rounded-2xl shadow-xl animate-float animation-delay-4000" aria-hidden="true">
-          <span class="text-xl sm:text-2xl">🚗</span>
+
+        <!-- Decoración -->
+        <div
+          class="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-violet-500/40 blur-3xl transition-colors duration-500 group-hover:bg-violet-500/60"
+          aria-hidden="true"
+        ></div>
+
+        <div
+          class="pointer-events-none absolute right-16 top-28 h-40 w-40 rounded-full border border-white/10"
+          aria-hidden="true"
+        ></div>
+
+        <div
+          class="pointer-events-none absolute right-28 top-40 h-20 w-20 rounded-full border border-white/10"
+          aria-hidden="true"
+        ></div>
+
+        <!-- Contenido inferior -->
+        <div class="relative z-10 mt-auto max-w-xl">
+          <p
+            class="text-sm font-medium uppercase tracking-[0.18em] text-white/45"
+          >
+            Nuestro propósito
+          </p>
+
+          <h3
+            class="mt-4 text-3xl font-medium leading-[1.05] tracking-[-0.04em] sm:text-5xl"
+          >
+            Formar personas responsables desde la infancia.
+          </h3>
+
+          <p class="mt-6 max-w-lg text-base font-medium leading-7 text-white/60">
+            Creamos conciencia vial mediante experiencias que conectan el
+            aprendizaje digital, la participación familiar y situaciones de la
+            vida cotidiana.
+          </p>
         </div>
+      </article>
+
+      <!-- Visión -->
+      <article
+        class="group flex min-h-72 flex-col rounded-[2rem] border border-black/10 bg-lime-200 p-7 transition duration-300 hover:-translate-y-1 sm:p-8 lg:col-span-5"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <span
+            class="flex h-11 w-11 items-center justify-center rounded-full bg-slate-950 text-sm font-medium text-white"
+          >
+            02
+          </span>
+
+          <span class="text-sm font-medium text-slate-700">
+            Visión
+          </span>
+        </div>
+
+        <div class="mt-auto pt-14">
+          <h3
+            class="text-2xl font-medium leading-tight tracking-[-0.035em] text-slate-950 sm:text-3xl"
+          >
+            Un futuro con menos accidentes viales.
+          </h3>
+
+          <p class="mt-4 text-sm font-medium leading-6 text-slate-700">
+            Creemos que la educación temprana puede transformar la manera en
+            que las nuevas generaciones utilizan y comparten la vía pública.
+          </p>
+        </div>
+      </article>
+
+      <!-- Método -->
+      <article
+        class="group flex min-h-72 flex-col rounded-[2rem] bg-violet-600 p-7 text-white transition duration-300 hover:-translate-y-1 sm:p-8 lg:col-span-5"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <span
+            class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-sm font-medium text-violet-700"
+          >
+            03
+          </span>
+
+          <span class="text-sm font-medium text-white/70">
+            Método
+          </span>
+        </div>
+
+        <div class="mt-auto pt-14">
+          <h3
+            class="text-2xl font-medium leading-tight tracking-[-0.035em] sm:text-3xl"
+          >
+            Aprender jugando y experimentando.
+          </h3>
+
+          <p class="mt-4 text-sm font-medium leading-6 text-white/70">
+            Utilizamos desafíos, recompensas, actividades familiares y
+            prácticas en una pista de conducción real.
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+ <!-- Partes del Proyecto Section -->
+<section
+  id="beneficios"
+  class="scroll-mt-20 border-t border-black/10 bg-[#f7f6fb] py-20 font-['Roobert'] sm:py-24 lg:py-28"
+  aria-labelledby="features-heading"
+>
+  <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Encabezado -->
+    <div
+      class="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-20"
+    >
+      <div>
+        <span
+          class="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm"
+        >
+          <span
+            class="h-2 w-2 rounded-full bg-lime-400"
+            aria-hidden="true"
+          ></span>
+
+          Todo en un solo lugar
+        </span>
+
+        <h2
+          id="features-heading"
+          class="mt-6 max-w-4xl text-[clamp(3rem,6vw,5.75rem)] font-semibold leading-[0.94] tracking-[-0.055em] text-slate-950"
+        >
+          Una experiencia completa para
+
+          <span class="block text-violet-600">
+            aprender seguridad vial.
+          </span>
+        </h2>
+      </div>
+
+      <div class="max-w-xl lg:justify-self-end lg:pb-2">
+        <p class="text-lg font-semibold leading-8 text-slate-600">
+          P.I.V.E.S. reúne aprendizaje, práctica, acompañamiento familiar y
+          recompensas en una plataforma creada para niños y sus familias.
+        </p>
       </div>
     </div>
-  </main>
 
-  <!-- ¿Qué es P.I.V.E.S.? Section -->
-  <section class="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="about-heading">
-    <div class="max-w-5xl mx-auto text-center">
-      <span class="inline-block py-1 px-4 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider uppercase mb-6">Conocé el Proyecto</span>
-      <h2 id="about-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-6">¿Qué es P.I.V.E.S.?</h2>
-      <p class="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed mb-8">
-        El <strong class="text-blue-700">Programa Infantil de Vialidad y Educación Vial</strong> es una iniciativa educativa que combina tecnología, juegos interactivos y experiencias prácticas para enseñar a los más chicos las reglas de tránsito, la importancia de la seguridad vial y la responsabilidad ciudadana.
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        <div class="bg-sky-50 rounded-2xl p-6 border border-sky-100">
-          <span class="text-4xl block mb-3" aria-hidden="true">🎯</span>
-          <h3 class="font-bold text-slate-800 mb-2">Misión</h3>
-          <p class="text-sm text-slate-600">Formar conductores y peatones responsables desde la infancia, creando conciencia vial en toda la familia.</p>
+    <!-- Bento Grid -->
+    <div class="mt-14 grid grid-cols-1 gap-4 lg:grid-cols-12">
+      <!-- 01: Desafíos de señales -->
+      <article
+        class="group relative min-h-[500px] overflow-hidden rounded-[2rem] bg-violet-600 p-7 text-white shadow-2xl shadow-violet-950/15 sm:p-9 lg:col-span-7"
+      >
+        <!-- Cabecera -->
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <span
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-sm font-semibold text-violet-700"
+          >
+            01
+          </span>
+
+          <span
+            class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white"
+          >
+            Aprendizaje
+          </span>
         </div>
-        <div class="bg-green-50 rounded-2xl p-6 border border-green-100">
-          <span class="text-4xl block mb-3" aria-hidden="true">🌱</span>
-          <h3 class="font-bold text-slate-800 mb-2">Visión</h3>
-          <p class="text-sm text-slate-600">Un futuro con cero accidentes viales gracias a la educación temprana, lúdica y familiar.</p>
+
+        <!-- Contenido -->
+        <div class="relative z-10 mt-16 max-w-lg">
+          <h3
+            class="text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl"
+          >
+            Desafíos de señales
+          </h3>
+
+          <p class="mt-5 max-w-md text-base font-semibold leading-7 text-white/70">
+            Preguntas interactivas sobre señales de tránsito, normas viales y
+            situaciones cotidianas.
+          </p>
         </div>
-        <div class="bg-amber-50 rounded-2xl p-6 border border-amber-100">
-          <span class="text-4xl block mb-3" aria-hidden="true">💡</span>
-          <h3 class="font-bold text-slate-800 mb-2">Método</h3>
-          <p class="text-sm text-slate-600">Aprender jugando: cuestionarios interactivos, recompensas, pista de conducción real y acciones familiares.</p>
+
+        <!-- Simulación de pregunta -->
+        <div
+          class="relative z-10 mt-10 rounded-3xl border border-white/15 bg-slate-950/30 p-5 backdrop-blur-md sm:p-6"
+        >
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-xs font-semibold text-white/55">
+              Pregunta 4 de 10
+            </span>
+
+            <span class="text-xs font-semibold text-lime-300">
+              Nivel inicial
+            </span>
+          </div>
+
+          <div class="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+            <div class="h-full w-[40%] rounded-full bg-lime-300"></div>
+          </div>
+
+          <p class="mt-5 text-lg font-semibold leading-7 text-white">
+            ¿Qué indica una señal triangular con borde rojo?
+          </p>
+
+          <div class="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div
+              class="rounded-2xl border border-lime-300 bg-lime-300/15 px-4 py-3 text-sm font-semibold text-lime-200"
+            >
+              Advertencia o peligro
+            </div>
+
+            <div
+              class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/65"
+            >
+              Estacionamiento permitido
+            </div>
+          </div>
         </div>
-      </div>
+
+        <!-- Decoración -->
+        <div
+          class="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-lime-300/20 blur-3xl transition-colors duration-500 group-hover:bg-lime-300/30"
+          aria-hidden="true"
+        ></div>
+      </article>
+
+      <!-- 02: Pista de conducción -->
+      <article
+        class="group relative min-h-[500px] overflow-hidden rounded-[2rem] border border-black/10 bg-lime-200 p-7 text-slate-950 transition duration-300 hover:-translate-y-1 sm:p-9 lg:col-span-5"
+      >
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <span
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white"
+          >
+            02
+          </span>
+
+          <span class="text-sm font-semibold text-slate-700">
+            Experiencia práctica
+          </span>
+        </div>
+
+        <div class="relative z-10 mt-14">
+          <h3
+            class="text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl"
+          >
+            Pista de conducción real
+          </h3>
+
+          <p class="mt-5 max-w-md text-base font-semibold leading-7 text-slate-700">
+            Las familias pueden reservar turnos para que los niños conduzcan
+            vehículos eléctricos en un espacio seguro y supervisado.
+          </p>
+        </div>
+
+        <!-- Representación de la pista -->
+        <div
+          class="absolute -bottom-20 left-1/2 h-72 w-[120%] -translate-x-1/2 rotate-[-8deg] rounded-[50%] bg-slate-950"
+          aria-hidden="true"
+        >
+          <div
+            class="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 border-l-4 border-dashed border-white/60"
+          ></div>
+        </div>
+
+        <!-- Vehículo -->
+        <div
+          class="absolute bottom-16 left-1/2 z-10 flex h-16 w-28 -translate-x-1/2 items-center justify-center rounded-[1.5rem] bg-violet-600 shadow-xl transition duration-300 group-hover:-translate-y-2"
+          aria-hidden="true"
+        >
+          <div
+            class="absolute -left-2 bottom-1 h-5 w-5 rounded-full bg-slate-950 ring-4 ring-white/20"
+          ></div>
+
+          <div
+            class="absolute -right-2 bottom-1 h-5 w-5 rounded-full bg-slate-950 ring-4 ring-white/20"
+          ></div>
+
+          <div class="h-6 w-14 rounded-lg bg-white/25"></div>
+        </div>
+      </article>
+
+      <!-- 03: Recompensas -->
+      <article
+        class="group flex min-h-[360px] flex-col rounded-[2rem] border border-black/10 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8 lg:col-span-4"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <span
+            class="flex h-11 w-11 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700"
+          >
+            03
+          </span>
+
+          <span class="text-sm font-semibold text-slate-500">
+            Motivación
+          </span>
+        </div>
+
+        <div class="mt-auto pt-12">
+          <!-- Monedas visuales -->
+          <div class="mb-8 flex -space-x-3" aria-hidden="true">
+            <span
+              class="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-amber-300 text-sm font-semibold text-slate-950 shadow-md"
+            >
+              R
+            </span>
+
+            <span
+              class="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-violet-500 text-sm font-semibold text-white shadow-md"
+            >
+              V
+            </span>
+
+            <span
+              class="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-lime-300 text-sm font-semibold text-slate-950 shadow-md"
+            >
+              +
+            </span>
+          </div>
+
+          <h3
+            class="text-2xl font-semibold leading-tight tracking-[-0.035em] text-slate-950 sm:text-3xl"
+          >
+            Sistema de recompensas
+          </h3>
+
+          <p class="mt-4 text-sm font-semibold leading-6 text-slate-600">
+            Los niños ganan Ruedas y Volantes, desbloquean logros y personalizan
+            su experiencia.
+          </p>
+        </div>
+      </article>
+
+      <!-- 04: Control familiar -->
+      <article
+        class="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-slate-950 p-7 text-white sm:p-8 lg:col-span-8"
+      >
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <span
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-sm font-semibold"
+          >
+            04
+          </span>
+
+          <span class="text-sm font-semibold text-white/50">
+            Acompañamiento
+          </span>
+        </div>
+
+        <div
+          class="relative z-10 mt-12 grid grid-cols-1 gap-8 sm:grid-cols-[1fr_auto] sm:items-end"
+        >
+          <div class="max-w-lg">
+            <h3
+              class="text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl"
+            >
+              Control familiar
+            </h3>
+
+            <p class="mt-5 text-base font-semibold leading-7 text-white/60">
+              Los adultos crean perfiles para cada niño, consultan su progreso
+              y acompañan su proceso de aprendizaje.
+            </p>
+          </div>
+
+          <!-- Perfiles -->
+          <div class="flex items-end -space-x-3" aria-hidden="true">
+            <span
+              class="flex h-16 w-16 items-center justify-center rounded-full border-4 border-slate-950 bg-violet-500 text-lg font-semibold text-white"
+            >
+              A
+            </span>
+
+            <span
+              class="flex h-20 w-20 items-center justify-center rounded-full border-4 border-slate-950 bg-lime-300 text-xl font-semibold text-slate-950"
+            >
+              M
+            </span>
+
+            <span
+              class="flex h-16 w-16 items-center justify-center rounded-full border-4 border-slate-950 bg-amber-300 text-lg font-semibold text-slate-950"
+            >
+              L
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="pointer-events-none absolute -bottom-32 right-0 h-72 w-72 rounded-full bg-violet-500/30 blur-3xl"
+          aria-hidden="true"
+        ></div>
+      </article>
+
+      <!-- 05: Mapa de eventos -->
+      <article
+        class="group relative min-h-[390px] overflow-hidden rounded-[2rem] border border-black/10 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8 lg:col-span-6"
+      >
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <span
+            class="flex h-11 w-11 items-center justify-center rounded-full bg-lime-200 text-sm font-semibold text-slate-950"
+          >
+            05
+          </span>
+
+          <span class="text-sm font-semibold text-slate-500">
+            Comunidad
+          </span>
+        </div>
+
+        <div class="relative z-10 mt-10 max-w-md">
+          <h3
+            class="text-3xl font-semibold leading-tight tracking-[-0.04em] text-slate-950"
+          >
+            Mapa de eventos
+          </h3>
+
+          <p class="mt-4 text-sm font-semibold leading-6 text-slate-600">
+            Talleres, presentaciones y actividades de educación vial
+            organizadas cerca de cada familia.
+          </p>
+        </div>
+
+        <!-- Mapa abstracto -->
+        <div
+          class="absolute -bottom-16 -right-12 h-64 w-72 rotate-6 rounded-[2rem] border border-violet-200 bg-violet-50"
+          aria-hidden="true"
+        >
+          <div
+            class="absolute left-10 top-0 h-full w-3 rotate-12 bg-white"
+          ></div>
+
+          <div
+            class="absolute left-0 top-24 h-3 w-full -rotate-6 bg-white"
+          ></div>
+
+          <span
+            class="absolute left-24 top-16 h-5 w-5 rounded-full bg-violet-600 ring-8 ring-violet-200"
+          ></span>
+
+          <span
+            class="absolute bottom-20 right-16 h-4 w-4 rounded-full bg-lime-400 ring-8 ring-lime-200"
+          ></span>
+        </div>
+      </article>
+
+      <!-- 06: Acciones de copiloto -->
+      <article
+        class="group flex min-h-[390px] flex-col rounded-[2rem] border border-violet-200 bg-[#ebe9ff] p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8 lg:col-span-6"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <span
+            class="flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white"
+          >
+            06
+          </span>
+
+          <span class="text-sm font-semibold text-violet-700">
+            En familia
+          </span>
+        </div>
+
+        <div class="mt-auto pt-14">
+          <div
+            class="mb-8 flex items-center gap-3 rounded-2xl border border-violet-200 bg-white/70 p-4"
+          >
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime-300 text-sm font-semibold text-slate-950"
+              aria-hidden="true"
+            >
+              ✓
+            </span>
+
+            <div>
+              <span class="block text-xs font-semibold text-slate-500">
+                Acción completada
+              </span>
+
+              <strong class="mt-1 block text-sm font-semibold text-slate-950">
+                Usamos siempre el cinturón
+              </strong>
+            </div>
+          </div>
+
+          <h3
+            class="text-3xl font-semibold leading-tight tracking-[-0.04em] text-slate-950"
+          >
+            Acciones de copiloto
+          </h3>
+
+          <p class="mt-4 text-sm font-semibold leading-6 text-slate-600">
+            Actividades familiares que trasladan lo aprendido a los viajes y a
+            la vida cotidiana.
+          </p>
+        </div>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Partes del Proyecto Section -->
-  <section class="bg-sky-50 py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="features-heading">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12">
-        <span class="inline-block py-1 px-4 rounded-full bg-green-100 text-green-700 text-xs font-bold tracking-wider uppercase mb-4">Todo en un solo lugar</span>
-        <h2 id="features-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800">¿Qué ofrece P.I.V.E.S.?</h2>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        <!-- Feature 1: Flashcards -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-sky-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🎮</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Desafíos de Señales</h3>
-          <p class="text-sm sm:text-base text-slate-600">Respondé cuestionarios interactivos sobre señales de tránsito y reglas viales. Ganá "Ruedas" por cada respuesta correcta y desbloqueá hitos.</p>
-        </div>
-        <!-- Feature 2: Pista Real -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-green-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🏎️</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Pista de Conducción Real</h3>
-          <p class="text-sm sm:text-base text-slate-600">Agendá turnos para que tus hijos conduzcan autos eléctricos reales en una pista segura y supervisada. ¡La experiencia más emocionante!</p>
-        </div>
-        <!-- Feature 3: Recompensas -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-amber-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🏆</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Sistema de Recompensas</h3>
-          <p class="text-sm sm:text-base text-slate-600">Ganá Ruedas, Volantes y desbloqueá documentos ficticios (licencia, seguro, tarjeta verde). Equipá accesorios a tu avatar y personalizá tu perfil.</p>
-        </div>
-        <!-- Feature 4: Control Familiar -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-purple-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-xl sm:text-2xl mb-6" aria-hidden="true">👨‍👩‍👧‍👦</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Control Familiar</h3>
-          <p class="text-sm sm:text-base text-slate-600">Los padres crean perfiles para cada hijo, supervisan su progreso y los acompañan en su camino de aprendizaje seguro y divertido.</p>
-        </div>
-        <!-- Feature 5: Mapa de Eventos -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-rose-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🗺️</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Mapa de Eventos</h3>
-          <p class="text-sm sm:text-base text-slate-600">Encontrá en el mapa interactivo las próximas prácticas, talleres, presentaciones y competencias de educación vial cerca tuyo.</p>
-        </div>
-        <!-- Feature 6: Acciones Familiares -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-2">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 text-xl sm:text-2xl mb-6" aria-hidden="true">🛡️</div>
-          <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-3">Acciones de Copiloto</h3>
-          <p class="text-sm sm:text-base text-slate-600">Actividades familiares que refuerzan los conceptos viales en la vida cotidiana. Padres e hijos aprenden juntos cómo ser mejores en la vía.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- Instituciones que nos apoyan -->
+@if (sponsorsLoaded && institutions.length > 0) {
+  <section
+    class="border-t border-black/10 bg-white py-20 font-['Roobert'] sm:py-24 lg:py-28"
+    aria-labelledby="institutions-heading"
+  >
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <!-- Encabezado -->
+      <div
+        class="grid grid-cols-1 gap-7 lg:grid-cols-[1fr_0.8fr] lg:items-end lg:gap-20"
+      >
+        <div>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700"
+          >
+            <span
+              class="h-2 w-2 rounded-full bg-violet-600"
+              aria-hidden="true"
+            ></span>
 
-  <!-- Instituciones que nos apoyan -->
-  @if (sponsorsLoaded && institutions.length > 0) {
-    <section class="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="institutions-heading">
-      <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-          <span class="inline-block py-1 px-4 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold tracking-wider uppercase mb-4">Respaldo Institucional</span>
-          <h2 id="institutions-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4">Instituciones que nos apoyan</h2>
-          <p class="text-slate-600 max-w-2xl mx-auto">Organizaciones e instituciones que creen en la educación vial y respaldan el proyecto P.I.V.E.S.</p>
+            Respaldo institucional
+          </span>
+
+          <h2
+            id="institutions-heading"
+            class="mt-6 max-w-4xl text-[clamp(3rem,5vw,5rem)] font-semibold leading-[0.95] tracking-[-0.05em] text-slate-950"
+          >
+            Organizaciones que creen en el
+
+            <span class="text-violet-600">
+              proyecto.
+            </span>
+          </h2>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          @for (inst of institutions; track inst.id) {
-            <div class="group bg-sky-50/50 rounded-2xl p-6 border border-sky-100 text-center hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1">
-              <div class="w-20 h-20 mx-auto mb-4 rounded-xl overflow-hidden bg-white border border-slate-200 flex items-center justify-center p-2 group-hover:shadow-md transition-shadow">
-                <img [src]="inst.logoUrl" [alt]="inst.name" class="w-full h-full object-contain" loading="lazy" />
-              </div>
-              <h3 class="text-sm sm:text-base font-bold text-slate-800 mb-1">{{ inst.name }}</h3>
-              <p class="text-xs text-slate-500 line-clamp-2">{{ inst.description }}</p>
+
+        <p class="max-w-xl text-lg font-medium leading-8 text-slate-600">
+          Instituciones que acompañan nuestra misión de acercar la educación
+          vial a más niños y familias.
+        </p>
+      </div>
+
+      <!-- Instituciones -->
+      <div
+        class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        @for (inst of institutions; track inst.id; let institutionIndex = $index) {
+          <article
+            class="group flex min-h-80 flex-col rounded-[2rem] border border-black/10 bg-[#f7f6fb] p-6 transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:bg-white hover:shadow-xl"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <span
+                class="text-sm font-semibold text-slate-400"
+                aria-hidden="true"
+              >
+                0{{ institutionIndex + 1 }}
+              </span>
+
+              <span
+                class="h-2.5 w-2.5 rounded-full bg-lime-400"
+                aria-hidden="true"
+              ></span>
+            </div>
+
+            <div
+              class="mt-10 flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-white p-3 shadow-sm"
+            >
+              <img
+                [src]="inst.logoUrl"
+                [alt]="'Logo de ' + inst.name"
+                class="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="mt-auto pt-8">
+              <h3
+                class="text-xl font-semibold tracking-[-0.025em] text-slate-950"
+              >
+                {{ inst.name }}
+              </h3>
+
+              <p
+                class="mt-3 line-clamp-3 text-sm font-medium leading-6 text-slate-600"
+              >
+                {{ inst.description }}
+              </p>
+
               @if (inst.websiteUrl) {
-                <a [href]="inst.websiteUrl" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-xs text-blue-600 hover:text-blue-800 font-medium hover:underline">
-                  Visitar sitio →
+                <a
+                  [href]="inst.websiteUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-violet-700 transition hover:gap-3 hover:text-violet-900"
+                >
+                  Visitar sitio
+                  <span aria-hidden="true">→</span>
                 </a>
               }
             </div>
-          }
-        </div>
-      </div>
-    </section>
-  }
-
-  <!-- Comercios que nos acompañan -->
-  @if (sponsorsLoaded && businesses.length > 0) {
-    <section class="bg-sky-50 py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="businesses-heading">
-      <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-          <span class="inline-block py-1 px-4 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold tracking-wider uppercase mb-4">Aliados Comerciales</span>
-          <h2 id="businesses-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4">Comercios que nos acompañan</h2>
-          <p class="text-slate-600 max-w-2xl mx-auto">Negocios y emprendimientos locales que apoyan la educación vial infantil y forman parte de la comunidad P.I.V.E.S.</p>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          @for (biz of businesses; track biz.id) {
-            <a [href]="biz.websiteUrl || '#'" [target]="biz.websiteUrl ? '_blank' : '_self'" rel="noopener noreferrer"
-               class="group block bg-white rounded-3xl p-6 border border-green-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-green-300 no-underline">
-              <div class="flex items-start gap-4">
-                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-sky-50 border border-slate-200 flex-shrink-0 flex items-center justify-center p-2 group-hover:shadow-md transition-shadow">
-                  <img [src]="biz.logoUrl" [alt]="biz.name" class="w-full h-full object-contain" loading="lazy" />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-base sm:text-lg font-bold text-slate-800 group-hover:text-green-700 transition-colors truncate">{{ biz.name }}</h3>
-                  <p class="text-sm text-slate-500 mt-1 line-clamp-3">{{ biz.description }}</p>
-                  @if (biz.websiteUrl) {
-                    <span class="inline-flex items-center gap-1 mt-3 text-xs text-green-600 font-semibold group-hover:text-green-700">
-                      Visitar comercio
-                      <span class="group-hover:translate-x-1 transition-transform">→</span>
-                    </span>
-                  }
-                </div>
-              </div>
-            </a>
-          }
-        </div>
-      </div>
-    </section>
-  }
-
-  <!-- Nuestros Auspiciantes -->
-  @if (sponsorsLoaded && sponsors.length > 0) {
-    <section class="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="sponsors-heading">
-      <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-          <span class="inline-block py-1 px-4 rounded-full bg-amber-100 text-amber-700 text-xs font-bold tracking-wider uppercase mb-4">Con el apoyo de</span>
-          <h2 id="sponsors-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4">Nuestros Auspiciantes</h2>
-          <p class="text-slate-600 max-w-2xl mx-auto">Empresas y marcas que hacen posible que la educación vial llegue a más familias.</p>
-        </div>
-        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          @for (sp of sponsors; track sp.id) {
-            <a [href]="sp.websiteUrl || '#'" [target]="sp.websiteUrl ? '_blank' : '_self'" rel="noopener noreferrer"
-               class="group flex flex-col items-center text-center no-underline">
-              <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-sky-50 border-2 border-slate-200 flex items-center justify-center p-3 group-hover:border-amber-400 group-hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
-                <img [src]="sp.logoUrl" [alt]="sp.name" class="w-full h-full object-contain group-hover:scale-105 transition-transform" loading="lazy" />
-              </div>
-              <span class="mt-3 text-sm font-semibold text-slate-700 group-hover:text-amber-700 transition-colors">{{ sp.name }}</span>
-            </a>
-          }
-        </div>
-      </div>
-    </section>
-  }
-
-  <!-- How It Works Section -->
-  <section class="bg-sky-50 py-16 px-4 sm:px-8 md:px-12 z-10 border-t border-sky-100" aria-labelledby="steps-heading">
-    <div class="max-w-5xl mx-auto text-center">
-      <span class="inline-block py-1 px-4 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider uppercase mb-4">Empezar es gratis</span>
-      <h2 id="steps-heading" class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-10">Es muy fácil empezar</h2>
-      <div class="flex flex-col md:flex-row gap-8 justify-center items-center relative">
-        <!-- Connecting Line for desktop -->
-        <div class="hidden md:block absolute top-1/2 left-20 right-20 h-1 bg-blue-200 -translate-y-1/2 z-0" aria-hidden="true"></div>
-        
-        <!-- Step 1 -->
-        <div class="relative z-10 flex flex-col items-center max-w-xs">
-          <div class="w-16 h-16 rounded-full bg-blue-600 text-white font-display text-2xl flex items-center justify-center shadow-lg mb-4 ring-4 ring-sky-50">1</div>
-          <h3 class="font-bold text-lg text-slate-800">Registrate</h3>
-          <p class="text-slate-600 text-sm mt-2">Creá una cuenta gratuita como padre o tutor en menos de un minuto.</p>
-        </div>
-        <!-- Step 2 -->
-        <div class="relative z-10 flex flex-col items-center max-w-xs">
-          <div class="w-16 h-16 rounded-full bg-green-500 text-white font-display text-2xl flex items-center justify-center shadow-lg mb-4 ring-4 ring-sky-50">2</div>
-          <h3 class="font-bold text-lg text-slate-800">Creá Perfiles</h3>
-          <p class="text-slate-600 text-sm mt-2">Agregá a tus hijos para que cada uno tenga su propia experiencia y progreso.</p>
-        </div>
-        <!-- Step 3 -->
-        <div class="relative z-10 flex flex-col items-center max-w-xs">
-          <div class="w-16 h-16 rounded-full bg-amber-500 text-white font-display text-2xl flex items-center justify-center shadow-lg mb-4 ring-4 ring-sky-50">3</div>
-          <h3 class="font-bold text-lg text-slate-800">¡A Aprender!</h3>
-          <p class="text-slate-600 text-sm mt-2">Los niños exploran desafíos interactivos, ganan recompensas y pueden manejar en la pista real.</p>
-        </div>
+          </article>
+        }
       </div>
     </div>
   </section>
+}
 
-  <!-- Final CTA Section -->
-  <section class="bg-blue-600 text-white py-16 px-4 sm:px-8 text-center z-10 relative overflow-hidden" aria-labelledby="cta-heading">
-    <!-- CTA Background Accents -->
-    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-blue-500 opacity-50 blur-2xl" aria-hidden="true"></div>
-    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-sky-400 opacity-40 blur-3xl" aria-hidden="true"></div>
-    
-    <div class="max-w-3xl mx-auto relative z-10">
-      <h2 id="cta-heading" class="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-6 text-white">¿Listo para formar a los conductores del mañana?</h2>
-      <p class="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">Únete a cientos de familias que ya están enseñando a sus hijos la importancia de la educación vial de forma amena y segura.</p>
-      <button routerLink="/register" class="px-8 py-4 bg-green-400 text-slate-900 font-bold text-lg rounded-2xl hover:bg-green-300 shadow-xl transition-transform transform hover:-translate-y-1">
-        Crear Cuenta Gratis
-      </button>
+<!-- Comercios que nos acompañan -->
+@if (sponsorsLoaded && businesses.length > 0) {
+  <section
+    class="border-t border-white/10 bg-slate-950 py-20 font-['Roobert'] text-white sm:py-24 lg:py-28"
+    aria-labelledby="businesses-heading"
+  >
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <!-- Encabezado -->
+      <div
+        class="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-end lg:gap-20"
+      >
+        <div>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/75"
+          >
+            <span
+              class="h-2 w-2 rounded-full bg-lime-300"
+              aria-hidden="true"
+            ></span>
+
+            Aliados comerciales
+          </span>
+
+          <h2
+            id="businesses-heading"
+            class="mt-6 max-w-4xl text-[clamp(3rem,5vw,5rem)] font-semibold leading-[0.95] tracking-[-0.05em] text-white"
+          >
+            Una comunidad que nos ayuda a
+
+            <span class="text-lime-300">
+              seguir creciendo.
+            </span>
+          </h2>
+        </div>
+
+        <p class="max-w-xl text-lg font-medium leading-8 text-white/55">
+          Comercios y emprendimientos que acompañan la educación vial infantil
+          y forman parte de la comunidad P.I.V.E.S.
+        </p>
+      </div>
+
+      <!-- Comercios -->
+      <div class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2">
+        @for (biz of businesses; track biz.id; let businessIndex = $index) {
+          <a
+            [href]="biz.websiteUrl || '#'"
+            [target]="biz.websiteUrl ? '_blank' : '_self'"
+            rel="noopener noreferrer"
+            class="group relative min-h-80 overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-7 text-white no-underline transition duration-300 hover:-translate-y-1 hover:border-violet-400/40 hover:bg-white/10 sm:p-8"
+          >
+            <div
+              class="pointer-events-none absolute -bottom-32 -right-32 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl transition-colors duration-500 group-hover:bg-violet-500/35"
+              aria-hidden="true"
+            ></div>
+
+            <div class="relative z-10 flex items-start justify-between gap-5">
+              <div
+                class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white p-3"
+              >
+                <img
+                  [src]="biz.logoUrl"
+                  [alt]="'Logo de ' + biz.name"
+                  class="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+
+              <span class="text-sm font-semibold text-white/35">
+                0{{ businessIndex + 1 }}
+              </span>
+            </div>
+
+            <div class="relative z-10 mt-14">
+              <h3
+                class="text-2xl font-semibold tracking-[-0.035em] text-white sm:text-3xl"
+              >
+                {{ biz.name }}
+              </h3>
+
+              <p
+                class="mt-4 max-w-xl text-sm font-medium leading-6 text-white/55"
+              >
+                {{ biz.description }}
+              </p>
+
+              @if (biz.websiteUrl) {
+                <span
+                  class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-lime-300 transition-all group-hover:gap-4"
+                >
+                  Visitar comercio
+                  <span aria-hidden="true">→</span>
+                </span>
+              }
+            </div>
+          </a>
+        }
+      </div>
     </div>
   </section>
+}
 
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-300 py-10 px-4 sm:px-6 text-center z-10" role="contentinfo">
-    <div class="max-w-4xl mx-auto space-y-3">
-      <p class="font-semibold text-sm sm:text-base text-white">&copy; 2026. Proyecto P.I.V.E.S. Todos los derechos reservados.</p>
-      <p class="text-[10px] sm:text-xs text-slate-400 leading-relaxed max-w-3xl mx-auto">
-        Obra protegida por la Ley N° 11.723 de Propiedad Intelectual de la República Argentina y registrada ante la Dirección Nacional del Derecho de Autor (DNDA).
+<!-- Nuestros auspiciantes -->
+@if (sponsorsLoaded && sponsors.length > 0) {
+  <section
+    class="border-t border-black/10 bg-white py-20 font-['Roobert'] sm:py-24"
+    aria-labelledby="sponsors-heading"
+  >
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <span
+          class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700"
+        >
+          <span
+            class="h-2 w-2 rounded-full bg-amber-400"
+            aria-hidden="true"
+          ></span>
+
+          Con el apoyo de
+        </span>
+
+        <h2
+          id="sponsors-heading"
+          class="mt-6 text-[clamp(3rem,5vw,4.75rem)] font-semibold leading-[0.95] tracking-[-0.05em] text-slate-950"
+        >
+          Nuestros auspiciantes
+        </h2>
+
+        <p class="mt-6 text-lg font-medium leading-8 text-slate-600">
+          Empresas y marcas que hacen posible que la educación vial llegue a
+          más familias.
+        </p>
+      </div>
+
+      <!-- Logos -->
+      <div
+        class="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6"
+      >
+        @for (sp of sponsors; track sp.id) {
+          <a
+            [href]="sp.websiteUrl || '#'"
+            [target]="sp.websiteUrl ? '_blank' : '_self'"
+            rel="noopener noreferrer"
+            class="group flex min-h-44 flex-col items-center justify-center rounded-3xl border border-black/10 bg-[#f7f6fb] p-5 text-center no-underline transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:bg-white hover:shadow-lg"
+          >
+            <div class="flex h-20 w-20 items-center justify-center">
+              <img
+                [src]="sp.logoUrl"
+                [alt]="'Logo de ' + sp.name"
+                class="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+
+            <span
+              class="mt-4 text-sm font-semibold leading-5 text-slate-700"
+            >
+              {{ sp.name }}
+            </span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- Cómo funciona -->
+<section
+  id="como-funciona"
+  class="scroll-mt-20 border-t border-black/10 bg-[#f7f6fb] py-20 font-['Roobert'] sm:py-24 lg:py-28"
+  aria-labelledby="steps-heading"
+>
+  <div
+    class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-14 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:px-8"
+  >
+    <!-- Encabezado -->
+    <div class="max-w-xl lg:sticky lg:top-28 lg:self-start">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm"
+      >
+        <span
+          class="h-2 w-2 rounded-full bg-violet-600"
+          aria-hidden="true"
+        ></span>
+
+        Empezar es gratis
+      </span>
+
+      <h2
+        id="steps-heading"
+        class="mt-6 text-[clamp(3rem,5.5vw,5.25rem)] font-semibold leading-[0.94] tracking-[-0.055em] text-slate-950"
+      >
+        Tres pasos para comenzar a
+
+        <span class="block text-violet-600">
+          aprender.
+        </span>
+      </h2>
+
+      <p class="mt-7 text-lg font-medium leading-8 text-slate-600">
+        La familia crea una cuenta, configura los perfiles y cada niño comienza
+        su propia experiencia de aprendizaje.
       </p>
-      <p class="text-[10px] sm:text-xs text-slate-400 leading-relaxed max-w-3xl mx-auto">
-        Queda estrictamente prohibida la reproducción, distribución, copia o modificación, total o parcial, de los contenidos, la estructura, el diseño metodológico y las funcionalidades del programa, de este sitio y de la aplicación sin la autorización expresa del autor.
+
+      <a
+        routerLink="/register"
+        class="mt-9 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-slate-950 px-7 text-base font-semibold text-white no-underline transition duration-200 hover:-translate-y-1 hover:bg-violet-600"
+      >
+        Crear cuenta gratis
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <!-- Pasos -->
+    <div class="space-y-4">
+      <!-- Paso 1 -->
+      <article
+        class="group rounded-[2rem] border border-black/10 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8"
+      >
+        <div
+          class="grid grid-cols-1 gap-7 sm:grid-cols-[auto_1fr] sm:items-start"
+        >
+          <span
+            class="flex h-14 w-14 items-center justify-center rounded-full bg-violet-600 text-base font-semibold text-white"
+          >
+            01
+          </span>
+
+          <div>
+            <span
+              class="text-sm font-semibold uppercase tracking-[0.15em] text-violet-600"
+            >
+              Crear la cuenta
+            </span>
+
+            <h3
+              class="mt-3 text-2xl font-semibold tracking-[-0.035em] text-slate-950 sm:text-3xl"
+            >
+              Registrate como padre o tutor
+            </h3>
+
+            <p class="mt-4 text-base font-medium leading-7 text-slate-600">
+              Creá una cuenta familiar gratuita utilizando un correo
+              electrónico y completá los datos básicos del adulto responsable.
+            </p>
+
+            <div
+              class="mt-7 flex items-center gap-3 rounded-2xl bg-violet-50 p-4"
+            >
+              <span
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white"
+                aria-hidden="true"
+              >
+                ✓
+              </span>
+
+              <span class="text-sm font-semibold text-violet-950">
+                El registro lleva menos de un minuto
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paso 2 -->
+      <article
+        class="group rounded-[2rem] border border-black/10 bg-lime-200 p-6 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8"
+      >
+        <div
+          class="grid grid-cols-1 gap-7 sm:grid-cols-[auto_1fr] sm:items-start"
+        >
+          <span
+            class="flex h-14 w-14 items-center justify-center rounded-full bg-slate-950 text-base font-semibold text-white"
+          >
+            02
+          </span>
+
+          <div>
+            <span
+              class="text-sm font-semibold uppercase tracking-[0.15em] text-slate-600"
+            >
+              Personalizar la experiencia
+            </span>
+
+            <h3
+              class="mt-3 text-2xl font-semibold tracking-[-0.035em] text-slate-950 sm:text-3xl"
+            >
+              Creá los perfiles de los niños
+            </h3>
+
+            <p class="mt-4 text-base font-medium leading-7 text-slate-700">
+              Cada niño tiene un perfil independiente con su propio avatar,
+              progreso, recompensas y actividades completadas.
+            </p>
+
+            <div class="mt-7 flex -space-x-3" aria-hidden="true">
+              <span
+                class="flex h-12 w-12 items-center justify-center rounded-full border-4 border-lime-200 bg-violet-600 text-sm font-semibold text-white"
+              >
+                A
+              </span>
+
+              <span
+                class="flex h-12 w-12 items-center justify-center rounded-full border-4 border-lime-200 bg-amber-300 text-sm font-semibold text-slate-950"
+              >
+                M
+              </span>
+
+              <span
+                class="flex h-12 w-12 items-center justify-center rounded-full border-4 border-lime-200 bg-white text-sm font-semibold text-slate-950"
+              >
+                +
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paso 3 -->
+      <article
+        class="group overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8"
+      >
+        <div
+          class="grid grid-cols-1 gap-7 sm:grid-cols-[auto_1fr] sm:items-start"
+        >
+          <span
+            class="flex h-14 w-14 items-center justify-center rounded-full bg-lime-300 text-base font-semibold text-slate-950"
+          >
+            03
+          </span>
+
+          <div>
+            <span
+              class="text-sm font-semibold uppercase tracking-[0.15em] text-lime-300"
+            >
+              Comenzar a aprender
+            </span>
+
+            <h3
+              class="mt-3 text-2xl font-semibold tracking-[-0.035em] text-white sm:text-3xl"
+            >
+              Completá desafíos y ganá recompensas
+            </h3>
+
+            <p class="mt-4 text-base font-medium leading-7 text-white/60">
+              Los niños responden preguntas, aprenden señales, completan
+              actividades familiares y desbloquean nuevas experiencias.
+            </p>
+
+            <div class="mt-7">
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-xs font-semibold text-white/45">
+                  Primer nivel
+                </span>
+
+                <span class="text-xs font-semibold text-lime-300">
+                  25%
+                </span>
+              </div>
+
+              <div
+                class="mt-3 h-2 overflow-hidden rounded-full bg-white/10"
+                role="progressbar"
+                aria-label="Ejemplo de progreso del primer nivel"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="25"
+              >
+                <div
+                  class="h-full w-1/4 rounded-full bg-gradient-to-r from-violet-500 to-lime-300"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA final -->
+<section
+  class="border-t border-black/10 bg-white px-4 py-16 font-['Roobert'] sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+  aria-labelledby="cta-heading"
+>
+  <div
+    class="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-violet-600 px-6 py-16 text-center text-white shadow-2xl shadow-violet-950/20 sm:px-10 sm:py-20 lg:rounded-[3rem] lg:px-16 lg:py-24"
+  >
+    <!-- Decoraciones -->
+    <div
+      class="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-lime-300/25 blur-3xl"
+      aria-hidden="true"
+    ></div>
+
+    <div
+      class="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-slate-950/35 blur-3xl"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative z-10 mx-auto max-w-4xl">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white"
+      >
+        <span
+          class="h-2 w-2 rounded-full bg-lime-300"
+          aria-hidden="true"
+        ></span>
+
+        Tu aventura comienza acá
+      </span>
+
+      <h2
+        id="cta-heading"
+        class="mt-7 text-[clamp(3rem,6vw,6rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-white"
+      >
+        Formemos a los conductores del
+
+        <span class="text-lime-300">
+          mañana.
+        </span>
+      </h2>
+
+      <p
+        class="mx-auto mt-7 max-w-2xl text-lg font-medium leading-8 text-white/70"
+      >
+        Sumate a las familias que ya están aprendiendo seguridad vial de una
+        manera interactiva, práctica y divertida.
+      </p>
+
+      <div
+        class="mt-10 flex flex-col justify-center gap-3 sm:flex-row"
+      >
+        <a
+          routerLink="/register"
+          class="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-lime-300 px-8 text-base font-semibold text-slate-950 no-underline transition duration-200 hover:-translate-y-1 hover:bg-lime-200"
+        >
+          Crear cuenta gratis
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <a
+          routerLink="/login"
+          class="inline-flex min-h-14 items-center justify-center rounded-full border border-white/20 bg-white/10 px-8 text-base font-semibold text-white no-underline backdrop-blur transition duration-200 hover:-translate-y-1 hover:bg-white/20"
+        >
+          Ya tengo una cuenta
+        </a>
+      </div>
+
+      <p class="mt-6 text-sm font-medium text-white/50">
+        Registro gratuito · Sin tarjeta de crédito
       </p>
     </div>
-  </footer>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer
+  class="border-t border-white/10 bg-slate-950 px-4 py-14 font-['Roobert'] text-white sm:px-6 lg:px-8"
+  role="contentinfo"
+>
+  <div class="mx-auto w-full max-w-7xl">
+    <!-- Parte superior -->
+    <div
+      class="grid grid-cols-1 gap-12 border-b border-white/10 pb-12 md:grid-cols-2 lg:grid-cols-[1.4fr_0.6fr_0.6fr]"
+    >
+      <!-- Marca -->
+      <div class="max-w-md">
+        <a
+          routerLink="/"
+          class="inline-flex items-center gap-3 text-white no-underline"
+        >
+          <img
+            src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg"
+            alt="Logo de P.I.V.E.S."
+            class="h-12 w-12 rounded-full object-cover"
+          />
+
+          <span class="text-xl font-semibold tracking-[-0.025em]">
+            P.I.V.E.S.
+          </span>
+        </a>
+
+        <p class="mt-6 text-base font-medium leading-7 text-white/50">
+          Educación vial interactiva para niños, familias y futuros conductores
+          responsables.
+        </p>
+      </div>
+
+      <!-- Navegación -->
+      <div>
+        <h2 class="text-sm font-semibold text-white">
+          Explorar
+        </h2>
+
+        <nav class="mt-5 flex flex-col gap-3" aria-label="Navegación del footer">
+          <a
+            href="#proyecto"
+            class="text-sm font-medium text-white/50 transition hover:text-white"
+          >
+            Proyecto
+          </a>
+
+          <a
+            href="#beneficios"
+            class="text-sm font-medium text-white/50 transition hover:text-white"
+          >
+            Beneficios
+          </a>
+
+          <a
+            href="#como-funciona"
+            class="text-sm font-medium text-white/50 transition hover:text-white"
+          >
+            Cómo funciona
+          </a>
+        </nav>
+      </div>
+
+      <!-- Acceso -->
+      <div>
+        <h2 class="text-sm font-semibold text-white">
+          Mi cuenta
+        </h2>
+
+        <nav class="mt-5 flex flex-col gap-3" aria-label="Acceso a la cuenta">
+          <a
+            routerLink="/login"
+            class="text-sm font-medium text-white/50 transition hover:text-white"
+          >
+            Ingresar
+          </a>
+
+          <a
+            routerLink="/register"
+            class="text-sm font-medium text-white/50 transition hover:text-white"
+          >
+            Registrarse
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Parte legal -->
+    <div
+      class="flex flex-col gap-6 pt-8 lg:flex-row lg:items-start lg:justify-between"
+    >
+      <p class="text-sm font-medium text-white/45">
+        © 2026 Proyecto P.I.V.E.S. Todos los derechos reservados.
+      </p>
+
+      <div class="max-w-3xl space-y-3 lg:text-right">
+        <p class="text-xs font-medium leading-5 text-white/35">
+          Obra protegida por la Ley N° 11.723 de Propiedad Intelectual de la
+          República Argentina y registrada ante la Dirección Nacional del
+          Derecho de Autor.
+        </p>
+
+        <p class="text-xs font-medium leading-5 text-white/35">
+          Queda prohibida la reproducción, distribución o modificación total o
+          parcial de los contenidos y funcionalidades sin autorización expresa
+          del autor.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
 </div>

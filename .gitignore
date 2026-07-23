@@ -45,3 +45,6 @@ src/environments/environment.ts
 src/environments/environment.prod.ts
 .env
 .env.local
+serviceAccountKey*.json
+server/serviceAccountKey*.json
+

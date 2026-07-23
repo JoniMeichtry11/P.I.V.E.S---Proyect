@@ -1,5 +1,55 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Roobert";
+  src: url("/fonts/Roobert-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roobert";
+  src: url("/fonts/Roobert-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roobert";
+  src: url("/fonts/Roobert-SemiBold.woff2") format("woff2");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Roobert", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f7f6fb;
+  color: #17151f;
+  font-family: "Roobert", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+
+
+
+
+
+
 /* Global cursor styles */
 button, 
 [role="button"],
@@ -92,4 +142,8 @@ button:disabled,
 
 .animation-delay-4000 {
   animation-delay: 4s;
-}
+} 
+
+
+
+
