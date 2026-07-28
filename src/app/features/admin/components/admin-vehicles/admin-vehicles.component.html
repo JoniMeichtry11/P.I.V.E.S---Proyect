@@ -1,0 +1,114 @@
+<div class="min-h-screen bg-slate-50 p-6">
+  <div class="mx-auto max-w-6xl">
+    <button
+      type="button"
+      class="mb-6 rounded-lg bg-slate-200 px-4 py-2"
+      (click)="goBack()">
+      ← Volver al panel
+    </button>
+
+    <div class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-800">
+          Gestión de vehículos
+        </h1>
+        <p class="text-slate-500">
+          Agregá, editá o eliminá los vehículos disponibles para reservar.
+        </p>
+      </div>
+
+      <div class="flex gap-2">
+        @if (vehicles.length === 0 && !loading) {
+          <button
+            type="button"
+            class="rounded-lg bg-amber-500 px-4 py-2 font-semibold text-white"
+            (click)="migrateVehicles()">
+            Cargar vehículos iniciales
+          </button>
+        }
+
+        <button
+          type="button"
+          class="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white"
+          (click)="addVehicle()">
+          + Agregar vehículo
+        </button>
+      </div>
+    </div>
+
+    @if (error) {
+      <div class="mb-4 rounded-lg bg-red-100 p-4 text-red-700">
+        {{ error }}
+      </div>
+    }
+
+    @if (successMessage) {
+      <div class="mb-4 rounded-lg bg-green-100 p-4 text-green-700">
+        {{ successMessage }}
+      </div>
+    }
+
+    @if (loading) {
+      <p>Cargando vehículos...</p>
+    } @else {
+      <div class="grid gap-6 md:grid-cols-2">
+        @for (vehicle of vehicles; track vehicle.id) {
+          <article class="rounded-2xl bg-white p-5 shadow">
+            <img
+              [src]="vehicle.image"
+              [alt]="vehicle.name"
+              class="mb-4 h-48 w-full rounded-xl object-cover">
+
+            <label class="mb-2 block font-semibold">
+              Nombre
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="vehicle.name"
+              class="mb-4 w-full rounded-lg border p-3">
+
+            <label class="mb-2 block font-semibold">
+              URL de imagen
+            </label>
+
+            <input
+              type="url"
+              [(ngModel)]="vehicle.image"
+              class="mb-4 w-full rounded-lg border p-3">
+
+            <label class="mb-2 block font-semibold">
+              Costo por turno, en litros
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              [(ngModel)]="vehicle.pricePerSlot"
+              class="mb-4 w-full rounded-lg border p-3">
+
+            <div class="flex gap-2">
+              <button
+                type="button"
+                class="flex-1 rounded-lg bg-green-600 px-4 py-2 font-semibold text-white"
+                (click)="saveVehicle(vehicle)">
+                @if (savingId === vehicle.id) {
+                  Guardando...
+                } @else {
+                  Guardar cambios
+                }
+              </button>
+
+              <button
+                type="button"
+                class="rounded-lg bg-red-600 px-4 py-2 font-semibold text-white"
+                (click)="deleteVehicle(vehicle)">
+                Eliminar
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</div>
