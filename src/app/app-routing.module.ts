@@ -101,7 +101,7 @@ const routes: Routes = [
   },
   {
     path: "**",
-    redirectTo: "/welcome",
+    redirectTo: "/",
   },
 ];
 
