@@ -78,25 +78,35 @@
       </div>
     </div>
 
-    <a routerLink="/admin/vehicles" class="rounded-2xl bg-white p-6 shadow transition hover:shadow-lg">
-      <div class="mb-3 text-4xl">🚗</div>
-
-      <h2 class="text-xl font-bold text-slate-800">
-        Vehículos
-      </h2>
-
-      <p class="mt-2 text-slate-500">
-        Administrar los vehículos disponibles para reservar.
-      </p>
-
-      <span class="mt-4 inline-block font-semibold text-blue-600">
-        Gestionar vehículos →
-      </span>
-    </a>
 
     <!-- Accesos rápidos -->
     <h2 class="text-lg font-bold text-slate-300 mb-4 uppercase tracking-wider">Gestión</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <button type="button" (click)="navigateTo('/admin/vehicles')"
+        class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all duration-300">
+
+        <div class="flex items-center gap-4">
+          <div
+            class="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+            🚗
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+              Vehículos
+            </h3>
+
+            <p class="text-sm text-slate-400">
+              Administrar los vehículos disponibles para reservar
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 group-hover:text-cyan-400 transition-colors">
+          <span>Gestionar vehículos</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+      </button>
       <button (click)="navigateTo('/admin/users')"
         class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-blue-500/50 hover:bg-slate-800/80 transition-all duration-300">
         <div class="flex items-center gap-4">
