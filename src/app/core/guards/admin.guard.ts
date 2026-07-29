@@ -11,12 +11,12 @@ export class AdminGuard implements CanActivate {
     private authService: AuthService,
     private adminService: AdminService,
     private router: Router
-  ) {}
+  ) { }
 
   async canActivate(): Promise<boolean> {
     const user = this.authService.getCurrentUser();
     if (!user) {
-      this.router.navigate(['/welcome']);
+      this.router.navigate(['/']);
       return false;
     }
 
