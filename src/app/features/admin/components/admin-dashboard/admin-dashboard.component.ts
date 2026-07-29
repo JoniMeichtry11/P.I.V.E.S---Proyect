@@ -35,7 +35,7 @@ export class AdminDashboardComponent implements OnInit {
 
   async logout(): Promise<void> {
     await this.authService.logout();
-    this.router.navigate(['/welcome']);
+    this.router.navigate(['/']);
   }
 
   navigateTo(route: string): void {
