@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { SponsorService } from '../../../../core/services/sponsor.service';
 import { Sponsor } from '../../../../core/models/user.model';
+import { LandingService } from '../../../../core/services/landing.service';
+import { LandingContent } from '../../../../core/models/landing.model';
 
 @Component({
   selector: 'app-landing-page',
@@ -14,11 +16,14 @@ export class LandingPage implements OnInit {
   businesses: Sponsor[] = [];
   sponsors: Sponsor[] = [];
   sponsorsLoaded = false;
+  content: LandingContent | null = null;
+  contentLoaded = false;
 
   constructor(
     private meta: Meta,
     private title: Title,
-    private sponsorService: SponsorService
+    private sponsorService: SponsorService,
+    private landingService: LandingService
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +31,19 @@ export class LandingPage implements OnInit {
     this.meta.updateTag({ name: 'description', content: 'Proyecto P.I.V.E.S. es una aplicación interactiva dedicada a la educación vial para niños y familias, fomentando la seguridad y prevención de accidentes.' });
     this.meta.updateTag({ name: 'keywords', content: 'educación vial, niños, seguridad, prevención, pives, proyecto pives' });
 
+    this.loadContent();
     this.loadSponsors();
+  }
+
+  private async loadContent(): Promise<void> {
+    try {
+      this.content = await this.landingService.getLandingContent();
+    } catch (error) {
+      console.warn('Error loading landing content, falling back to defaults:', error);
+      this.content = this.landingService.getDefaultContent();
+    } finally {
+      this.contentLoaded = true;
+    }
   }
 
   private async loadSponsors(): Promise<void> {
