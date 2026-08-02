@@ -4,6 +4,9 @@ import { SponsorService } from '../../../../core/services/sponsor.service';
 import { Sponsor } from '../../../../core/models/user.model';
 import { LandingService } from '../../../../core/services/landing.service';
 import { LandingContent } from '../../../../core/models/landing.model';
+import { AuthService } from '../../../../core/services/auth.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-landing-page',
@@ -18,13 +21,17 @@ export class LandingPage implements OnInit {
   sponsorsLoaded = false;
   content: LandingContent | null = null;
   contentLoaded = false;
+  isLoggedIn$: Observable<boolean>;
 
   constructor(
     private meta: Meta,
     private title: Title,
     private sponsorService: SponsorService,
-    private landingService: LandingService
-  ) {}
+    private landingService: LandingService,
+    private authService: AuthService
+  ) {
+    this.isLoggedIn$ = this.authService.currentUser$.pipe(map(user => !!user));
+  }
 
   ngOnInit(): void {
     this.title.setTitle('Proyecto P.I.V.E.S. - Educación que salva vidas');

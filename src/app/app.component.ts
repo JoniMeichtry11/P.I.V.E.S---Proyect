@@ -137,7 +137,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
           const currentUrl = this.router.url;
           if (
-            currentUrl === "/" ||
             currentUrl === "/welcome" ||
             currentUrl === "/login" ||
             currentUrl === "/register"

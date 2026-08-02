@@ -6,8 +6,14 @@
       <span class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 tracking-tight whitespace-nowrap">P.I.V.E.S.</span>
     </div>
     <nav class="flex gap-3 sm:gap-4 items-center" aria-label="Navegación principal">
-      <button routerLink="/login" class="px-4 py-2 text-sm sm:text-base text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors whitespace-nowrap" aria-label="Ingresar a tu cuenta">Ingresar</button>
-      <button routerLink="/register" class="px-5 py-2.5 text-sm sm:text-base bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-sm transition-all whitespace-nowrap" aria-label="Crear una cuenta nueva">Registrarse</button>
+      @if (isLoggedIn$ | async) {
+        <button routerLink="/home" class="px-5 py-2.5 text-sm sm:text-base bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-sm transition-all whitespace-nowrap" aria-label="Volver a la aplicación">
+          Volver a la App &rarr;
+        </button>
+      } @else {
+        <button routerLink="/login" class="px-4 py-2 text-sm sm:text-base text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors whitespace-nowrap" aria-label="Ingresar a tu cuenta">Ingresar</button>
+        <button routerLink="/register" class="px-5 py-2.5 text-sm sm:text-base bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-sm transition-all whitespace-nowrap" aria-label="Crear una cuenta nueva">Registrarse</button>
+      }
     </nav>
   </header>
 

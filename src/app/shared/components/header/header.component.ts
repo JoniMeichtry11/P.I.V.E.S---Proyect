@@ -50,6 +50,11 @@ export class HeaderComponent {
     this.router.navigate(['/home']);
   }
 
+  navigateToLanding(): void {
+    this.isMenuOpen = false;
+    this.router.navigate(['/']);
+  }
+
   switchProfile(): void {
     this.isMenuOpen = false;
     this.userService.setActiveChildIndex(null);
