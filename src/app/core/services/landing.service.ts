@@ -9,6 +9,7 @@ import { LandingContent } from '../models/landing.model';
 export class LandingService {
   private readonly collectionName = 'settings';
   private readonly documentId = 'landing';
+  private readonly cacheKey = 'pives_landing_content';
 
   private defaultContent: LandingContent = {
     hero: {
@@ -106,7 +107,46 @@ export class LandingService {
     return { ...this.defaultContent };
   }
 
-  async getLandingContent(): Promise<LandingContent> {
+  /**
+   * Obtiene el contenido de la landing con estrategia stale-while-revalidate.
+   * - Si hay datos en caché, los devuelve inmediatamente.
+   * - En paralelo, consulta Firestore y si los datos cambiaron, invoca el callback `onUpdate`.
+   * - Si no hay caché, espera la respuesta de Firestore.
+   */
+  async getLandingContent(onUpdate?: (content: LandingContent) => void): Promise<LandingContent> {
+    const cached = this.getCachedContent();
+
+    if (cached) {
+      // Revalidar en background
+      this.fetchFromFirestore().then(fresh => {
+        if (fresh && !this.isEqual(cached, fresh)) {
+          this.saveToCache(fresh);
+          onUpdate?.(fresh);
+        }
+      }).catch(err => {
+        console.warn('Error revalidating landing content from Firestore:', err);
+      });
+      return cached;
+    }
+
+    // Sin caché: esperar Firestore
+    try {
+      const content = await this.fetchFromFirestore();
+      if (content) {
+        this.saveToCache(content);
+        return content;
+      }
+      return this.defaultContent;
+    } catch (error) {
+      console.warn('Could not read landing content from Firestore (permission or offline). Using default content.', error);
+      return this.defaultContent;
+    }
+  }
+
+  /**
+   * Busca el contenido directamente en Firestore.
+   */
+  private async fetchFromFirestore(): Promise<LandingContent | null> {
     try {
       const reference = doc(
         this.firebaseService.firestore,
@@ -118,7 +158,7 @@ export class LandingService {
       if (snapshot.exists()) {
         return snapshot.data() as LandingContent;
       } else {
-        // If it doesn't exist yet, attempt to write the default one (if authorized)
+        // Si no existe, intentar escribir los defaults
         try {
           await this.updateLandingContent(this.defaultContent);
         } catch {
@@ -127,8 +167,8 @@ export class LandingService {
         return this.defaultContent;
       }
     } catch (error) {
-      console.warn('Could not read landing content from Firestore (permission or offline). Using default content.', error);
-      return this.defaultContent;
+      console.warn('Could not read landing content from Firestore (permission or offline).', error);
+      return null;
     }
   }
 
@@ -139,5 +179,39 @@ export class LandingService {
       this.documentId
     );
     await setDoc(reference, content);
+    // Actualizar caché al guardar desde admin
+    this.saveToCache(content);
+  }
+
+  /**
+   * Lee el contenido cacheado del localStorage de forma sincrónica.
+   * Útil para hidratar la UI antes del primer render y evitar el spinner.
+   */
+  getCachedContent(): LandingContent | null {
+    try {
+      const raw = localStorage.getItem(this.cacheKey);
+      if (!raw) return null;
+      return JSON.parse(raw) as LandingContent;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Guarda el contenido en localStorage.
+   */
+  private saveToCache(content: LandingContent): void {
+    try {
+      localStorage.setItem(this.cacheKey, JSON.stringify(content));
+    } catch {
+      // localStorage lleno o no disponible, no es crítico
+    }
+  }
+
+  /**
+   * Compara dos objetos LandingContent para detectar cambios.
+   */
+  private isEqual(a: LandingContent, b: LandingContent): boolean {
+    return JSON.stringify(a) === JSON.stringify(b);
   }
 }
