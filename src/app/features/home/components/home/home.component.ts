@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 
   async logout(): Promise<void> {
     await this.authService.logout();
-    this.router.navigate(['/welcome']);
+    this.router.navigate(['/']);
   }
 
   get hasCompletedBookings(): boolean {

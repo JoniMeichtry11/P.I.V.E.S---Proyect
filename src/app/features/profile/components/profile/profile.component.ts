@@ -114,7 +114,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     try {
       await this.userService.deleteAccount();
       // El guard de auth se encargará de redirigir si el usuario ya no existe
-      this.router.navigate(['/welcome']);
+      this.router.navigate(['/']);
     } catch (error: any) {
       alert(error.message || 'Error al eliminar la cuenta');
       this.isDeleteModalOpen = false;

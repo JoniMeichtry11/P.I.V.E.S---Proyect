@@ -21,13 +21,13 @@ export class HeaderComponent {
 
   isMenuOpen = true;
   private _activeChild: Child | null = null;
-  cachedMilestones: Array<{name: string; icon: string; isUnlocked: boolean}> = [];
+  cachedMilestones: Array<{ name: string; icon: string; isUnlocked: boolean }> = [];
 
   constructor(
     private router: Router,
     private userService: UserService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -50,6 +50,11 @@ export class HeaderComponent {
     this.router.navigate(['/home']);
   }
 
+  navigateToLanding(): void {
+    this.isMenuOpen = false;
+    this.router.navigate(['/']);
+  }
+
   switchProfile(): void {
     this.isMenuOpen = false;
     this.userService.setActiveChildIndex(null);
@@ -59,7 +64,7 @@ export class HeaderComponent {
   logout(): void {
     this.isMenuOpen = false;
     this.authService.logout();
-    this.router.navigate(['/welcome']);
+    this.router.navigate(['/']);
   }
 
   navigateToAdmin(): void {

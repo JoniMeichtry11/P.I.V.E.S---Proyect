@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { AdminService } from '../../../../core/services/admin.service';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { Child, CarModel, UserAccount, Booking } from '../../../../core/models/user.model';
+import { Child, UserAccount, Booking } from '../../../../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
-import { CAR_MODELS, TIME_SLOTS } from '../../../../core/constants/app.constants';
+import { TIME_SLOTS } from '../../../../core/constants/app.constants';
+import { VehicleService } from '../../../../core/services/vehicle.service';
+import { CarModel } from '../../../../core/models/user.model';
 import { Subscription } from 'rxjs';
 
 interface ModalAction {
@@ -31,7 +33,7 @@ interface ModalState {
 export class BookingComponent implements OnInit, OnDestroy {
   activeChild: Child | null = null;
   currentUserAccount: UserAccount | null = null;
-  
+
   step = 1;
   selectedCar: CarModel | null = null;
   selectedDate = '';
@@ -47,37 +49,53 @@ export class BookingComponent implements OnInit, OnDestroy {
   reassignCandidates: Child[] = [];
   reassignTargetId = '';
   confirmedForChildName = '';
+  carModels: CarModel[] = [];
+  loadingVehicles = true;
 
   private subscriptions = new Subscription();
 
   router: Router;
 
-  constructor(
-    private _router: Router,
-    private userService: UserService,
-    private adminService: AdminService,
-    private notificationService: NotificationService,
-    private http: HttpClient
-  ) {
-    this.router = this._router;
-  }
+ constructor(
+  private _router: Router,
+  private userService: UserService,
+  private adminService: AdminService,
+  private notificationService: NotificationService,
+  private http: HttpClient,
+  private vehicleService: VehicleService
+) {
+  this.router = this._router;
+}
 
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.userService.activeChild$.subscribe(child => {
-        this.activeChild = child;
-      })
-    );
+  this.subscriptions.add(
+    this.userService.activeChild$.subscribe(child => {
+      this.activeChild = child;
+    })
+  );
 
-    this.subscriptions.add(
-      this.userService.currentUserAccount$.subscribe(account => {
-        this.currentUserAccount = account;
-      })
-    );
+  this.subscriptions.add(
+    this.userService.currentUserAccount$.subscribe(account => {
+      this.currentUserAccount = account;
+    })
+  );
 
-    // Cargar slots ocupados cuando cambian el coche o la fecha
-    this.loadBookedSlots();
+  this.loadVehicles();
+  this.loadBookedSlots();
+}
+
+async loadVehicles(): Promise<void> {
+  this.loadingVehicles = true;
+
+  try {
+    this.carModels = await this.vehicleService.getVehicles();
+  } catch (error) {
+    console.error('Error loading vehicles:', error);
+    this.carModels = [];
+  } finally {
+    this.loadingVehicles = false;
   }
+}
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -93,9 +111,6 @@ export class BookingComponent implements OnInit, OnDestroy {
     return today.toISOString().split('T')[0];
   }
 
-  get carModels(): CarModel[] {
-    return CAR_MODELS;
-  }
 
   get timeSlots(): typeof TIME_SLOTS {
     return TIME_SLOTS;
@@ -124,15 +139,15 @@ export class BookingComponent implements OnInit, OnDestroy {
         title: '¡Te falta combustible!',
         content: `El ${car.name} consume ${car.pricePerSlot} Litros. Tú tienes ${this.userFuel} Litros ⛽.`,
         actions: [
-          { 
-            text: 'Entendido', 
-            onClick: () => this.closeModal(), 
-            className: 'bg-slate-400 hover:bg-slate-500' 
+          {
+            text: 'Entendido',
+            onClick: () => this.closeModal(),
+            className: 'bg-slate-400 hover:bg-slate-500'
           },
-          { 
-            text: 'Ir a cargar ⛽', 
-            onClick: () => { this.closeModal(); this.router.navigate(['/buy-fuel']); }, 
-            className: 'bg-green-500 hover:bg-green-600' 
+          {
+            text: 'Ir a cargar ⛽',
+            onClick: () => { this.closeModal(); this.router.navigate(['/buy-fuel']); },
+            className: 'bg-green-500 hover:bg-green-600'
           }
         ]
       };
@@ -208,7 +223,7 @@ export class BookingComponent implements OnInit, OnDestroy {
       this.closeModal();
       this.confirmedForChildName = targetChild.name;
       this.step = 4;
-      
+
       // Enviar email de confirmación
       this.sendConfirmationEmail(this.currentUserAccount!, targetChild.name, {
         car: this.selectedCar,
@@ -246,7 +261,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         car: this.selectedCar,
         date: this.selectedDate,
         time: this.selectedTime,
-        id: '', 
+        id: '',
         status: 'active',
         remindersSent: { dayBefore: false, sameDay: false }
       });
