@@ -110,16 +110,6 @@ export class AdminVehiclesComponent implements OnInit {
     }
   }
 
-  async migrateVehicles(): Promise<void> {
-    try {
-      await this.vehicleService.seedDefaultVehicles();
-      await this.loadVehicles();
-      this.successMessage = 'Vehículos iniciales cargados.';
-    } catch (error) {
-      this.error = 'La colección ya tiene vehículos o ocurrió un error.';
-    }
-  }
-
   goBack(): void {
     this.router.navigate(['/admin']);
   }
