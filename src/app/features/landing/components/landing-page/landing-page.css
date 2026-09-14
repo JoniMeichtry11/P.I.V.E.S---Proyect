@@ -30,3 +30,8 @@
 :host #main-content a {
   letter-spacing: normal;
 }
+
+:host #proyecto,
+:host #proyecto * {
+  font-family: 'Poppins', sans-serif;
+}
