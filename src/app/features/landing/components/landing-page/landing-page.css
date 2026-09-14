@@ -2,25 +2,24 @@
   display: block;
 }
 
-/* Tipografía solo del encabezado, portada y franja azul.
-   No modifica el login ni las secciones inferiores. */
+/* Poppins en el encabezado, la portada y la franja azul. */
 :host > div > header,
 :host > div > header *,
 :host #main-content,
 :host #main-content * {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Título principal: sin la fuente redondeada anterior. */
+/* Título principal. */
 :host #hero-heading {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
   letter-spacing: -0.04em;
   line-height: 1.02;
 }
 
-/* Descripción más liviana, como en la referencia. */
+/* Descripción de la portada. */
 :host #hero-heading + p {
   font-weight: 400;
   letter-spacing: normal;
