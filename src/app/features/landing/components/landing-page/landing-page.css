@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+/* Tipografía solo del encabezado, portada y franja azul.
+   No modifica el login ni las secciones inferiores. */
+:host > div > header,
+:host > div > header *,
+:host #main-content,
+:host #main-content * {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Título principal: sin la fuente redondeada anterior. */
+:host #hero-heading {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+/* Descripción más liviana, como en la referencia. */
+:host #hero-heading + p {
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.5;
+}
+
+/* Texto de los botones. */
+:host #main-content a {
+  letter-spacing: normal;
+}
