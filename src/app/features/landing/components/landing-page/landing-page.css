@@ -35,3 +35,18 @@
 :host #proyecto * {
   font-family: 'Poppins', sans-serif;
 }
+
+:host #proposito,
+:host #proposito * {
+  font-family: 'Poppins', sans-serif;
+}
+
+:host #que-es-pives,
+:host #que-es-pives * {
+  font-family: 'Poppins', sans-serif;
+}
+
+:host #como-funciona,
+:host #como-funciona * {
+  font-family: 'Poppins', sans-serif;
+}
