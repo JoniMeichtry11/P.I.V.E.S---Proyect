@@ -65,3 +65,172 @@
 :host #respaldo-institucional * {
   font-family: 'Poppins', sans-serif;
 }
+
+:host #nuestro-objetivo,
+:host #nuestro-objetivo * {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+:host #nuestro-objetivo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  scroll-margin-top: 6rem;
+  background: #124e7e;
+  color: #fff;
+}
+
+:host #nuestro-objetivo .objective-road {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 0 auto;
+  width: min(42%, 36rem);
+  height: 100%;
+  opacity: 0.22;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 75%);
+  mask-image: linear-gradient(to right, transparent, #000 75%);
+}
+
+:host #nuestro-objetivo .objective-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding: 1.75rem 1rem;
+}
+
+:host #nuestro-objetivo .objective-intro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+:host #nuestro-objetivo .objective-growth {
+  display: block;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 3.25rem;
+  color: #e9f3fa;
+}
+
+:host #nuestro-objetivo .objective-copy {
+  min-width: 0;
+  max-width: 32rem;
+}
+
+:host #nuestro-objetivo h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+:host #nuestro-objetivo p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #fff;
+}
+
+:host #nuestro-objetivo .objective-pillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5fr;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  list-style: none;
+}
+
+:host #nuestro-objetivo .objective-pillars li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+  padding-inline: 0.5rem;
+  text-align: center;
+}
+
+:host #nuestro-objetivo .objective-pillars li + li {
+  border-left: 1px solid rgb(255 255 255 / 32%);
+}
+
+:host #nuestro-objetivo .objective-pillars svg {
+  display: block;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  color: #e9f3fa;
+}
+
+:host #nuestro-objetivo .objective-pillars span {
+  max-width: 100%;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+@media (min-width: 640px) {
+  :host #nuestro-objetivo .objective-inner {
+    padding: 2rem 1.5rem;
+  }
+  :host #nuestro-objetivo .objective-intro {
+    gap: 1.5rem;
+  }
+  :host #nuestro-objetivo .objective-growth {
+    width: 3.5rem;
+    height: 4rem;
+  }
+  :host #nuestro-objetivo p {
+    font-size: 0.9375rem;
+  }
+  :host #nuestro-objetivo .objective-pillars span {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host #nuestro-objetivo .objective-inner {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 2.5rem;
+    min-height: 10rem;
+    padding: 1.75rem 5.5rem 1.75rem 2rem;
+  }
+  :host #nuestro-objetivo .objective-pillars {
+    margin: 0;
+    padding: 0;
+    border-top: 0;
+  }
+  :host #nuestro-objetivo .objective-road {
+    width: min(42%, 36rem);
+    opacity: 0.24;
+  }
+}
+
+@media (max-width: 639px) {
+  :host #nuestro-objetivo .objective-road {
+    top: auto;
+    width: 16rem;
+    height: 8rem;
+    opacity: 0.15;
+  }
+}
