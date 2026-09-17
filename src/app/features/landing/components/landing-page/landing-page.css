@@ -234,3 +234,128 @@
     opacity: 0.15;
   }
 }
+
+:host #cierre-final,
+:host #cierre-final * {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+:host #cierre-final {
+  margin: 0;
+  padding: 1.75rem 1rem 2rem;
+  scroll-margin-top: 6rem;
+  background: #eaf4fa;
+  color: #101e2f;
+  text-align: center;
+}
+
+:host #cierre-final .closing-inner {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+}
+
+:host #cierre-final h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.125rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  color: #101e2f;
+  overflow-wrap: break-word;
+}
+
+:host #cierre-final .closing-description {
+  max-width: 58rem;
+  margin: 0.625rem auto 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #364858;
+}
+
+:host #cierre-final .closing-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 20rem;
+  margin: 1rem auto 0;
+}
+
+:host #cierre-final .closing-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.5rem;
+  border: 1px solid #124e7e;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+:host #cierre-final .closing-button svg {
+  display: block;
+  flex: 0 0 auto;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+:host #cierre-final .closing-button-primary {
+  background: #124e7e;
+  color: #fff;
+}
+
+:host #cierre-final .closing-button-primary:hover {
+  border-color: #0b3558;
+  background: #0b3558;
+}
+
+:host #cierre-final .closing-button-secondary {
+  background: transparent;
+  color: #124e7e;
+}
+
+:host #cierre-final .closing-button-secondary:hover {
+  background: #d9eaf5;
+}
+
+:host #cierre-final .closing-button:focus-visible {
+  outline: 2px solid #124e7e;
+  outline-offset: 4px;
+}
+
+@media (min-width: 640px) {
+  :host #cierre-final {
+    padding: 1.75rem 1.5rem;
+  }
+  :host #cierre-final .closing-description {
+    font-size: 0.9375rem;
+  }
+  :host #cierre-final .closing-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host #cierre-final {
+    padding-inline: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host #cierre-final .closing-button {
+    transition: none;
+  }
+}
