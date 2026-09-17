@@ -60,3 +60,8 @@
 :host #espacios-educativos * {
   font-family: 'Poppins', sans-serif;
 }
+
+:host #respaldo-institucional,
+:host #respaldo-institucional * {
+  font-family: 'Poppins', sans-serif;
+}
