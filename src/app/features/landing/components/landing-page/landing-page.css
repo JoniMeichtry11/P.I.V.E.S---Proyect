@@ -50,3 +50,13 @@
 :host #como-funciona * {
   font-family: 'Poppins', sans-serif;
 }
+
+:host #familias,
+:host #familias * {
+  font-family: 'Poppins', sans-serif;
+}
+
+:host #espacios-educativos,
+:host #espacios-educativos * {
+  font-family: 'Poppins', sans-serif;
+}
