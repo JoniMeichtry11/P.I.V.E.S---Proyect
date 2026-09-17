@@ -884,116 +884,78 @@
   </div>
 </section>
 
-<!-- Footer -->
-<footer
-  class="border-t border-white/10 bg-slate-950 px-4 py-14 font-['Roobert'] text-white sm:px-6 lg:px-8"
-  role="contentinfo"
->
-  <div class="mx-auto w-full max-w-7xl">
-    <!-- Parte superior -->
-    <div
-      class="grid grid-cols-1 gap-12 border-b border-white/10 pb-12 md:grid-cols-2 lg:grid-cols-[1.4fr_0.6fr_0.6fr]"
-    >
-      <!-- Marca -->
-      <div class="max-w-md">
-        <a
-          routerLink="/"
-          class="inline-flex items-center gap-3 text-white no-underline"
-        >
+<!-- Footer — Etapa 11: pie de página PIVES. -->
+<footer id="pives-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#main-content" class="footer-brand-link" aria-label="PIVES, volver al inicio">
           <img
-            src="https://i.ibb.co/3yNpyGh4/logo-final-flia.jpg"
-            alt="Logo de P.I.V.E.S."
-            class="h-12 w-12 rounded-full object-cover"
+            src="/logo-HD-pives.png"
+            alt="PIVES"
+            width="2116"
+            height="743"
+            loading="lazy"
+            decoding="async"
           />
-
-          <span class="text-xl font-semibold tracking-[-0.025em]">
-            P.I.V.E.S.
-          </span>
         </a>
-
-        <p class="mt-6 text-base font-medium leading-7 text-white/50">
-          Educación vial interactiva para niños, familias y futuros conductores
-          responsables.
-        </p>
+        <p>Educación vial desde la infancia.</p>
       </div>
 
-      <!-- Navegación -->
-      <div>
-        <h2 class="text-sm font-semibold text-white">
-          Explorar
-        </h2>
+      <!-- Solo destinos existentes: no agrega páginas ni enlaces de relleno. -->
+      <nav class="footer-nav" aria-label="Navegación del pie de página">
+        <div class="footer-group">
+          <h2 id="footer-proposal-heading">La propuesta</h2>
+          <ul aria-labelledby="footer-proposal-heading">
+            <li><a href="#que-es-pives">Qué es PIVES</a></li>
+            <li><a href="#como-funciona">Cómo funciona</a></li>
+          </ul>
+        </div>
 
-        <nav class="mt-5 flex flex-col gap-3" aria-label="Navegación del footer">
-          <a
-            href="#proyecto"
-            class="text-sm font-medium text-white/50 transition hover:text-white"
+        <div class="footer-group">
+          <h2 id="footer-participation-heading">Participación</h2>
+          <ul aria-labelledby="footer-participation-heading">
+            <li><a href="#familias">Para familias</a></li>
+            <li><a href="#espacios-educativos">Espacios educativos</a></li>
+            <li><a routerLink="/register">Crear cuenta</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-group">
+          <h2 id="footer-about-heading">Sobre nosotros</h2>
+          <ul aria-labelledby="footer-about-heading">
+            <li><a href="#proposito">Nuestro propósito</a></li>
+            <li><a href="#nuestro-objetivo">Nuestro objetivo</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="footer-access">
+        <a routerLink="/login" class="footer-login">
+          Ingresar a PIVES
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
           >
-            Proyecto
-          </a>
-
-          <a
-            href="#beneficios"
-            class="text-sm font-medium text-white/50 transition hover:text-white"
-          >
-            Beneficios
-          </a>
-
-          <a
-            href="#como-funciona"
-            class="text-sm font-medium text-white/50 transition hover:text-white"
-          >
-            Cómo funciona
-          </a>
-        </nav>
-      </div>
-
-      <!-- Acceso -->
-      <div>
-        <h2 class="text-sm font-semibold text-white">
-          Mi cuenta
-        </h2>
-
-        <nav class="mt-5 flex flex-col gap-3" aria-label="Acceso a la cuenta">
-          <a
-            routerLink="/login"
-            class="text-sm font-medium text-white/50 transition hover:text-white"
-          >
-            Ingresar
-          </a>
-
-          <a
-            routerLink="/register"
-            class="text-sm font-medium text-white/50 transition hover:text-white"
-          >
-            Registrarse
-          </a>
-        </nav>
+            <path d="M4 12h16m-6-6 6 6-6 6" />
+          </svg>
+        </a>
       </div>
     </div>
 
-    <!-- Parte legal -->
-    <div
-      class="flex flex-col gap-6 pt-8 lg:flex-row lg:items-start lg:justify-between"
-    >
-      <p class="text-sm font-medium text-white/45">
-        © 2026 Proyecto P.I.V.E.S. Todos los derechos reservados.
+    <!-- Se conserva el contenido legal del footer anterior. -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        © 2026 PIVES  | Educacion vial y prevencion
       </p>
-
-      <div class="max-w-3xl space-y-3 lg:text-right">
-        <p class="text-xs font-medium leading-5 text-white/35">
-          Obra protegida por la Ley N° 11.723 de Propiedad Intelectual de la
-          República Argentina y registrada ante la Dirección Nacional del
-          Derecho de Autor.
-        </p>
-
-        <p class="text-xs font-medium leading-5 text-white/35">
-          Queda prohibida la reproducción, distribución o modificación total o
-          parcial de los contenidos y funcionalidades sin autorización expresa
-          del autor.
-        </p>
-      </div>
     </div>
   </div>
 </footer>
-
 </div>
