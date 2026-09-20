@@ -82,31 +82,6 @@
     <!-- Accesos rápidos -->
     <h2 class="text-lg font-bold text-slate-300 mb-4 uppercase tracking-wider">Gestión</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <button type="button" (click)="navigateTo('/admin/vehicles')"
-        class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all duration-300">
-
-        <div class="flex items-center gap-4">
-          <div
-            class="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
-            🚗
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
-              Vehículos
-            </h3>
-
-            <p class="text-sm text-slate-400">
-              Administrar los vehículos disponibles para reservar
-            </p>
-          </div>
-        </div>
-
-        <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 group-hover:text-cyan-400 transition-colors">
-          <span>Gestionar vehículos</span>
-          <span class="group-hover:translate-x-1 transition-transform">→</span>
-        </div>
-      </button>
       <button (click)="navigateTo('/admin/users')"
         class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-blue-500/50 hover:bg-slate-800/80 transition-all duration-300">
         <div class="flex items-center gap-4">
@@ -179,6 +154,32 @@
         </div>
       </button>
 
+      <button type="button" (click)="navigateTo('/admin/vehicles')"
+        class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all duration-300">
+
+        <div class="flex items-center gap-4">
+          <div
+            class="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+            🚗
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+              Vehículos
+            </h3>
+
+            <p class="text-sm text-slate-400">
+              Administrar los vehículos disponibles para reservar
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 group-hover:text-cyan-400 transition-colors">
+          <span>Gestionar vehículos</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+      </button>
+
       <button (click)="navigateTo('/admin/sponsors')"
         class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all duration-300">
         <div class="flex items-center gap-4">
@@ -187,13 +188,32 @@
             🏢
           </div>
           <div>
-            <h3 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">Sponsors / Landing
+            <h3 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">Sponsors
             </h3>
             <p class="text-sm text-slate-400">Instituciones, comercios y auspiciantes de la landing page</p>
           </div>
         </div>
         <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 group-hover:text-indigo-400 transition-colors">
           <span>Gestionar sponsors</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+      </button>
+
+      <button (click)="navigateTo('/admin/landing')"
+        class="group bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-left hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all duration-300">
+        <div class="flex items-center gap-4">
+          <div
+            class="w-14 h-14 bg-indigo-600/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+            📝
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">Landing Page
+            </h3>
+            <p class="text-sm text-slate-400">Modificar imágenes y textos de la landing page</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 group-hover:text-indigo-400 transition-colors">
+          <span>Gestionar landing page</span>
           <span class="group-hover:translate-x-1 transition-transform">→</span>
         </div>
       </button>

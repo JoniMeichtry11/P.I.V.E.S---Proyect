@@ -8,6 +8,7 @@ import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.
 import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-flashcards.component';
 import { AdminSponsorsComponent } from './components/admin-sponsors/admin-sponsors.component';
 import { AdminVehiclesComponent } from './components/admin-vehicles/admin-vehicles.component';
+import { AdminLandingComponent } from './components/admin-landing/admin-landing.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AdminVehiclesComponent } from './components/admin-vehicles/admin-vehicl
     AdminCouponsComponent,
     AdminFlashcardsComponent,
     AdminSponsorsComponent,
-    AdminVehiclesComponent
+    AdminVehiclesComponent,
+    AdminLandingComponent
   ],
   imports: [
     SharedModule,

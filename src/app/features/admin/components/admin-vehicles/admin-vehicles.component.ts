@@ -17,6 +17,14 @@ export class AdminVehiclesComponent implements OnInit {
   error: string | null = null;
   successMessage: string | null = null;
 
+  // Modal de confirmación
+  confirmModal = {
+    isOpen: false,
+    title: '',
+    message: '',
+    action: () => {}
+  };
+
   constructor(
     private vehicleService: VehicleService,
     private router: Router
@@ -41,6 +49,9 @@ export class AdminVehiclesComponent implements OnInit {
   }
 
   async saveVehicle(vehicle: CarModel): Promise<void> {
+    this.error = null;
+    this.successMessage = null;
+
     if (!vehicle.name.trim()) {
       this.error = 'El vehículo debe tener un nombre.';
       return;
@@ -76,6 +87,9 @@ export class AdminVehiclesComponent implements OnInit {
   }
 
   async addVehicle(): Promise<void> {
+    this.error = null;
+    this.successMessage = null;
+
     try {
       await this.vehicleService.addVehicle({
         name: 'Nuevo vehículo',
@@ -85,38 +99,41 @@ export class AdminVehiclesComponent implements OnInit {
 
       await this.loadVehicles();
       this.successMessage = 'Vehículo agregado correctamente.';
+      setTimeout(() => this.successMessage = null, 3000);
     } catch (error) {
       console.error(error);
       this.error = 'No se pudo agregar el vehículo.';
     }
   }
 
-  async deleteVehicle(vehicle: CarModel): Promise<void> {
-    const confirmed = confirm(
-      `¿Seguro que querés eliminar ${vehicle.name}?`
-    );
+  confirmDeleteVehicle(vehicle: CarModel): void {
+    this.confirmModal = {
+      isOpen: true,
+      title: '⚠️ Eliminar Vehículo',
+      message: `¿Estás seguro de que deseas eliminar el vehículo "${vehicle.name}"? Esta acción no se puede deshacer.`,
+      action: async () => {
+        await this.deleteVehicle(vehicle);
+        this.confirmModal.isOpen = false;
+      }
+    };
+  }
 
-    if (!confirmed) {
-      return;
-    }
+  closeConfirmModal(): void {
+    this.confirmModal.isOpen = false;
+  }
+
+  async deleteVehicle(vehicle: CarModel): Promise<void> {
+    this.error = null;
+    this.successMessage = null;
 
     try {
       await this.vehicleService.deleteVehicle(vehicle.id);
       await this.loadVehicles();
       this.successMessage = 'Vehículo eliminado correctamente.';
+      setTimeout(() => this.successMessage = null, 3000);
     } catch (error) {
       console.error(error);
       this.error = 'No se pudo eliminar el vehículo.';
-    }
-  }
-
-  async migrateVehicles(): Promise<void> {
-    try {
-      await this.vehicleService.seedDefaultVehicles();
-      await this.loadVehicles();
-      this.successMessage = 'Vehículos iniciales cargados.';
-    } catch (error) {
-      this.error = 'La colección ya tiene vehículos o ocurrió un error.';
     }
   }
 

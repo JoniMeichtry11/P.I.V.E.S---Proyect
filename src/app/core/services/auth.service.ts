@@ -61,8 +61,9 @@ export class AuthService {
       this.errorService.showInfo("¡Éxito!", "Cuenta creada exitosamente 🎉");
       return user;
     } catch (error) {
-      this.errorService.handleError(error, "Error al registrar", "No pudimos crear tu cuenta. Por favor intenta de nuevo.");
-      throw this.getFriendlyErrorMessage(error as AuthError);
+      const friendlyError = this.getFriendlyErrorMessage(error as AuthError);
+      this.errorService.handleError(friendlyError, "Error al registrar", friendlyError.message);
+      throw friendlyError;
     }
   }
 
@@ -95,8 +96,9 @@ export class AuthService {
         this.errorService.handleError(error, "Email no verificado", error.message);
         throw error;
       }
-      this.errorService.handleError(error, "Error al iniciar sesión", "Las credenciales son incorrectas. Por favor intenta de nuevo.");
-      throw this.getFriendlyErrorMessage(error as AuthError);
+      const friendlyError = this.getFriendlyErrorMessage(error as AuthError);
+      this.errorService.handleError(friendlyError, "Error al iniciar sesión", friendlyError.message);
+      throw friendlyError;
     }
   }
 
@@ -119,20 +121,49 @@ export class AuthService {
   }
 
   private getFriendlyErrorMessage(error: AuthError): Error {
+    let code = error?.code;
+    const rawMessage = typeof error === 'string' ? error : (error?.message || '');
+
+    if (!code && typeof rawMessage === 'string') {
+      const match = rawMessage.match(/auth\/[a-z-]+/i);
+      if (match) {
+        code = match[0];
+      }
+    }
+
     const errorMessages: Record<string, string> = {
+      "auth/invalid-credential":
+        "El correo electrónico o la contraseña son incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.",
       "auth/user-not-found":
-        "Este usuario no está registrado. Por favor, crea una cuenta nueva para ingresar.",
+        "No encontramos ninguna cuenta registrada con este correo electrónico.",
       "auth/wrong-password":
-        "La contraseña es incorrecta. Por favor, inténtalo de nuevo.",
+        "La contraseña ingresada es incorrecta. Por favor, inténtalo de nuevo.",
+      "auth/invalid-email":
+        "El correo electrónico ingresado no tiene un formato válido.",
       "auth/email-already-in-use":
         "Este correo electrónico ya está registrado. Intenta iniciar sesión.",
       "auth/weak-password":
         "La contraseña es demasiado débil. Debe tener al menos 6 caracteres.",
+      "auth/user-disabled":
+        "Esta cuenta ha sido deshabilitada. Por favor, contacta con soporte.",
+      "auth/too-many-requests":
+        "Demasiados intentos fallidos. Por seguridad, por favor intenta más tarde.",
+      "auth/network-request-failed":
+        "Error de conexión. Por favor, verifica tu conexión a internet.",
+      "auth/requires-recent-login":
+        "Por seguridad, debes haber iniciado sesión recientemente para realizar esta acción.",
+      "auth/expired-action-code":
+        "El enlace de verificación ha expirado. Por favor solicita uno nuevo.",
+      "auth/invalid-action-code":
+        "El enlace de verificación es inválido o ya ha sido utilizado.",
     };
 
     const message =
-      errorMessages[error.code] ||
-      "Este usuario no se halla en los registros. ¿Deseas registrarte?.";
+      (code && errorMessages[code]) ||
+      (error instanceof Error && !error.message?.startsWith('Firebase:')
+        ? error.message
+        : "Error al iniciar sesión. Verifica tu usuario y contraseña.");
+
     return new Error(message);
   }
 
