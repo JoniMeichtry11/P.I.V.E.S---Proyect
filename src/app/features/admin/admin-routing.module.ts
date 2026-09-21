@@ -8,6 +8,7 @@ import { AdminVehiclesComponent } from './components/admin-vehicles/admin-vehicl
 import { AdminCouponsComponent } from './components/admin-coupons/admin-coupons.component';
 import { AdminFlashcardsComponent } from './components/admin-flashcards/admin-flashcards.component';
 import { AdminSponsorsComponent } from './components/admin-sponsors/admin-sponsors.component';
+import { AdminLandingComponent } from './components/admin-landing/admin-landing.component';
 
 const routes: Routes = [
   { path: '', component: AdminDashboardComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'coupons', component: AdminCouponsComponent },
   { path: 'flashcards', component: AdminFlashcardsComponent },
   { path: 'sponsors', component: AdminSponsorsComponent },
+  { path: 'landing', component: AdminLandingComponent },
   { path: 'vehicles', component: AdminVehiclesComponent }
 ];
 

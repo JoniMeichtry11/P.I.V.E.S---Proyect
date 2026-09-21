@@ -1,0 +1,296 @@
+<div class="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
+  <div class="mx-auto max-w-6xl">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900">Configuración Landing Page</h1>
+        <p class="text-sm text-slate-500">Modifica los textos, imágenes y configuraciones de la página pública.</p>
+      </div>
+      <div class="flex gap-3">
+        <button (click)="goBack()" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+          Cancelar
+        </button>
+        <button (click)="saveConfig()" [disabled]="isSaving" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors">
+          {{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div class="flex flex-col gap-6 lg:flex-row">
+      <!-- Sidebar / Tabs -->
+      <aside class="w-full shrink-0 lg:w-56">
+        <nav class="flex space-x-1 overflow-x-auto lg:flex-col lg:space-x-0 lg:space-y-0.5 pb-2 lg:pb-0">
+          @for (tab of tabs; track tab.id) {
+            <button
+              (click)="setActiveTab(tab.id)"
+              class="flex items-center rounded-lg px-3 py-2.5 text-sm font-medium whitespace-nowrap lg:whitespace-normal transition-colors text-left w-full"
+              [class]="activeTab === tab.id
+                ? 'bg-blue-50 text-blue-700 border-l-2 border-blue-600'
+                : 'text-slate-600 hover:bg-slate-100 border-l-2 border-transparent'"
+            >
+              {{ tab.name }}
+            </button>
+          }
+        </nav>
+      </aside>
+
+      <!-- Form Content -->
+      <div class="flex-1 rounded-xl border border-slate-200 bg-white shadow-sm p-6">
+        
+        <!-- Tab: Hero -->
+        @if (activeTab === 'hero') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Hero / Portada</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Etiqueta (Tag)</span><input type="text" [(ngModel)]="config.hero.tag" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 1</span><input type="text" [(ngModel)]="config.hero.title1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 2</span><input type="text" [(ngModel)]="config.hero.title2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <div class="col-span-1 md:col-span-2">
+                <span class="text-sm font-medium text-slate-700">Imagen Hero <span class="text-xs font-normal text-slate-400">(Recomendado: 1200×800px)</span></span>
+                <div class="mt-2 flex items-center gap-4">
+                  <div class="h-24 w-36 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    @if (getPreviewUrl('hero', 'imageUrl')) {
+                      <img [src]="getPreviewUrl('hero', 'imageUrl')" class="h-full w-full object-cover" alt="Vista previa Hero" />
+                    } @else {
+                      <span class="text-xs text-slate-400 text-center px-2">Sin imagen</span>
+                    }
+                  </div>
+                  <div class="flex-1">
+                    <input type="file" accept="image/*" (change)="onImageSelect($event, 'hero', 'imageUrl')" class="block w-full text-sm text-slate-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" />
+                    <p class="mt-1 text-xs text-slate-400">PNG, JPG, WebP. Máximo 5 MB.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Subtítulo</span><textarea [(ngModel)]="config.hero.subtitle" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Botón Primario</span><input type="text" [(ngModel)]="config.hero.primaryButtonText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Botón Secundario</span><input type="text" [(ngModel)]="config.hero.secondaryButtonText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Texto Footer (Login)</span><input type="text" [(ngModel)]="config.hero.footerText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Link Footer</span><input type="text" [(ngModel)]="config.hero.footerLinkText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+          </div>
+        }
+
+        <!-- Tab: Pilares -->
+        @if (activeTab === 'pilares') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Franja Pilares</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 1</span><input type="text" [(ngModel)]="config.pilares.pilar1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 2</span><input type="text" [(ngModel)]="config.pilares.pilar2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 3</span><input type="text" [(ngModel)]="config.pilares.pilar3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Subtítulo central</span><input type="text" [(ngModel)]="config.pilares.subtitle" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+          </div>
+        }
+
+        <!-- Tab: El Desafío -->
+        @if (activeTab === 'elDesafio') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">El Desafío</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Etiqueta (Tag)</span><input type="text" [(ngModel)]="config.elDesafio.tag" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <div class="col-span-1 md:col-span-2">
+                <span class="text-sm font-medium text-slate-700">Imagen Ilustrativa <span class="text-xs font-normal text-slate-400">(Recomendado: 600×600px o 800×800px)</span></span>
+                <div class="mt-2 flex items-center gap-4">
+                  <div class="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    @if (getPreviewUrl('elDesafio', 'imageUrl')) {
+                      <img [src]="getPreviewUrl('elDesafio', 'imageUrl')" class="h-full w-full object-cover" alt="Vista previa El Desafío" />
+                    } @else {
+                      <span class="text-xs text-slate-400 text-center px-1">Sin imagen</span>
+                    }
+                  </div>
+                  <div class="flex-1">
+                    <input type="file" accept="image/*" (change)="onImageSelect($event, 'elDesafio', 'imageUrl')" class="block w-full text-sm text-slate-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" />
+                    <p class="mt-1 text-xs text-slate-400">PNG, JPG, WebP. Máximo 5 MB.</p>
+                  </div>
+                </div>
+              </div>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 1</span><input type="text" [(ngModel)]="config.elDesafio.title1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 2</span><input type="text" [(ngModel)]="config.elDesafio.title2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Párrafo 1</span><textarea [(ngModel)]="config.elDesafio.text1" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Párrafo 2</span><textarea [(ngModel)]="config.elDesafio.text2" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+          </div>
+        }
+
+        <!-- Tab: Propósito -->
+        @if (activeTab === 'proposito') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Nuestro Propósito</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Etiqueta (Tag)</span><input type="text" [(ngModel)]="config.proposito.tag" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <div></div>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 1</span><input type="text" [(ngModel)]="config.proposito.title1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 2</span><input type="text" [(ngModel)]="config.proposito.title2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto principal</span><textarea [(ngModel)]="config.proposito.text" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 1</span><input type="text" [(ngModel)]="config.proposito.pilar1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 2</span><input type="text" [(ngModel)]="config.proposito.pilar2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 3</span><input type="text" [(ngModel)]="config.proposito.pilar3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+          </div>
+        }
+
+        <!-- Tab: Qué es PIVES -->
+        @if (activeTab === 'queEsPives') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Qué es PIVES</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Etiqueta (Tag)</span><input type="text" [(ngModel)]="config.queEsPives.tag" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <div class="col-span-1 md:col-span-2">
+                <span class="text-sm font-medium text-slate-700">Imagen Principal <span class="text-xs font-normal text-slate-400">(Recomendado: 800×600px)</span></span>
+                <div class="mt-2 flex items-center gap-4">
+                  <div class="h-24 w-36 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    @if (getPreviewUrl('queEsPives', 'imageUrl')) {
+                      <img [src]="getPreviewUrl('queEsPives', 'imageUrl')" class="h-full w-full object-cover" alt="Vista previa Qué es PIVES" />
+                    } @else {
+                      <span class="text-xs text-slate-400 text-center px-2">Sin imagen</span>
+                    }
+                  </div>
+                  <div class="flex-1">
+                    <input type="file" accept="image/*" (change)="onImageSelect($event, 'queEsPives', 'imageUrl')" class="block w-full text-sm text-slate-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" />
+                    <p class="mt-1 text-xs text-slate-400">PNG, JPG, WebP. Máximo 5 MB.</p>
+                  </div>
+                </div>
+              </div>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 1</span><input type="text" [(ngModel)]="config.queEsPives.title1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 2</span><input type="text" [(ngModel)]="config.queEsPives.title2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto principal</span><textarea [(ngModel)]="config.queEsPives.text" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto del Botón</span><input type="text" [(ngModel)]="config.queEsPives.buttonText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+          </div>
+        }
+
+        <!-- Tab: Cómo Funciona -->
+        @if (activeTab === 'comoFunciona') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Cómo funciona</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Etiqueta (Tag)</span><input type="text" [(ngModel)]="config.comoFunciona.tag" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título Principal</span><input type="text" [(ngModel)]="config.comoFunciona.title" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            @for (step of [
+              { n: 1, titleKey: 'step1Title', textKey: 'step1Text' },
+              { n: 2, titleKey: 'step2Title', textKey: 'step2Text' },
+              { n: 3, titleKey: 'step3Title', textKey: 'step3Text' },
+              { n: 4, titleKey: 'step4Title', textKey: 'step4Text' }
+            ]; track step.n) {
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-slate-100 bg-slate-50 p-4 rounded-lg">
+                <h3 class="col-span-1 md:col-span-2 font-medium text-slate-700 text-sm">Paso {{ step.n }}</h3>
+                <label class="block"><span class="text-sm font-medium text-slate-700">Título</span><input type="text" [(ngModel)]="config.comoFunciona[step.titleKey]" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+                <label class="block"><span class="text-sm font-medium text-slate-700">Texto</span><input type="text" [(ngModel)]="config.comoFunciona[step.textKey]" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Tab: Familias -->
+        @if (activeTab === 'familias') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Para Familias</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Etiqueta (Tag)</span><input type="text" [(ngModel)]="config.familias.tag" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Texto Botón</span><input type="text" [(ngModel)]="config.familias.buttonText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 1</span><input type="text" [(ngModel)]="config.familias.title1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 2</span><input type="text" [(ngModel)]="config.familias.title2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto principal</span><textarea [(ngModel)]="config.familias.text" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border border-slate-100 bg-slate-50 p-4 rounded-lg">
+              @for (item of [
+                { n: 1, titleKey: 'item1Title', textKey: 'item1Text' },
+                { n: 2, titleKey: 'item2Title', textKey: 'item2Text' },
+                { n: 3, titleKey: 'item3Title', textKey: 'item3Text' }
+              ]; track item.n) {
+                <div>
+                  <label class="block"><span class="text-sm font-medium text-slate-700">Ítem {{ item.n }} Título</span><input type="text" [(ngModel)]="config.familias[item.titleKey]" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+                  <label class="block mt-2"><span class="text-sm font-medium text-slate-700">Ítem {{ item.n }} Texto</span><input type="text" [(ngModel)]="config.familias[item.textKey]" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Tab: Espacios Educativos -->
+        @if (activeTab === 'espaciosEducativos') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Espacios Educativos</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 1</span><input type="text" [(ngModel)]="config.espaciosEducativos.title1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Título 2</span><input type="text" [(ngModel)]="config.espaciosEducativos.title2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border border-slate-100 bg-slate-50 p-4 rounded-lg">
+              @for (item of [
+                { n: 1, titleKey: 'item1Title', textKey: 'item1Text' },
+                { n: 2, titleKey: 'item2Title', textKey: 'item2Text' },
+                { n: 3, titleKey: 'item3Title', textKey: 'item3Text' }
+              ]; track item.n) {
+                <div>
+                  <label class="block"><span class="text-sm font-medium text-slate-700">Ítem {{ item.n }} Título</span><input type="text" [(ngModel)]="config.espaciosEducativos[item.titleKey]" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+                  <label class="block mt-2"><span class="text-sm font-medium text-slate-700">Ítem {{ item.n }} Texto</span><input type="text" [(ngModel)]="config.espaciosEducativos[item.textKey]" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Tab: Objetivo -->
+        @if (activeTab === 'objetivo') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Nuestro Objetivo</h2>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Título</span><input type="text" [(ngModel)]="config.objetivo.title" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto principal</span><textarea [(ngModel)]="config.objetivo.text" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 1</span><input type="text" [(ngModel)]="config.objetivo.pilar1" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 2</span><input type="text" [(ngModel)]="config.objetivo.pilar2" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Pilar 3</span><input type="text" [(ngModel)]="config.objetivo.pilar3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+          </div>
+        }
+
+        <!-- Tab: CTA Final -->
+        @if (activeTab === 'ctaFinal') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">CTA Final (Cierre)</h2>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Título</span><input type="text" [(ngModel)]="config.ctaFinal.title" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto descriptivo</span><textarea [(ngModel)]="config.ctaFinal.text" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="block"><span class="text-sm font-medium text-slate-700">Botón Primario</span><input type="text" [(ngModel)]="config.ctaFinal.primaryButtonText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+              <label class="block"><span class="text-sm font-medium text-slate-700">Botón Secundario</span><input type="text" [(ngModel)]="config.ctaFinal.secondaryButtonText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            </div>
+          </div>
+        }
+
+        <!-- Tab: Sponsors -->
+        @if (activeTab === 'sponsors') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Sponsors</h2>
+            <div class="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <input type="checkbox" id="showSponsors" [(ngModel)]="config.sponsors.showSponsors" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+              <label for="showSponsors" class="text-sm font-medium text-slate-700">Mostrar sección de Sponsors en la Landing Page</label>
+            </div>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Título de la sección</span><input type="text" [(ngModel)]="config.sponsors.title" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto descriptivo</span><textarea [(ngModel)]="config.sponsors.text" rows="3" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></textarea></label>
+            <div class="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-700">
+              💡 Los logos y enlaces de los sponsors se configuran desde la sección <strong>Sponsors</strong> del panel principal de administración.
+            </div>
+          </div>
+        }
+
+        <!-- Tab: Footer -->
+        @if (activeTab === 'footer') {
+          <div class="space-y-5">
+            <h2 class="text-lg font-semibold text-slate-800 border-b pb-2">Footer</h2>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Subtítulo (bajo el logo)</span><input type="text" [(ngModel)]="config.footer.subtitle" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto botón Login</span><input type="text" [(ngModel)]="config.footer.loginText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+            <label class="block"><span class="text-sm font-medium text-slate-700">Texto Copyright</span><input type="text" [(ngModel)]="config.footer.copyrightText" class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm"></label>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>

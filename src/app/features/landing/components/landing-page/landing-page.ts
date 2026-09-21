@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { SponsorService } from '../../../../core/services/sponsor.service';
 import { Sponsor } from '../../../../core/models/user.model';
+import { LandingConfigService } from '../../../../core/services/landing-config.service';
+import { LandingConfig, DEFAULT_LANDING_CONFIG } from '../../../../core/models/landing.model';
 
 @Component({
   selector: 'app-landing-page',
@@ -14,17 +16,23 @@ export class LandingPage implements OnInit {
   businesses: Sponsor[] = [];
   sponsors: Sponsor[] = [];
   sponsorsLoaded = false;
+  config: LandingConfig = DEFAULT_LANDING_CONFIG;
 
   constructor(
     private meta: Meta,
     private title: Title,
-    private sponsorService: SponsorService
+    private sponsorService: SponsorService,
+    private landingConfigService: LandingConfigService
   ) {}
 
   ngOnInit(): void {
     this.title.setTitle('Proyecto P.I.V.E.S. - Educación que salva vidas');
     this.meta.updateTag({ name: 'description', content: 'Proyecto P.I.V.E.S. es una aplicación interactiva dedicada a la educación vial para niños y familias, fomentando la seguridad y prevención de accidentes.' });
     this.meta.updateTag({ name: 'keywords', content: 'educación vial, niños, seguridad, prevención, pives, proyecto pives' });
+
+    this.landingConfigService.config$.subscribe(c => {
+      this.config = c;
+    });
 
     this.loadSponsors();
   }
