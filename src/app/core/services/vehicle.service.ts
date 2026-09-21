@@ -72,46 +72,4 @@ export class VehicleService {
 
     await deleteDoc(reference);
   }
-
-  async seedDefaultVehicles(): Promise<void> {
-    const vehicles = await this.getVehicles();
-
-    if (vehicles.length > 0) {
-      throw new Error('La colección de vehículos ya tiene datos.');
-    }
-
-    const reference = collection(
-      this.firebaseService.firestore,
-      this.collectionName
-    );
-
-    for (const vehicle of [
-      {
-        id: 'car1',
-        name: 'Buggito',
-        image: 'https://i.ibb.co/8DPJkNFJ/buggy-rojo.jpg',
-        pricePerSlot: 2
-      },
-      {
-        id: 'car2',
-        name: 'Aventurero Azul',
-        image: 'https://i.ibb.co/Ld81vLT5/hilux-azul.jpg',
-        pricePerSlot: 2
-      },
-      {
-        id: 'car3',
-        name: 'Princesa Rosa',
-        image: 'https://i.ibb.co/hx8tmcK4/rosado.jpg',
-        pricePerSlot: 2
-      },
-      {
-        id: 'car4',
-        name: 'Rayo Blanco',
-        image: 'https://i.ibb.co/ZRK9Ny1X/mercedes-blanco.jpg',
-        pricePerSlot: 2
-      }
-    ]) {
-      await setDoc(doc(reference, vehicle.id), vehicle);
-    }
-  }
 }

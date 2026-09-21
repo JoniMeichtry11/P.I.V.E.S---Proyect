@@ -17,6 +17,7 @@ import {
 })
 export class SponsorService {
   private readonly collectionName = 'sponsors';
+  private readonly cacheKey = 'pives_active_sponsors';
 
   constructor(
     private firebaseService: FirebaseService,
@@ -46,22 +47,50 @@ export class SponsorService {
   }
 
   /**
-   * Obtiene los sponsors activos, ordenados por su campo `order`.
-   * No usa LoadingService porque se llama desde la landing pública sin UI de admin.
+   * Obtiene los sponsors activos con estrategia stale-while-revalidate.
+   * Si hay caché, los devuelve inmediatamente y revalida en background.
+   * Si los datos cambiaron en Firestore, invoca el callback `onUpdate`.
    */
-  async getActiveSponsors(): Promise<Sponsor[]> {
+  async getActiveSponsors(onUpdate?: (sponsors: Sponsor[]) => void): Promise<Sponsor[]> {
+    const cached = this.getCachedActiveSponsors();
+
+    if (cached) {
+      // Revalidar en background
+      this.fetchActiveFromFirestore().then(fresh => {
+        if (fresh && !this.isEqual(cached, fresh)) {
+          this.saveToCache(fresh);
+          onUpdate?.(fresh);
+        }
+      }).catch(err => {
+        console.warn('Error revalidating active sponsors from Firestore:', err);
+      });
+      return cached;
+    }
+
+    // Sin caché: esperar Firestore
     try {
-      const sponsorsRef = collection(this.firebaseService.firestore, this.collectionName);
-      const snapshot = await getDocs(sponsorsRef);
-      const sponsors = snapshot.docs
-        .map(d => ({ id: d.id, ...d.data() } as Sponsor))
-        .filter(s => s.isActive)
-        .sort((a, b) => a.order - b.order);
-      return sponsors;
+      const sponsors = await this.fetchActiveFromFirestore();
+      if (sponsors) {
+        this.saveToCache(sponsors);
+        return sponsors;
+      }
+      return [];
     } catch (error) {
       console.error('Error loading active sponsors:', error);
       return [];
     }
+  }
+
+  /**
+   * Busca sponsors activos directamente en Firestore.
+   */
+  private async fetchActiveFromFirestore(): Promise<Sponsor[]> {
+    const sponsorsRef = collection(this.firebaseService.firestore, this.collectionName);
+    const snapshot = await getDocs(sponsorsRef);
+    return snapshot.docs
+      .map(d => ({ id: d.id, ...d.data() } as Sponsor))
+      .filter(s => s.isActive)
+      .sort((a, b) => a.order - b.order);
   }
 
   /**
@@ -90,6 +119,7 @@ export class SponsorService {
           }
 
           await setDoc(docRef, data, { merge: true });
+          this.invalidateCache();
           return docRef.id;
         },
         "Guardando sponsor..."
@@ -109,6 +139,7 @@ export class SponsorService {
         async () => {
           const docRef = doc(this.firebaseService.firestore, this.collectionName, id);
           await deleteDoc(docRef);
+          this.invalidateCache();
         },
         "Eliminando sponsor..."
       );
@@ -128,6 +159,7 @@ export class SponsorService {
         async () => {
           const docRef = doc(this.firebaseService.firestore, this.collectionName, id);
           await setDoc(docRef, { isActive }, { merge: true });
+          this.invalidateCache();
         },
         isActive ? "Activando sponsor..." : "Desactivando sponsor..."
       );
@@ -135,5 +167,48 @@ export class SponsorService {
       this.errorService.handleError(error, "Error al actualizar sponsor", "No pudimos actualizar el estado.");
       throw error;
     }
+  }
+
+  /**
+   * Lee los sponsors cacheados del localStorage de forma sincrónica.
+   * Útil para hidratar la UI antes del primer render y evitar el spinner.
+   */
+  getCachedActiveSponsors(): Sponsor[] | null {
+    try {
+      const raw = localStorage.getItem(this.cacheKey);
+      if (!raw) return null;
+      return JSON.parse(raw) as Sponsor[];
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Guarda los sponsors activos en localStorage.
+   */
+  private saveToCache(sponsors: Sponsor[]): void {
+    try {
+      localStorage.setItem(this.cacheKey, JSON.stringify(sponsors));
+    } catch {
+      // localStorage lleno o no disponible, no es crítico
+    }
+  }
+
+  /**
+   * Invalida el caché de sponsors activos (usado tras operaciones de admin).
+   */
+  private invalidateCache(): void {
+    try {
+      localStorage.removeItem(this.cacheKey);
+    } catch {
+      // No es crítico
+    }
+  }
+
+  /**
+   * Compara dos arreglos de sponsors para detectar cambios.
+   */
+  private isEqual(a: Sponsor[], b: Sponsor[]): boolean {
+    return JSON.stringify(a) === JSON.stringify(b);
   }
 }
