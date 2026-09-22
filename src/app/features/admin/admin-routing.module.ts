@@ -17,8 +17,8 @@ const routes: Routes = [
   { path: 'coupons', component: AdminCouponsComponent },
   { path: 'flashcards', component: AdminFlashcardsComponent },
   { path: 'sponsors', component: AdminSponsorsComponent },
-  { path: 'vehicles', component: AdminVehiclesComponent },
-  { path: 'landing', component: AdminLandingComponent }
+  { path: 'landing', component: AdminLandingComponent },
+  { path: 'vehicles', component: AdminVehiclesComponent }
 ];
 
 @NgModule({

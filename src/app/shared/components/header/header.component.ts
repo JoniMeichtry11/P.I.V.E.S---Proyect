@@ -55,6 +55,7 @@ export class HeaderComponent {
     this.router.navigate(['/']);
   }
 
+
   switchProfile(): void {
     this.isMenuOpen = false;
     this.userService.setActiveChildIndex(null);
